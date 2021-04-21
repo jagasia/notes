@@ -1,0 +1,370 @@
+1) table with multiple class, heading, hover, responsive (to device size)
+2) alert (contextual like success, info, danger), closing alerts
+3) buttons (contextual), outlined (ex: btn-outline-success)
+4) bootstrap pagination (active page, disabled page)
+5) list group (hover, contextual)
+6) bootstrap dropdown (with divider), active/ disabled item, left-right dropdown, menu-right, above
+7) Accordion 
+8) navigation (ul class="nav"), nav-pills, (<li class="dropdown nav-item"), toggling, nav-tabs, nav-justified, nav bar themes (dark, light)
+
+simple javascript program to calculate result.
+
+Write a javascript program to find the gender selected by the user. (genders are selected in radio buttons)
+
+<div class="header">	html4
+<header>		html5
+
+<card>
+
+PLSQL Exceptions
+
+1) handle exceptions
+2) raise exceptions
+3) map exceptions to an user defined exception name
+
+DECLARE	(Optional)
+BEGIN
+	.......	raises excpetion some times....
+EXCEPTION (Optional)
+	WHEN TOO_MANY_ROWS THEN
+		....
+	WHEN NO_DATA_FOUND THEN
+		....
+	WHEN OTHERS THEN
+		....
+END;
+
+
+
+
+
+raising exceptions are very useful, when we create proc/functions.
+you are creating a procedure. but someone is calling the procedure. 
+	You know that denominator is 0 means wrong. but what to do? we cannot decide.
+	So we raise exception in our procedure.
+	Those who call our procedure, will get this exception. they can handle them.
+
+	MY_EXCEPTION EXCEPTION;		--declare our own exception type
+	pragma exception_init(-20111,MY_EXCEPTION);	--this is used to associate an exception number to a type
+
+Raise exceptions:
+	RAISE_APPLICATION_ERROR(-20111,'SOME THING WRONG');
+
+Problem is when we handle this exception. User defined exception
+	WHEN MY_EXCEPTION THEN
+	
+	WHEN OTHERS THEN
+
+
+
+When will you need a cursor program?
+	when multiple rows are returned by a select query, we need cursors.
+
+
+JAVA SCRIPT
+==========
+used for validations
+Front end technology to build interactive web sites
+dynamic web pages
+
+
+FRONT END		web UI
+	HTML5
+	CSS3
+	Bootstrap	(is an application of CSS, Javascript, JQuery)
+------------------------------------------------
+	Javascript
+	JQuery
+	
+	Angular
+
+
+
+what is dynamic aspect?
+	response to user actions!
+	calculation
+	validation
+
+javascript is a client side scripting language 	(script=program in web apps)
+	client side script means runs in client computer.	(browser)
+
+structure of javascript programs	(Object Oriented Programming language)
+	Javascipt	version		ES6	(ECMA Script 6)	
+
+	Typescript		on compilation, gives Javascript code.
+create
+	class
+	interface
+	
+==	compare equality
+===	compare equality of value/ref and type of object			a===b		a and b should be same type, same value/ref
+
+	if a and b are value types, their values are compared.
+	if a and b are ref types, their references are compared.
+
+	a is an object. a refers to a memory location. if you see the value inside a, it is ref to another memory.
+	a is a primitive like int, char, float, then if you see the value inside a, it is value stored in a.
+
+
+signup form
+	password
+	confirm password
+
+when i submit the form, the passwords should be checked if they are same. else, error msg should be displayed.
+
+	what is meant by submit?
+
+	<input type="submit" />		this element must be present inside a <form> element.
+
+
+
+server side script		<form>
+spring boot
+jsp
+servlet
+php
+asp
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function fn1()
+        {
+            // alert('hello world');
+            var arr=document.getElementsByName("Gender");
+            //alert(arr.length);
+            // for(int i=0;i<3;i++)            
+            for(var i=0;i<arr.length;i++)
+            {
+               // alert(arr[i].checked);
+               if(arr[i].checked)
+               {                   
+                document.getElementById("result").innerHTML=arr[i].value;
+                var name=document.getElementById("txtName").value;
+                if(arr[i].value=='Female')
+                {
+                    document.getElementById("output").innerHTML="Welcome, Ms. "+name;
+                }   
+                else
+                {
+                    document.getElementById("output").innerHTML="Welcome, Mr. "+name;
+                }
+               }
+            }
+        }
+        function save()
+        {
+           // alert('save method');
+            var pwd=document.getElementById("txtPassword").value;
+            var cpwd=document.getElementById("txtCPassword").value;
+            if(pwd==cpwd)
+             {
+                 document.getElementById("output").innerHTML="Fine. Passwords are correct";
+                return true;        //causes the form submission.
+             }   
+            else
+            {
+                document.getElementById("output").innerHTML="<font color=red>Passwords do not match</font>";
+                return false;       //prevents submission. page stays.
+            }   
+        }
+
+
+        function fn3()
+        {
+          
+        }
+    </script>
+</head>
+<body>
+    <form onsubmit="return save()">
+        <!-- <form> -->
+    Name: <br>
+    <input type="text" name="" id="txtName"><br>
+    Password: <br>  <input type="text" name="" id="txtPassword"><br>
+    Confirm Password: <br> <input type="text" name="" id="txtCPassword">
+    Gender: <br>
+    <input type="radio" name="Gender" id="rdoMale" value="Male" onchange="fn1()"> <label for="rdoMale">Male</label>
+    <input type="radio" name="Gender" id="rdoFemale" value="Female" onchange="fn1()"> <label for="rdoFemale">Female</label>
+    <input type="radio" name="Gender" id="rdoOther" value="Other" onchange="fn1()"> <label for="rdoOther">Other</label>
+    <br><button onclick="alert('why you clicked this button?')">Click here</button>
+    <br><p id="result"></p>
+    <p id="output"></p>
+    <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+
+
+
+
+DELETE			
+	the data inside the table(rows) are deleted. Table is not removed.
+	where condition can be used to select which records to be deleted.
+	can roll back.
+	may call (DELETE) triggers to invoke
+	DML	
+
+TRUNCATE
+	all the rows in the table are deleted. Table is not removed.
+	no where conditions. all records only. not selective records.
+	cannot rollback.
+	will not cause DELETE triggers at all.
+	DDL
+
+DROP
+	Table is removed from the database.
+	cannot rollback.		(can flashback by admin if table is found in recycle bin (NOT POSSIBLE if purged)
+	
+
+	delete from student;
+	delete student;			--from is optional
+
+SELECT * FROM EMPLOYEES WHERE FIRST_NAME like 'A%'			--Starts from A....
+
+	like operator is used to use wild cards
+
+
+
+trans 1 is updating a particular record.
+	before t1 commit/rollback, if another transaction t2 reads that record, then it is called "dirty read".
+
+
+50	t1 is changing it to 60
+	t2 is seeing 60 
+	t1 rollsback.	what t2 has seen became dirty read.
+
+solution:
+	t2 should not be able to see the changes done by t1 until t1 commits/rollback.
+
+READ_COMMITED	is concurrency control level used.		(READ_UNCOMMITTED is a type of cc control )
+
+dead lock			(set time_out in control file).  	DBA can update init parameters in control file
+
+
+CURSOR
+FOR UPDATE OF
+WHERE CURRENT OF
+
+
+
+
+Cursor we create is using SELECT Query.		SELECT query usually lock the records.
+In our case, we are creating a cursor using SELECT query, 
+	loop those records.
+	and we may update those records.	Update is DML. That DML itself will have lock???????
+	So, the moment, we start fetching the records, we NEED A RANGE LOCK. 
+	we need to refer to the record which is currently fetched. (WHERE CURRENT OF)	
+
+
+suppose i do UPDATE. It may affect some records. during updation, if any other transaction tries to update those same records, the new transaction will be made to wait.
+because, current transaction will impose lock.
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <header>THis is header</header>
+    <button class="btn btn-info" data-toggle="collapse" data-target="#div1" >Click here</button>
+    <br>
+    <div id="div1" class="collapse">This is a paragraph typed by me for example. There is another line also. Third line is the last list</div>
+  <br>
+  <br>
+  <div class="container">
+  <div class="card-deck">
+   <div class="card bg- ">
+       <div class="card-body">
+       this is another
+       <br>
+       <br>
+       this is another div
+       <a class="btn btn-info stretched-link" href="http://www.google.com">Google</a>   
+       </div>
+    </div>
+  </div>
+  </div>
+    <div class="container">
+        <h2>Card Deck</h2>
+        <p>The .card-deck class creates an <strong>equal height and width</strong> grid of cards. The layout will automatically adjust as you insert more cards.</p>
+        <p>In this example we have added extra content to the first card, to make it taller. Notice how the other cards follow.</p>
+        <p><strong>Note:</strong> The cards are displayed vertically on small screens (less than 576px):</p>
+        <div class="card-deck">
+          <div class="card bg-primary">
+            <div class="card-body text-center">
+              <p class="card-text">Some text inside the first card</p>
+              <p class="card-text">Some more text to increase the height</p>
+              <p class="card-text">Some more text to increase the height</p>
+              <p class="card-text">Some more text to increase the height</p>
+              <a href="http://www.google.com" class="btn btn-primary" >Google</a>
+            </div>
+          </div>
+          <div class="card bg-warning">
+            <div class="card-body text-center">
+              <p class="card-text">Some text inside the second card</p>
+              <a href="http://www.google.com" class="btn btn-primary stretched-link" >Google</a>
+            </div>
+          </div>
+          <div class="card bg-success">
+            <div class="card-body text-center">
+              <p class="card-text">Some text inside the third card</p>
+            </div>
+          </div>
+          <div class="card bg-danger">
+            <div class="card-body text-center">
+              <p class="card-text">Some text inside the fourth card</p>
+            </div>
+          </div>  
+        </div>
+      </div>
+</body>
+</html>
+
+
+
+PRODUCT
+	PID
+	PNAME
+	PRICE
+
+SALES
+	INVNO
+	INVDATE
+	PID
+	PNAME	(1 extra column is costly when so many records added to this table)	it is not good idea in ecom
+	CID
+	QTY
+
+
+SELECT QUERY ON SALES TABLE.	But customer want to see product name rather than PID
+so we need join.	
+join is costly. takes time to execute.
+so one idea, if we add pname also in sales table. this will make PNAME redundant (in sales table)
+but looking at the performance of query, it will help in getting query result fast.
+
+this is allowed when 
+
+But in a airline domain,
+	how many aircraft will be added to our company in a year.
+
+AIRCRAFT
+	AID
+	ANAME
+	
+
+TICKET TABLE highly populated.
+
