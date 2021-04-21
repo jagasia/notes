@@ -1,0 +1,445 @@
+2 implementations using linked list done on yesterday:
+	1) LinkedList (singly)
+	2) Doubly Linked List
+	3) Stack	(push, pop)
+	
+Today:
+	We need to create Queue	(using linked list)
+	what are the operations allowed in queue
+		to add elements, "enqueue()"
+		to remove elements, "dequeue()"	(now, deque means double ended queue)
+
+	where should a new element be added in a queue?
+		add at the rear
+	where should the element be removed from a queue?
+		remove from the front
+	traveral order?
+		Queue has reference to "front" and "rear".
+		Rear is useful while adding element
+		Front is useful while removing element
+		where will we start our traversal. 
+			Front to Rear	(correct order) Output will be same order as insertion order
+
+		(like a Stack has "top". linked list has "start". Tree has "root")
+
+	example:
+		what should be the type of "data"?
+
+		Student type:	(id, name, dateOfBirth)	
+		Menu driven application.
+			1: add a student
+			2: remove a student (override equals method to find a student based on id)
+			3: traverse
+
+
+in java
+	Stack has both add method and push method
+
+
+
+
+Tree
+	what is a tree?
+		we have seen trees in operating system folder structure
+		so far, whatever data structure we have seen were linear.	
+
+		like hierarchical structure
+		
+	why we need tree?
+		sometimes, the relationship between one node and another node can be "Parent"-"child" relationship
+		
+	ex:	a folder can contain many sub folders.	those sub folders can contain sub folders
+
+		not all folders are present in 1 level.
+
+	
+	terminologies of Tree:
+		Tree			represents the who data structure
+		Node			one element in the tree
+		root			represents the beginning of the tree
+		leaf node		last in that hierarchy		a node that do not have a child node
+					there can be several leaf nodes in a tree
+		branch/children		a node can contain branch/ children
+		level			root is considered to be in level 0
+		height			height of the tree is the number of levels in the tree
+					
+
+
+				ROOT		-------level 0--------
+			child1		child2		child 3		--------------level 1-----------
+		child4		child5				child6	--------------level 2-----------
+	child7		child8						----------=---level 3
+
+	A tree cannot have 2 roots. Only in level 0, it is 1 node
+	but in level 1 or more, there can be any number of nodes
+
+		x=y		and x and y are reference types, x will contain only address of y (not value of y)
+
+
+
+Create an abstract Tree
+	what is an abstract tree,
+		a tree where a node can contain any number of children
+
+	1) create a Node class
+		define data		(what should be the type of date. String)
+		List<Node> children
+
+	2) create a tree class
+		has a root node
+		Node root;
+
+			methods:	
+				add
+				traverse (in order/ pre order/ post roder)
+				remove
+
+
+
+	consider add(root)
+		add(root.getChildren().get(0))		//considering first child as root, repeat same task
+
+	while adding a node, we need to specify the parent node and add it as a child
+
+		find the parent node and add the new node to its children list
+		
+		how to find the parent node?	root.getChildren this gives a list. loop the list.
+
+
+		adding and traverse is done
+	How to remove a node from the tree?
+		
+
+What is Binary tree?
+	2 nodes max allowed in a parent node.
+	a root node can contain	
+		0 	or 	1 	or	2	 nodes
+	each node can contain 
+		2 child		left/right
+
+	every node can have left node whose value is lesser than the root node
+	every right child should have value greater than the root node.	(root means here, current node)
+
+	parent - child
+
+i am adding elements in a binary tree
+
+				1
+			11		12
+						35
+					30		41
+								55
+
+we can call this as a linked list
+		This tree looks like linked list
+		in this case, there is no advantage of having a binary tree.
+	
+		what is the advantage of having a binary tree?
+			to find an element in tree, we compare the element with root and go left or right. In this way, after each comparison, the list is reduced to half
+
+	so we need to maintain the tree - "height balanced"
+
+	A height balanced tree is a tree where the difference between the total nodes in left and total nodes in right should be maximum 1
+
+	three elements in a tree
+		10
+	5		12
+
+if
+		12
+	10
+5
+
+here, right side 0 elements
+	left side, 2 elements
+	the difference is >1 and so it is not height balanced tree
+
+in order to maintain this, we may have to do rotations
+
+let us understand various types  of trees:
+	1) Abstract / general tree
+	3) binary tree
+		binary search tree		(smaller in left, greater in right)
+	2) AVL tree
+	 Threaded binary tree				means leaf nodes have a thread to root node
+
+
+
+
+Binary tree types:
+	Full binary tree		every node contains either 2 or 0 child
+	Complete binary tree		every node contains either 0 or 1 or 2 children (max diff is 1)
+	Perfect binary tree		at last level there will equal nodes in left and right
+
+
+		data			based on data, position is decided left or right. Means??? the data should be comparable
+
+
+		in java, every wrapper (corresponding to primitives) implements Comparable.	we can use compareTo method to compare 2 objects.	ex: 	Strings can be compared using compareTo method
+
+		if data is user defined type, Employee, then implement comparable interface
+
+program for Binary search tree:			based on value, it is decided left or right
+	Node 
+		data	(type of data is Integer)
+		left, right
+
+	BinaryTree
+		root
+
+	traverse
+		in order		left - root - right
+		pre order		root - left - right
+		post order		left - right -root
+
+
+
+				50
+	10				150
+5		20		100		200
+
+
+level 0 		no hyphen
+level 1			1 hyphen
+
+
+
+
+
+in order:
+	5, 10, 20, 50, 100, 150, 200
+
+
+10, 9, 8, 1, 2, 3
+
+
+Task:
+	Create a binary search tree to add numbers randomly.
+	Traverse the tree in order traversal and observe that the output is in ascending order.
+
+
+
+---------------------
+SEARCHING algorithm
+	1) sequential search	/	linear search
+	2) binary search
+
+	sequential search is possible for any linear data structure
+		start from 1st element and search till
+			the element is found (or)
+			the end of list is reached
+
+	this is considered as poor algorithm for large lists
+	suppose if there are 1000 elements in a list.
+	we are searching for an element, 
+		in best case scenario:	how many comparisons required to find the element
+		what is the best case scenario here?	found at 1st position itself
+		
+		in worst case scenario:	how many comparisons
+		if element is not found in the list or found at last position
+			1000 comparisons	(n comparisons for n elements)
+
+		average number of comparisons (best + worst)/2
+
+		1001/2		500 comparisons in average	
+			n/2 comparison in average scenario
+
+	in an unsorted array, we use linear search. any other option?
+
+
+	try something different
+		55, 5, 20, 2, 100, 200, 8, 81, 75
+
+	to find an element (2)
+	if we approach in non linear fashion
+
+		compare with 1st element
+		compare with last element
+
+		compare with second 1st element
+		compare with second last element
+
+		at index 0 and n-1-0
+		0 	vs	n-1-0
+		1	vs	n-1-1
+		2	vs	n-1-2
+	
+		n-1	vs 	n-1-n-1 (0) first element
+
+		in an average scenario, how many comparisons required.
+		to find average scenario, find the best and worst case
+
+		what is best case?					1 comparison
+			found at index 0 or index n-1
+		what is worst case?
+			found at index n/2		middle			how many comparisons? almost all (n)
+		
+
+		average= (n-1)/2		same as linear search
+
+-------------------------------------
+
+Binary search:
+	binary search is possible only if the list is already sorted.
+		we repeatedly / recursively decide a range to search.
+		initially the range is 0 to n-1		(index)
+			find the median index and 
+			compare the element at median if it is matching with search value
+			if yes, found
+			if no, decide the range (either left or right side of median) to repeat the search
+
+the problem was
+	the range to search is 	6 to 11
+		what should be the median?		6+11	=17/2	=8
+			11-6/2	=2	that is the problem
+
+
+
+
+
+canner input = new Scanner(System.in);
+          System.out.println("Enter number of elements:");
+          num = input.nextInt(); 
+          
+          array = new int[num];
+          System.out.println("Enter " + num + " integers");
+          
+          for (i = 0; i < num; i++)
+              array[i] = input.nextInt();
+          System.out.println("Enter the search value:");
+          item = input.nextInt();
+          first = 0;
+          last = num - 1;
+          middle = (first + last)/2;
+          while( first <= last )
+          {
+             if ( array[middle] < item )
+               first = middle + 1;
+             else if ( array[middle] == item )
+             {
+               System.out.println(item + " found at index " + (middle + 1) + ".");
+               break;
+             }
+             else
+             {
+                 last = middle - 1;
+             }
+             middle = (first + last)/2;
+          }
+          if ( first > last )
+              System.out.println(item + " is not found.\n");
+    }
+}
+
+
+
+Task:
+	write a java program to find the element in a sorted array using binary search.
+	i) recursion
+	ii) non recursion
+
+-----------------------------------------
+Sorting algorithms:
+	sorting means arranging the elements in an ascending or descending order.	
+	Usually ascending order unless specified
+
+	simplest program to sort an array is 
+		Bubble sort.
+
+		suppose there are 10 elements.		10,19,82,73,46,55,46,73,28,19
+
+		1st Pass:	(pass means walking from left to right)
+			comparison 1:	compare element at index 0 and 0+1
+					first element is expected to be smaller than second. but if not, swap them
+			swap if element at index i > at index i+1
+			in 1st pass, we do n-1 comparisons		(10 elements, so 9 comparisons)
+
+		2nd Pass:
+			the biggest element would have moved to the end. so we need not compare last element with any
+			in 2nd pass, we do n-1-2 comparisons	(n-2)
+
+		when will we do 1 comparison?
+					10 elements		1st pass= 9 comparisons		
+								2nd pass= 8 comparisons
+								8th pass= 2 comparisons
+								9th pass= 1 comparison	ie., n-1 passes
+
+		n-1 pass 
+		Totally how many comparisons
+	
+		n-1	+	n-2	+	n-2	+	3+2+1
+		n(n-1)
+
+
+			Integer arr[]= {82, 73, 73, 55, 46, 46, 28, 19, 19, 10};
+		int n=arr.length;
+		for(int pass=1;pass<=n-1;pass++)
+		{
+			for(int i=0;i<n-pass;i++)
+			{
+				//compare element at i and i+1
+				if(arr[i]>arr[i+1])
+				{
+					//swap
+					int temp=arr[i];
+					arr[i]=arr[i+1];
+					arr[i+1]=temp;
+				}
+			}
+			System.out.println("After pass"+pass+", array is "+Arrays.toString(arr));
+		}
+		System.out.println(Arrays.toString(arr));
+		Arrays.sort(arr,(a,b)->b-a);
+		System.out.println(Arrays.toString(arr));
+
+
+--------------------------------------
+Insertion sort
+	divide and conquer approach
+		divide the list into (sorted and unsorted) region
+		from unsorted region, take each element and insert at correct position in sorted region
+
+		1,2,3,4,55,40,12,36
+
+		pivot is at 4 (before index 4, all elements are sorted).
+			so our algorithm is narrowed to index 4 and 7
+
+
+		add 55 to the sorted region		1,2,3,4,55
+
+		add 40 to the sorted region		1,2,3,4,40,55
+
+		add 12 to the sorted region		1,2,3,4,12,40,55
+
+		add 36 to the sorted region		1,2,3,4,12,36,40,55
+
+
+
+Write a program to shift last element to first position. and all other elements to the next position in right.
+		1,2,3,4,55,40,12,36		
+			keep 36 in a var key
+			key=36			now pull element from left to right
+
+		36,1,2,3,4,55,40,12
+
+
+	1) key=arr[len-1]
+	2) arr[len-i]=arr[len-(i+1)]			if i=1 	repeat until index 0
+	finally at index 0, put the key
+
+
+
+	Heap sort
+		if we add array elements into a binary search tree. and then do in order traversal. it will be sorted.
+
+	Merge sort
+
+		divide the array into small, small sub arrays.	
+		5 elements in an array. divide this into 5 sub arrays.
+
+		each array has 1 element only. now i claim each sub array is sorted.
+		now merge the sub arrays in such a way it is sorted
+
+		
+	Quick sort
+		

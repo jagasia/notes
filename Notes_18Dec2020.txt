@@ -1,0 +1,437 @@
+ngClass		based on true / false
+	
+	
+ngStyle		
+
+<p class="something">
+
+<button class="btn btn-info">
+
+
+class influence the style  of the element
+
+#
+
+.btn
+{
+	
+}
+<p class="red">This is my paragraph</p>
+<p [ngClass]="{red:true,bred:true}">this is new way</p>
+
+<p style="color:blue;background-color: yellow;">this is static way</p>
+<p [ngStyle]="{'color':'blue','background-color':'yellow'}">This is angular way</p>
+
+
+
+ng-content
+
+	app-component
+
+		a child component	(jag)
+		<app-jag>have you ever typed anything in between these tags?</app-jag>
+
+
+we created employee component
+		<app-employee>typed in the parent component</app-employee>
+
+
+<ng-content>				with @Input()
+
+
+lets see how these are used:
+	<app-employee title="Emp Form">type here for ng-content</app-employee>
+
+
+
+input:button
+input:submit
+
+
+
+in our project
+	Front End
+		angular			they do not have access to database.	
+					they access rest api (spring controller java programs through URL)
+
+
+	Back End
+		controller
+			Spring Controller		(java programs to can access database)
+		mysql database
+
+
+
+
+{"id":30,"title":"Activity 30","dueDate":"2020-12-19T10:17:09.3768785+00:00","completed":true}
+
+we get JSON object
+
+to and fro back end, we need json objects
+
+
+
+class
+	is a blueprint for creating Objects
+
+how to create a class in angular?
+	i) manually
+	ii) ng g class employee				
+
+
+{"employeeId":"121","firstName":"Jagadees","lastName":"waran"}
+
+
+JSON.stringify		to convert object into string
+JSON.parse		to convert string into object
+
+
+
+
+class Employee
+{
+}
+
+
+Task:
+	Registration form:
+		is filled by the user while signing up to our application.
+		after successful submission, the data to be stored in User Master table
+		so there should be a User class
+	i) create User class
+	ii) create user component
+	iii) in user.component.html
+		create user interface to enter the data
+	iv) on submission, we should be able to display a json of user type
+
+
+
+user id		(that you want to create)
+password
+confirm password
+first name
+last name
+email id
+phone number
+type				(is a dropdown list containing 2 options	(admin/ user)
+gender				(radio button			(male/female/other)
+
+CR1		introduce type
+CR2		introduce gender
+
+
+
+Template driven forms:
+	we are going to see the form as a group
+	form can be mapped to a class			
+
+what is a template?
+	html code is the template
+
+in Template Driven Forms, the form content and validations are done in html
+	(FormsModule)
+Model driven forms:
+	done using typescript
+
+i can create a form group in .ts code
+	i can add controls dynamically in ts code
+	Model Driven Forms are also called as Reactive Forms		(ReactiveFormsModule)
+
+
+i do not need to create a class separately	
+
+{'employeeId':122,'firstName':'rama'}
+<form #loginForm=(ngForm) (submit)="fn1()" ngNativeValidate>
+    Employee Id: <input class="form-control" type="text" name="employeeId" id="" ngModel><br>
+    First Name: <input class="form-control" type="text" name="firstName" id="" ngModel><br>
+  
+    <input type="submit" class="btn btn-info" value="Submit">
+</form>
+
+
+[{employeeId: "1", firstName: "Jagadees", lastName: "waran", type: "admin", gender: "male"}
+{employeeId: "2", firstName: "Rajesh", lastName: "Kumar", type: "user", gender: "male"}];
+
+
+
+there are some dummy rest api
+they can be called from our angular project.
+
+creating services that can access asynchronous code
+
+
+service
+	ng g service user
+
+
+AJAX		
+	in angular there is a module for ajax
+		HttpClientModule
+
+
+from my component function, i cannot call a rest api
+i can call rest api from a service only.
+
+how to create a service?????
+	ng g service user
+
+
+import { HttpClientModule } from '@angular/common/http';
+
+HttpClientModule		module
+	HttpClient		component
+1) import HttpClientModule in app.module.ts
+2) inject HttpClient component to the constructor of our service (name it as http for ex)
+3) in our function (getUsers())		returns observable
+	this.http.get(url)		ex: https://jsonplaceholder.typicode.com/todos
+4) in our component.ts
+	inject the service to our constructor
+		constructor(private x:UserService) { }
+5)	create a function that will call the service function
+	declare 
+		users:any;
+	fn1()
+	{
+		this.x.getUsers().subscribe(data=>this.users=data);		getUsers returns observable. so we subscribe
+	}
+6) 	html:	put one button	on click call the fn1()
+	
+7) 	display content:
+	<li *ngFor="let u of users">{{u.title}}</li>
+
+
+subscribe(x=>this.users=x);
+
+fn4(x)
+{		
+	this.users=x;
+}
+
+
+
+
+----------------------------
+Reactive Forms Module
+
+<form (submit)="fnSubmit()">
+    User Name: <input class="form-control" type="text" name="" id="" [formControl]="userName">
+    Password: <input class="form-control" type="password" name="" id="" [formControl]="password">
+    <input type="submit" value="Submit" class="btn btn-info">
+</form>
+{{userName.value}}
+<br>
+{{password.value}}
+
+
+userName=new FormControl();
+  password=new FormControl();
+
+
+fnSubmit()
+  {
+    alert('the user name was :'+this.userName.value+" and the password is :"+this.password.value);
+  }
+
+
+
+
+
+what is form control?
+	it is an object representation of the dom control		<input type=text />	(this is dom control)
+	userName=new FormControl();
+
+
+what is form group?
+	the entire form is represented as an object
+
+we can send this form object as json to rest api
+or
+we can receive json object from rest api and patch it to the form control
+
+
+
+
+loginForm=new FormGroup();
+
+
+
+---------------------------
+<form [formGroup]="loginForm" (submit)="fnSubmit()">
+    User Name: <input class="form-control" type="text" name="" id="" formControlName="userName" >
+    Password: <input class="form-control" type="password" name="" id="" formControlName="password">
+    <input type="submit" value="Submit" class="btn btn-info">
+</form>
+{{loginForm.value | json}}
+----------------------
+
+
+  loginForm=new FormGroup({
+    userName:new FormControl(),
+    password:new FormControl()
+  });
+
+
+  ngOnInit(): void {
+    this.loginForm.patchValue({userName:'Abhijeet',password:'secret'});
+  }
+
+ fnSubmit()
+  {
+    alert("hello:"+JSON.stringify(this.loginForm.value));
+  }
+
+
+-------------------------------------
+Task:
+
+for all todos:
+https://jsonplaceholder.typicode.com/todos
+
+for a specific todo:
+https://jsonplaceholder.typicode.com/todos/1
+
+
+1) Create a page that displays a drop down list
+	all the distinct todo userId should be displayed in the dropdownlist
+
+2) on selecting an userId from the ddlist, 
+	corresponding todo should be displayed as JSON
+
+3) patch the todo in a form (use patchValue method of formGroup to populate form using JSON)
+	3 text boxes 
+	1 check box		(tick if "completed" is true)
+
+solution:
+1) create a service todo
+	ng g s todo
+
+2) in this service,		todo.service.ts
+	inject the http client to the constructor
+		constructor(private http:HttpClient) { }
+
+3) create a function that gets all the todos from the rest api
+	 getAllTodos()
+  	{
+    		return this.http.get('https://jsonplaceholder.typicode.com/todos');
+  	}	
+
+4) call this service method from jag component ts:
+	i) inject the service in the constructor
+		constructor(private x:UserService, private y:TodoService) { }
+
+5) create a function that will call the service method
+	declare a variable
+		todos:any;
+		  	fnGetAllTodos()
+  			{
+			    this.y.getAllTodos().subscribe(data=>this.todos=data);
+			  }
+
+6) call this fnGetAllTodos() function in ngOnInit() function of ts.
+
+7) display the ids in a dropdown list:
+	<select name="ddlId" id="">
+    <option *ngFor="let t of todos" [value]="t.id">{{t.id}}</option>
+</select>
+
+8) bind the ddl to a variable
+	in ts:
+		id:number;
+	in html:
+		<select name="ddlId" id="" [(ngModel)]="id">
+
+9) create a function in service to get json for a specific id:
+	https://jsonplaceholder.typicode.com/todos/1
+
+	  getTodoById(id:number)
+	  {
+	    return this.http.get('https://jsonplaceholder.typicode.com/todos/'+id);
+	  }
+
+
+
+10) put this form below <select>
+
+	<form [formGroup]="todoForm">
+    User Id:
+    <input class="form-control" type="number" formControlName="userId">
+    Id:
+    <input class="form-control" type="number" formControlName="id">
+    Title:
+    <input class="form-control" type="text" formControlName="title">
+    Completed:
+    <input type="checkbox" formControlName="completed" id="chkCompleted">&nbsp;<label for="chkCompleted">Completed</label> <br>
+    <button class="btn btn-info">Submit</button>
+</form>
+
+
+declare the form group and controls
+
+
+	todoForm=new FormGroup({
+    userId:new FormControl(),
+    id:new FormControl(),
+    title:new FormControl(),
+    completed:new FormControl()
+  });
+
+
+11) create a function in component that will be called when ddl is changed
+	fnGetTodoById()
+  {
+    this.y.getTodoById(this.id).subscribe(data=>this.todoForm.patchValue(data));
+  }
+
+
+
+--------------------------------
+in reactive forms
+	i) form control
+	ii) form group
+	iii) form builder
+
+
+
+model	is some data definition or data access code
+	rest api sends information	that is also model
+	ts code that controls form
+
+
+
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent implements OnInit {
+
+  loginForm:any;
+  // x=new FormGroup();
+
+  constructor(private fb:FormBuilder) { 
+    this.loginForm=this.fb.group({
+      userName:['',Validators.required],
+      password:['',Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+  }
+
+  // onSubmit(value)
+  // {
+  //   alert(JSON.stringify(value));
+
+  // }
+  fn1()
+  {
+    alert(JSON.stringify(this.loginForm.value));
+  }
+}
+
+
+    email: ['', [Validators.required, ValidationService.emailValidator]],
+      profile: ['', [Validators.required, Validators.minLength(10)]]

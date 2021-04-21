@@ -1,0 +1,500 @@
+jar file???
+
+java archive		=	jar
+
+what is archive?
+	similar to zip		or		rar
+how to create jar in command prompt
+
+conditional
+
+if
+	in c language,
+		int i=20;
+		if(i)
+			////		true if i is anything other than 0
+	but in java language, 	if(i)		is not allowed.
+		only boolean expressions are allowed in if statement
+
+if else
+if else if else
+
+
+switch
+	whenever we use x==1	x==10		whenever == comes many times, think if switch can be used
+	
+
+while
+do while
+for loop
+for each loop
+
+
+
+in c language,
+	int arr[10];			//allowed in c language. NOT ALLOWED IN JAVA
+
+in java language,
+	int arr[]=new int[10];		//new operator is used to size the array.	
+
+	without new also, we can create array:
+	int arr[]={1,2,3,4,5,6,100,22,32};
+
+	the size of the array is understood from the number of values given in declaration.
+
+we can split this array creation into multiple steps.
+
+	int arr[];			//declaration. where we declare, that decides the scope
+
+	arr=new int[5];			//size the array when required.
+
+
+
+
+
+index is used to access any element in the array.
+arr[0]		is first element in the array
+arr[5]		is translated into 	arr+5*scaling factor		the loc of element is found using this algorithm
+
+in any collection, we use the reference of first element to find any other elements
+
+array elements are present in contigeous memory locations
+
+
+
+what is multi dimension array?
+
+int arr[];
+int arr[][];	//array of arrays
+
+
+primitive variable:
+	int i;					// this is complete
+	Employee e;				// this is incomplete.
+	e=new Employee();			// now this is complete
+
+	int arr[]=new int[10];			// this is complete
+	Employee e[]=new Employee[10];		// this is not complete		here new is for sizing array
+	for(int i=0;i<e.length;i++)
+		e[i]=new Employee();		//complete	here new is for constructor
+
+
+arr[][]=new int[3][3];
+
+arr[0][0]
+arr[0][1]
+arr[0][2]
+arr[1][0]
+arr[1][1]
+arr[1][2]
+arr[2][0]
+arr[2][1]
+arr[2][2]
+
+the above can be done using nested for loop:
+for(int i=0;i<3;i++)
+{
+	for(int j=0;j<3;j++)
+	{
+		arr[i][]
+	}
+}
+
+
+3 inputs
+x
+y
+z
+
+sort them and find the last element
+larger amount of element
+
+
+if x>y	&&	
+
+how will you find the largest number in these three.
+
+
+
+walk from 1 to 50
+x is the current element	
+
+
+inner loop till x
+when x is 15
+inner loop will be from 2 to x	for div, half of x is enough to be checked for divisors
+
+16
+i dont need to walk till 16	till 8 is enough. 
+1
+
+1 not > 1 so not 
+2
+1 and 2
+3
+
+4
+2
+5
+6
+2 3	=5
+7
+8
+2 4	6	
+10
+2 5
+
+
+---------------
+suppose 1 to 50
+
+loop the numbers from 1 to 50
+arr[i]=1
+arr[i]=2
+arr[i]=3
+arr[i]=12;
+	inner loop 
+		2 to arr[i]		ie.,		2 to 12
+		2 is divisible by 12
+			sum+=2			2
+		3 is divisible by 12
+			sum+=3			5
+		4 is divisible by 12
+			sum+=4			9
+		5 is not
+		6 is divisible by 12
+			sum			15
+		7,8,9,10,11 need not be checked because half of 12 is already checked
+
+	SUM of all divisers is 15 which is greater than 12
+		12 is displayed
+
+
+
+public			anywhere it is accessible
+protected		within the same package + any sub class
+default			within the same package
+private			withing the class only
+
+packagename . class name
+
+
+
+what is 1/2		=		0		(if 1 and 2 are integers, result is also integer)
+we assume 1/2	is 0/5	and then *100	=50
+but actually
+	1/2	=	0	(int part)
+	0*100	=	0 	only
+
+
+by default, all array elements are 0 by default
+
+city is an array
+5
+5 * 5
+
+
+towers have x y coordinates
+mark the locations with 1
+a tower covers its position plus 	left, right, up, down, diagonal left, right, down diag left and rigtht
+
+update those cells with 1
+check if any 0s Found in the city array.	then "not covered".
+
+
+
+if no, count the 0s and display
+
+
+
+class contains
+	variable			data structures
+	methods				algorithm
+
+
+class is a wrapper
+	box	that contains
+
+class is a blue print for creating objects
+we are creating a composite type
+user defined type
+
+data types. we cannot create user defined data types. we create user defined types.
+
+Structures in language - to create user defined data types.
+NO STRUCTURES IN JAVA
+
+class
+interface
+
+if we declare public variables, we allow unconditional manipulation of data in the variable
+
+if x is public
+
+	x=20;
+	x=-20;
+
+i cannot restrict the data entered in a variable
+
+so we make variable as private	(non public)
+
+Property:
+	is a non public data member of a class.
+	with public getter and/or setter
+
+	only getter	(read only property)
+	only setter	(write only property)
+	both getter and setter	(read/write property)
+	no getter or setter 	(not a property)
+
+we can generate these setter, getter code in eclipse
+
+
+
+E-R diagram
+Entities became TABLES in the database
+Entities become Classes in java program
+
+
+
+what are constructors
+
+
+
+
+
+1) non public data members
+2) no arg constructor
+3) all arg constructor
+4) getters and setters
+5) toString() method
+
+
+what is encapsulation?
+	enclose/wrap/box the properties and methods inside a class
+
+
+int i=20;			this is value type	i has value called 20
+Integer x=new Integer(20);	here 20 is value. x is a wrapper. that boxes, 20 inside a class
+
+x=i;			//boxing	(automatic from java version 5 onwards)
+
+int score=x;			x is an object (box). take value out of box.	Unboxing (automatic)
+
+auto boxing
+auto unboxing
+
+
+method?
+		whatIsAMethodInJava?
+		function
+
+		computation, calculation, validation, do Task
+
+		behavior
+
+		f(x)			f is the function		x is the argument
+		{
+			
+		}
+
+	public static void methodName(parameters)
+
+
+EmployeeBO		CLASS			all methods related to Employee
+		createEmployee
+		modifyEmployee
+		removeEmployee
+		findEmployeeById
+		retrieveAllEmployees
+
+
+EmployeeDAO		class			all code related to store or retrieve data from to database
+
+in atm
+	withdraw		simple BO method
+		so many methods in DAO
+		check card details
+		validate pin number
+		check avl balance in account
+		check avl money in atm machine
+			withdraw	(a/c UPDATED)
+		dispense cash
+		print receipt
+
+
+
+method can accept any type of arg
+	argument can be
+		primitive		int char float long double boolean short byte 
+		ref types		Employee
+		arrays			arrays can be parameters
+		param array		var lenght argument		...
+		collections		ArrayList	LinkedList		HashSet	HashMap	
+
+methods can return
+		all of above
+		or void
+
+
+SimpleDateFormat:
+to convert String into Date		parse() 	method
+to convert Date into String		format()	method
+
+IIT Madras,www.iitm.ac.in,7845612390,iit,16,Madras,15-12-1959
+iit Madras,www.iitm.ac.in,7845612390,iit,16,Madras,15-12-1959
+
+
+
+String str1="hello";
+String str2=new String("hello");
+
+str1.equals(str2);		returns true;
+
+
+
+
+how to exit from a method
+	return	 statement is used to exit from a method.
+
+void display()
+{
+	return;				//return without any value
+}
+
+
+what is static?	(shared among the objects)	even if no object is created also, static members exist in memory
+
+	can be used without an instance of the class. 
+	can be used with the CLass
+	belongs to the class
+
+	
+
+
+static variables	
+static methods
+
+
+opposite to static variable is "instance" variable
+
+in c, c++ language,
+we can declare static variables inside a function also.
+but in java language,
+we cannot declare static variables inside a method.
+
+static means, class variable only.	(no local variable inside a method can be static)
+
+Integer.parseInt()		returns int
+Integer.valueOf()		returns Integer
+
+Integer startingDate=20					int to Integer is autoboxing
+
+
+overloading is a feature of object oriented programming language that allows
+	creating multiple methods with same name
+	but there should be a difference in
+	i) number of parameters		(and/or)
+	ii) type of parameters		(and/or)
+	iii) order of the type of parameters
+
+	in short, different signature
+
+
+
+	the return type may be same or different	
+	return type is not a part of signature
+
+
+
+int sum(int a, int b)
+int sum(int b, int a)
+
+	is this allowed?	NOT allowed!
+
+sum(2,3)			which of the above 2 will be chosen?????
+
+
+
+rules for param array
+
+i) param array must be the last arg in the list
+2) there can be only 1 param array in the list
+
+
+
+arrays
+	can you create array of objects?
+
+6
+7 1 2 7 7 2
+
+package com.jag.model;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Indices {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int n=sc.nextInt();
+		int arr[]=new int[n];
+		int result[]=new  int[n];
+		for(int i=0;i<n;i++)
+		{
+			result[i]=-1;
+		}
+		for(int i=0;i<n;i++)
+		{
+			arr[i]=sc.nextInt();
+		}
+		
+		int temp[]=new int[n];
+		for(int i=0;i<n;i++)
+		{
+			temp[i]=arr[i];
+		}
+		Arrays.sort(temp);
+		
+		for(int i=0;i<n;i++)
+		{
+//			System.out.println(arr[i]);
+			for(int j=0;j<n;j++)
+			{
+				
+				if(arr[i]==temp[j])
+				{
+					System.out.printf("arr[i] %d is matching with temp[j] %d at index %d",arr[i],temp[j],j);
+					
+//					if j is already not found in result array
+					boolean isFound=false;
+					for(int k=0;k<n;k++)
+					{
+						if(j==result[k])
+						{
+							isFound=true;
+						}
+						
+					}
+					if(!isFound)
+					{
+						System.out.println(" storing");
+						result[i]=j;
+						break;
+					}else
+					{
+						System.out.println(" ignoring");
+						continue;
+					}
+					
+				}
+			}
+		}
+		
+		//display result array
+		for(int i=0;i<n;i++)
+			System.out.print(result[i]+" ");
+	}
+
+}

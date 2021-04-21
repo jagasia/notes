@@ -1,0 +1,334 @@
+MVC1 vs MVC2
+
+	what is MVC?
+	
+		Model View Controller
+
+		model is for db operations
+		view is for User Interface
+		Initially, MVC was introduced only for Java projects.
+
+		it is a software design pattern
+		controller interacts with model and view
+		controller is used to handle user request
+
+		controls the access between the model and view
+
+		view is what user sees on the screen
+
+	Now, relate this to the dynamic web project we create.
+
+		model is Dao part that access the database
+
+		model:	data definition, data access
+			ex:	
+				Entity class is "data definition"
+				Student class defines the attributes of Student. It defines data or ddl 
+
+				StudentDao is data access
+				Entity class is also called as DTO	data transfer object
+
+				sometimes select * from Student
+				here entire record is represented by Student object
+				sometimes select col1, col2 from Student
+				here, Tuple is returned containing different values
+
+MVC1 vs MVC2
+
+	what is MVC1
+		JSP was much encouraged in MVC1 pattern
+		JSP custom tags with useBean was the technique encouraged in MVC1 
+		JSP acted as view. do you remember JSTL sql tag?
+		we can write custom tags like dataSource, sql tags? that can access model
+		
+		stack over flow and find discussions on MVC1 and MVC2
+
+	
+		IMO during MVC1, Servlets we used for both View and Controller
+		
+		In MVC1, there is tight coupling between page and model. As data access
+		is usually done using custom tag or through java bean call
+		(from jsp itself, using custom tag or java bean, we call model)
+
+		in both mvc models, model is clearly separated from view and controller
+		model is same in both models
+
+		In mvc2 architecture, there  is only one controller which receives all requests
+		(this is what we learn in spring mvc)
+		and this one controller is responsible for taking appropriate action in 
+		response to each request.
+
+	<form action="servlet1">
+		<input type=submit name="btn" value="Add" />
+		<input type=submit name="btn" value="Modify" />
+		<input type=submit name="btn" value="Delete" />
+	</form>
+
+	in servlet1,
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ClassPathXmlApplicationContext ctx=new ClassPathXmlApplicationContext("bean.xml");
+		VehicleService vs = (VehicleService) ctx.getBean("vs");
+		String btn=request.getParameter("btn");
+		int id;
+		String name, type, company;
+		switch(btn)
+		{
+		case "Add":
+		case "Modify":
+			name=request.getParameter("name");
+			type=request.getParameter("type");
+			company=request.getParameter("company");
+			Vehicle vehicle=new Vehicle(name, type, company);
+			if(btn.equals("Modify"))
+			{
+				if(request.getParameter("id")==null)
+					return;
+				id=Integer.parseInt(request.getParameter("id"));
+				vehicle.setId(id);
+				vs.update(vehicle);
+			}else
+				vs.add(vehicle);
+			break;
+		case "Delete":
+			if(request.getParameter("id")==null)
+				return;
+			id=Integer.parseInt(request.getParameter("id"));
+			vs.delete(id);
+			break;
+		}
+		response.sendRedirect("home");
+	}	
+
+
+======================
+	the above program is not managable and is not POJO 
+	we need a POJO class that contains below structure
+
+	using java reflection, can we get list of all methods
+	present in the blow controller class?	(getMethods())
+	and then using the annotation, we can understand which method to be invoked
+	if the request path is "add", then based on annotation value, i can decide
+	to call the add() method
+
+	if there is someone called as DispatcherServlet who will receive any request coming from user. That servlet
+		1) get the actual URL (requested for)
+		2) check the method available in our controller (POJO)
+		3) finally, invoke the correct method for the requested url
+
+
+
+	public class MyController
+	{
+		@RequestMapping("/add")
+		public void add()
+		{}
+		public void modify()
+		{}
+		public void delete()
+		{}
+	}
+
+
+uploaded a war into server (trainer.war)
+
+
+
+so that servlet portion should be taken care by 1 servlet that receives any request from the user
+and decide to call which method according to the url
+
+We call that servlet as DispatcherServlet
+
+	ABT parcel service
+
+	different parcel comes from diff locations and moves to different locations
+	there is one person called as controller who will take the parcel and put it in correct rack so that it will move to that location correctly
+
+	in controller, any request comes with url will meet only the dispatcher only
+		so he will take care of calling which method 
+
+MVC2
+	in MVC2, the controller is always servlet
+		spring boot? there is a dispatcher servlet (which is invisible) but it is there behind the controller
+
+	Struts	
+		Action	(is derived from Servlet)
+		Action is a controller	(what i claim, in java mvc, every controller is a servlet only)
+	
+	who will create dispatcher servlet?
+		Spring framework contains this dispatcher servlet
+		(means, we need to add a dependency? Yes)
+
+		<servlet>
+			<servlet-name>	</servlet-name>
+			<servlet-class>	</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>	</servlet-name>
+			<url-pattern>/	</url-pattern>
+		</servlet-mapping>
+
+http://localhost:8080/old-web-app/DispatcherServlet
+
+http://localhost:8080/old-web-app/home.jsp
+
+
+
+
+<servlet>
+		<servlet-name>DispatcherServlet</servlet-name>
+		<display-name>DispatcherServlet</display-name>
+		<description></description>
+		<servlet-class>controller.DispatcherServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DispatcherServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+
+
+1) web.xml	(if it is not found, how to add one)	right click -> Java EE tools -> deployement descriptor
+2) in modern dyn web app, servlets use annotations. remove that annotation and configure the servlet in web.xml
+	in annotation also, i can define /*	(i dont need web.xml way of configuring. But when configuring spring dispatcher, we cannot modify the annotation since we dont have access to modify the source code. learn to do in xml)
+3) in dispatcher servlet
+	display a line "i am dispatcher".
+4) observe that whatever url you enter in the browser (http://localhost:8080/project-context/    should be there)
+	this dispatcher comes
+5) display the url actually requested for
+6) Create an annotation "RequestMapping" with value attribute
+7) create a controller class "MyController" and for each method, use this request mapping annotation
+8) now, get all the methods of MyController and check if there is annotation called RequestMapping and read its value.
+9) if the annotation value matches the url then
+	invoke that method. (display some message in sout to confirm that the method is called)
+10) report me that the task is completed	
+	
+
+========================
+Spring MVC project
+1) create a dynamic web project and then
+	convert it into maven project
+	i) right click the project -> configure -> convert to maven project
+
+2) in pom.xml
+	before <build>
+	create an element <dependencies>
+3) add the below dependency elements 
+	<dependency>  
+    <groupId>org.springframework</groupId>  
+    <artifactId>spring-webmvc</artifactId>  
+    <version>5.1.1.RELEASE</version>  
+</dependency>  
+  
+<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->  
+<dependency>    
+    <groupId>javax.servlet</groupId>    
+    <artifactId>servlet-api</artifactId>    
+    <version>3.0-alpha-1</version>    
+</dependency>  
+
+4) configure the dispatcher servlet (this time, spring fw has a dispatcher servlet)
+	<servlet>    
+    <servlet-name>spring</servlet-name>    
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>    
+    <load-on-startup>1</load-on-startup>      
+</servlet>    
+<servlet-mapping>    
+    <servlet-name>spring</servlet-name>    
+    <url-pattern>/</url-pattern>    
+</servlet-mapping>    
+
+
+
+
+in my first execution,
+	i used / only
+	but index.jsp won
+	so we need to make our dispatcher servlet to be on high priority when there is index.jsp
+
+
+5) understand spring dispatcher servlet (has some expectations)
+	i) where you put your jsp file?		(inform spring dispatcher servlet)
+	ii) in my controller, 	return "home";		what does that mean?	home means home.jsp
+	how would you configure these information?
+		1) package where we can find controller	(scan)
+		2) prefix of the url (folder that contains jsp)
+		3) suffix (home means home.jsp)
+	These information can be configured in bean.xml (sorry, the name cannot be bean.xml)
+	there is a convention:
+		<servlet-name>spring</servlet-name>    
+	if the dispatcher servlet name is "spring", 
+		then the bean configuration file name should be: "spring-servlet.xml" 
+		(something-servlet.xml) what is that something? servlet name
+		-servlet.xml is fixed		only the first part should match "servlet-name"
+
+
+
+
+
+response.sendRedirect("index.jsp");			//always means web content folder to have this jsp file
+response.sendRedirect("WEB-INF/index.jsp");		//if index.jsp is present inside web-inf
+
+
+spring framework
+	request dispatcher servlet is done by spring framework. 
+	in coming chapters, we are going to get bean (getBean()) for dao, aop, etc etc using bean.xml
+	if i am creating a config	xmlconfig ( i can mention the bean.xml file name )
+	ClasspathXmlApplicationContext ctx=new Class....("bean.xml");
+		this is how we mention xml file name during spring core, aop, dao
+	but when it comes to spring mvc, we follow the convention on file name
+
+	
+	convention:	following the naming convention		dispatcher servlet name suppose is "jag"
+		bean.xml file name should be 	jag-servlet.xml		(this is advised by spring mvc framework)
+
+
+
+Front Controller
+	struts fw represented the form as a bean	(form bean)
+	our aim is to represent everything as an object
+		TABLE:		we represent table as an object How?	Entity class	
+		FORM:	html form?	we represent it as an object (in angular, we used formbuilder to rep the form as an object)
+	Controller gives lot of benefits.
+		
+	find what is front controller and share your observations now
+
+
+yesterday, we didn't want to go to index.jsp directly
+	instead we went to home (servlet)
+		home servlet, reads all vehicles and store the List<Vehicle> in the session and then redirects to index.jsp
+
+what is the front controller?
+	Dispatcher servlet.		then what is that class annotated with @Controller ?????
+
+	earlier our servlets served both (dispatcher servlet and controller) roles
+	now we have separated them into 2
+
+	both together is Front controller
+
+	good news, all servlet related code like
+		request.getParameter
+		session.setAttribute
+
+		etc etc are handled by Spring Dispatcher Servlet automatically. we will never require to write those code
+
+	imagine, 	there is a html form
+		<form>
+			id
+			name
+			type
+			company
+		</form>
+
+	on submitting the form, my controller gets an object of Vehicle	( i dont need to write request.getParameter )
+
+
+in hibernate
+		create(Vehicle vehicle)
+			from the object vehicle to table we need not split the object. hibernate do that
+
+in spring mvc
+		form input elements to Vehicle object we need not do it manually. Spring will do that
+
+TasK:
+yesterday, you created a web application 	(dynamic web app converted to maven) and used spring dao 
+	use the same dao in today's spring mvc project

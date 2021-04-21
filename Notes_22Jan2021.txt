@@ -1,0 +1,296 @@
+Testing
+	unit testing		testing individual units like functions 
+	regression testing	aim of testing is to find the bugs. after reporting the bugs, the dev team works on correcting/ solving the bugs. After solving the bugs, again we need to test (regression test). Why? sometimes, after rectifying one error, side effects will be there
+				test little, develop little, test little, develop little
+	functional testing	black box testing. testing the functionalities.	(expected vs actual)
+	integration testing	
+	acceptance testing	requirements
+	ad-hoc testing		random testing
+	stress testing
+	
+
+
+testing life cycle will be mapped with development life cycle
+	v model
+
+
+	software development life cycle
+		requirement gathering			SRS document
+		analysis				OOA
+		design					UML diagram
+		coding	/	development		programs
+		testing					
+		deployment				configuration
+		maintenance
+
+
+Junit
+		unit and regression testing framework
+		is free open source framework
+		provides annotations to define test
+		junit 5
+		provides test runners for running the test
+		test suites	-	(test suite contains test cases)
+		simple and takes less time
+
+environment setup	(download jar)
+
+	we need to write lot of test cases for each method (unit) in our java code.
+	each test case should be implemented using a method with @Test 
+	run the test
+		JunitCore
+		Right click run as junit (eclipse)
+
+
+Writing test cases
+	boundary values
+	usual values
+	abnormal values
+
+	mark <50 is fail
+	mark <0 is invalid
+	mark >100 is invalid
+	mark >=50 is pass
+
+	test cases:		what are the mark values to be tested?
+		0
+		-1
+		1
+		100
+		99
+		101
+		50
+		49
+		51
+		45
+		60
+		Integer.MAX_VALUE			should be tested	(program may say "pass", "fail", "invalid"	but if the value is out of range of Integer?	it will error)
+		Integer.MIN_VALUE
+		Integer.MAX_VALUE+1
+		Integer.MIN_VALUE-1		(HARD CODE not as 		Integer.MIN_VALUE)
+
+		15 test cases here
+
+
+Task:
+	Task any existing java bean and test 1 or 2 method using 2 test cases each (make 1/2 test cases fail)
+	run the junit test using 
+		eclipse (right click project run as junit)or 
+		main method	JUnitCore.runClasses()
+
+
+
+	compare 
+		annotations with xml file
+		in web.xml we configure servlet
+		or we use annotation
+		so, both annotations and xml are for configuration
+
+	maven is about convention than configuration
+
+question:
+we can create a java program that will call a method with some input values.
+	and then check the result if correct, a success message. else a failure message.
+
+	i) we separately testing by giving expected and actual values
+	ii) in maven, we write testing code in a separate package
+	iii) in java project, we use @Test while writing test cases
+
+	we do not run the project, we run as JUnit (test runner) because, we do not want to mix testing code with deliverable product
+
+	if we do as per the question, we do not know if the code is a part of deliverable (requirement) or coded by tester?
+
+	separating the roles of tester and developer to work in different space
+
+suggest, how we can use junit in our project
+	tester call the methods. That method call should not affect the database. SO WE CREATE MOCK SERVICES INSTEAD OF DATA SERVICE	(Mockito)
+
+	
+
+use case		withdraw
+		pre condition and post condition
+		before cash available in the atm should be checked
+		after	whethere account is debited or not 
+
+@Before		this annotation is used in a method to ensure that this method should be called
+		before everytime the @Test is performed
+@After
+@BeforeClass	sometime, we do not want to call the @Before everytime the test is performed. We need to use @BeforeClass so that it is called only once irrespective of any number of test
+
+Task:
+	create multiple Test methods and only 1 before method.
+	Run test and display the message in before method to see how many times before method is called for tests
+
+	create @BeforeClass method and check that for any number of tests, @BeforeClass method is called only once
+
+
+
+@Ignore
+	if used on a method, that test method is ignored
+	if used on a class, all tests in that class are ignored
+
+Exception test:
+	in test annotation, use "expected" attribute to specify the expected exception
+			@Test(expected = ArithmeticException.class)
+	declare exception variable using @Rule
+		@Rule
+	public ExpectedException exception=ExpectedException.none();
+
+	Define exception block using Test annotation
+	@Test
+	public void exceptionBlock()
+	{
+//		exception.expect(ArithmeticException.class);
+//		exception.expectMessage("error");
+		System.out.println("error occurred");
+	}
+
+	if exception occurred is unchecked exception, it will consider the test as failed. if it is checked exception, then it will redirect to exception block.
+
+Task:
+	identify the behavior of junit in case of "checked" and "unchecked" exceptions.
+
+TimeOut
+	some test may take more than expected time. For example, a transaction waiting for another transaction to release lock. or even deadlock.
+	you want to set timeout limit.	we can use @TimeOut 
+
+JUnit Assertions:
+
+Test Suite:
+	same project, i want to carry a walk through like as "user". Then like an "adming"
+
+
+JUnit Test Suite
+	create multiple test classes (class containing methods with @Test)
+	create a Test Suite that contains 2 test classes
+	run the test in eclise and using JUnitCore runnable classes
+
+
+Task
+	scenario:	There are 2 test classes with 4 Test methods each. These 2 classes form a test suite. But we do not want to execute all the test methods present in these 2 classes. So we run test suite for a particular category.
+steps:
+	in test class1, categorize 1st and 3rd method as "Admin"
+	in test class2, categorize 2nd and 4th method as "Admin"
+
+	run the test suite (@RunWith) categories by including category "Admin"
+
+
+Parameterized test
+	if we have a collection of test cases (inputs and expectedResult)
+		2,3,5
+		20,30,50
+	we can supply them as a collection to the test runner
+
+	sum method
+	i have modified it to old way:		sum(int, int)
+	but in my test method, i am not using constant	2,3	instead, i am using variables 	sum(no1, no2)
+	this no1 and no2 should be supplied from collection (test case)
+
+	we use Parameterized.class of Junit for this.
+
+steps:
+	1) the test class annotated with
+		@RunWith(Parameterized.class)
+	2) declare the instance variables for as many elements in the collection
+			int no1, no2, expectedResult;	//match the collection
+	3) constructor with arguments (we do not call the constructor, Parameterized.class will)
+		public MathsTest11(int no1, int no2,int expectedResult) {
+			super();
+			this.expectedResult = expectedResult;
+			this.no1 = no1;
+			this.no2 = no2;
+		}
+	4) define the collection
+		@Parameterized.Parameters
+	   public static Collection primeNumbers() {
+	      return Arrays.asList(new Object[][] {
+	ex:
+		@Parameterized.Parameters
+	   public static Collection primeNumbers() {
+	      return Arrays.asList(new Object[][] {
+	         { 2, 3, 6 },
+	         { 6, 3, 9 },
+	         { 19, 1, 20 },
+	         { 22, 1, 100 },
+	         { 23, 1, 24 },
+	         {1,2,3}
+	      });
+	   }
+	notice the order of values {2,3,6} matches the constructor order
+
+	5) define the @Test method
+	6) run the program
+
+----------------------------
+Task:
+	email address validation
+
+----------------------
+Theories
+	@RunWith(Theories.class)
+		works with 
+			DataPoint
+			DataPoints
+
+Task:
+	understand the Theories and DataPoint(s) and how it is used in Junit.
+	
+--------------
+Alternative Runners
+--------------
+JUnit Runners
+	JUnitCore.runClasses	method
+	@RunWith(Runner.class)		-	default runner
+	@RunWith(Suite.class)		-	suite runner
+	@RunWith(Categories.class)	-	categories runner
+	@RunWith(Parameterized.class)	-	parameterized runner
+	@RunWith(Theory.class)		- 	theory runner
+	
+
+	
+
+
+exceptions in JUnit
+	
+	1) create a test case for exceptional values (means, the values that cause an exception)
+		use @Test (expected
+	2) create a test case that do not cause exception, but produce output
+		do not use @Test(expected		here
+
+
+
+
+	1,2		do not use expected
+	2,1		do not use expected
+	1,0		use expected
+	2,0		use expected
+
+
+
+in case the test case produces exception (unexpected), test case is not failed. but errors.
+	if we can mark the test case as failure in case of unexpected exception
+		because, by design a test case can result in :
+			success
+			failure
+			error
+
+identify the test cases that can be done on your project
+	create a prefill() method for each DAO
+		i) a create method should return no of rows affected.	if 0, failure. if 1, success
+		ii) an update method should return no of rows affected.	if 0, if >1 then failure. if 1, success
+		iii) a delete method should return no of rows affected. if 0, if >1 then failure. if 1, success
+		iv) for the given prefill (if prefill contains 4 elements in the list), 
+			the read() should return a collection of same size
+		
+	Note:
+		prefill is the area, used by the tester for test cases. But all the methods are going to manipulate the database only.
+		setup is prefill data is stored in the db (using @Before)
+			a bulk update method in DAO is required. Clear the records first. then the bulk update 	that will use prefill list of entities to store in db
+
+		do not worry about this because, db.properties (change the db url to mock db)
+
+		
+
+	list of courses, enrolled by a student.
+		for the given prefill, you know how many courses, check the outcome of the DAO method
+

@@ -1,0 +1,226 @@
+Servlet chaining
+	response.sendRedirect(url);
+	rd=request.getRequestDispatcher(url);
+	rd.include();		or		rd.forward()
+		in case of include(), the current servlet will continue after including the response obtained from the target servlet
+		in case of forward(), the current servlet's outputstream is closed and continue from the target servlet
+
+	
+Session Management:
+	HTTP is a stateless protocol
+		
+
+		class having 2 methods.		sum(2,3)	i get 5
+						product()	i didn't give any input. still i get 6 as output
+
+		class has 2 states:		no1 and no2 	the sum functions set these state information
+			and the state information is retained across multiple function calls
+
+		in http:
+		in a form, i select country in a ddlist. all states related to the country are populated in the next ddlist. 	but fname, lname, whatever we entered has vanished.
+
+		because, whenever postback occurs (form is submitted to server), a new instance of page is sent to the browser.
+
+		but we are seeing the data entered in the form persistent across several round trips between server and our browser. This is done with session management techniques. (this is not automatic)
+
+	1) client side options	(the information will be stored in client machine)
+		i) hidden form fields
+		ii) url re-writing
+		iii) cookies
+	2) server side options	(the information will be store in server machine)
+		i) HttpSession			(session)
+		ii) ServletContext		(application)
+		iii) SevletConfig		(servlet)
+
+	
+Hidden form field
+	i) hidden form field
+	ii) cookies
+		small text files created by web page in clients machine. (client machine only)
+		Cookie cookie=new Cookie("name",value);
+		cookie.setMaxAge(millis);
+		resonse.addCookie(cookie);
+
+		cookies[]=request.getCookies();
+		for(c:cookies)
+			if(c.getName().equals("username"))
+				out.print(c.getValue());
+		
+	all these session management techniques are key-value pair only
+		cookie has name. has value.	expiry duration
+
+		adv:	it is easy to manage
+		disadv:	browser privacy settings will disable cookies
+
+	iii) url re-writing
+		this is also called as query string
+		?key1=value1&key2=value2
+		response.sendRedirect("two?username=raja");
+
+	iv) HttpSession
+		in one page, setAttribute		then in another page, getAttribute
+		
+		session.invalidate();
+		multiple ways to remove session attribute.	
+		remove 1 attribute
+			session.removeAttribute(arg0);
+
+		to automatically timout the session when the user is idle for certain time
+			session.setMaxInactiveInterval(interval);		//in seconds
+
+
+
+Task
+	user should be able to login using DAO
+		servlet calls the DAO impl validate login method and decide to call home page if success.
+			Welcome the user in home page
+		it was already done using
+			http session
+		now,
+			do the same using 
+			url rewriting
+			
+
+
+		in servlet one	
+
+		response.sendRedirect("two?username="+u);
+
+	http://localhost:8080/jan-11-01/two?username=Jag
+
+
+		in servlet two
+		String u=request.getParameter("username");
+
+
+
+Task:
+	accept username and password in login.html
+		LoginServlet, 
+			if login is successful, store the username in cookie and redirect to home page
+		Home page should greet the user (username obtained from the cookie)
+			if user directly goes to home page also, it will greet. until logging out
+
+		give a hyperlink in home page that will call a servlet.
+			LogoutServlet should 
+				destroy the session	(and)
+				delete the cookie with name "username"
+		
+
+-------------------------
+only using servlet:
+	we should be able to create an app.
+
+	1) if we stay in the form page and pull result from servlet using AJAX
+
+	2) if we call servlet using javascript, we can do dynamic response 
+
+	3) from servlet, we can also display dynamic form
+
+ to display image in browser, we use <img
+		in <img	 instead of giving file path, we give byte array
+		the byte[] should be converted to Base64 encoded string
+			for this we need to add a jar (apache commons jar)
+import org.apache.tomcat.util.codec.binary.Base64;
+
+	String x=Base64.encodeBase64String(employee.getPhoto());
+		out.print("<img width=80 height=80 id=photo1 name=photo1 src=data:image/jpg;base64," + x+" />");
+
+
+dynamic form.
+
+		there is no editEmployee html file at all.
+		there is display (servlet) on choosing a row in display servlet, a form is displayed by the servlet. This is a dynamic form. on submitting this form, the add servlet is able to understand that it is existing employee only. so updating the employee. 
+
+
+
+Task:
+	any entity
+		add
+		modify
+		display			every row has a "edit" and "delete" button
+
+	one form having multiple submit button
+		remember submit button is also an input control. 
+		
+	<form action=somethgin>
+		<input type=submit name=x value="edit" />
+		<input type=submit name=x value="delete" />
+	</form>
+
+	in something servlet,
+		request.getParameter("x");		this returns "edit" or "delete" whichever is clicked
+
+
+
+submit button in a form.
+form element should not have action
+
+<form onsubmit="fn1()">
+		in javascript, you can get the 
+			arr[]=document.getElementsByName("btn");
+		in this array, if we loop, one will be have checked/ selected property true another false
+
+
+
+----------------------
+Filters
+	how can you find the time taken by our servlet?
+	we may have to introduce this filter sometimes, sometime dont want to.
+	i dont to modify my servlet whenever this feature is required and not required
+
+	a servlet may allow anybody to request.
+	sometimes i want only those who are authenticated to access my servlet.
+	sometimes everybody is allowed
+
+	
+	Introducing filters
+		intercept the request and response to and fro the servlet
+
+	interceptor
+		the request passes through the filter
+		the response passes throught the filter
+
+	1 filter can intercept multiple servlets 	(based on pattern	ex:		*.do)
+		ex;		*EmployeeServlet			
+			means	AddEmployeeServlet
+		or we can give servlet name itself
+
+
+	@WebFilter(urlPatterns = {"/*"}, initParams = { 
+		   @WebInitParam(name = "test-param", value = "Initialization Paramter")}) 
+
+	what are all we can do with filter
+		doFilter() method
+			parameters	-	request, response, chain (FilterChain)
+
+			request.getParameter to get inputs
+			authentication
+			authorization
+			logging
+
+
+
+Task:
+	in a new project
+		create a servlet
+			display hello world
+
+		create a filter that intercepts that servlet
+			display " hello from filter" 
+
+	do this in 2 projects:
+			2.5 version			(web.xml)	just right click project and create filter
+			4.0 version			annotations will be used
+
+
+	1 filter can intercept multiple servlets using pattern
+	1 servlet can be intercepted by multiple filters
+
+	we can enable a filter to intercept or disable as and when required
+
+	FilterChain		is the 3rd parameter in doChain method	
+
+
+
+

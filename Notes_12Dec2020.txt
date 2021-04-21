@@ -1,0 +1,112 @@
+1) create a html page with 10 text boxes.
+change the background color of text boxes to yellow when they get focus. change the background color of text boxes to white when they lose focus
+
+2) create a html page with 1 text box and a button.
+	in the text box, user will enter a number. 
+	on clicking the button, the number implies the number  of textboxes to be displayed below.
+
+3) use below code for date picker:
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+        rel = "stylesheet">
+     <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+     <!-- <link rel="stylesheet" href="jquery-ui-jag.css" type="text/css" media="all" /> 
+     <script src="jquery-ui-jag.js" type="text/javascript"></script>
+     <script src="jquery-jag.js" type="text/javascript"></script> -->
+
+     <script>
+         $(document).ready(function(){
+             $("#txt").datepicker();
+         });
+     </script>
+</head>
+<body>
+    <input type="text" name="" id="txt" placeholder="Date of Birth">
+</body>
+</html>
+
+4) create a web page with 
+	i) date picker
+	ii) slider
+
+5) 
+	i) draggable
+	ii) accordion
+
+
+
+summary:
+	datepicker
+	slider
+	draggable
+	accordion
+	tabs
+	
+
+
+var data=`Burger,No,Rs.129.00,Main Course;
+Sandwich,Yes,Rs. 99.00,Main Course`;
+
+var rows=data.split(";");
+var cols=rows[i].split(",");
+
+Task:
+	Create a website that allows:
+	i) admin to view the menu items (with an "edit" option)
+	ii) admin to edit the menu item in a separate page
+	iii) customer to view active items (as on date) 
+	iv) add item to the cart
+	v) remove item from the cart
+
+	validations: 
+	i) the customer should be able to see only menu items which are active, and also already launched.
+	
+	Note:
+	the customer can add the same item any number of times. 
+
+var str=`Sandwich,Rs. 99.00,Yes,15/03/2017,Main Course,Yes;
+    Burger,Rs.129.00,Yes,23/12/2017,Main Course,No;
+    Pizza,Rs. 149.00,Yes,21/08/2017,Main Course,No;
+    French Fries,Rs.57.00,No,02/07/2017,Starters,Yes;
+    Chocolate Brownie,Rs.32.00,Yes,02/11/2022,Dessert,Yes`;
+
+
+https://upskillit.com/cart/edit-menu-item.html?menu=Sandwich,Rs.%2099.00,Yes,15/03/2017,Main%20Course,Yes
+
+did you notice ?menu=Sandwich,Rs..........
+this is query string.	(url?key=value&key2=value2&key3=value3)
+how to read the query string from javascript function
+
+when the edit button is clicked, the edit.html page should be auto populated with the selected menu item.
+
+customer.html
+	1) retrieve all the menu items from the localstorage.
+	2) display all the items in tabular format.
+		i) now introduce following conditions before displaying inside the loop
+			active should be "Yes"
+			date of launch should be today or past
+	3) each row should have last column as "Add to Cart"
+		clicking this link should add that row to the cart (localStorage)
+
+
+
+
+Monday onwards, 
+	1) typescript
+	2) angular
+
+	we need to download and install		node js			node package manager (npm)
+	using npm, we can install 	typescript, angular
+
+	compile the .ts file and execute the .js file
+	compile:
+		tsc one.ts
+	execute:
+		node one.js

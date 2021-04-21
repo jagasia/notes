@@ -1,0 +1,338 @@
+Annotations?
+	what is annotation?
+		comment
+			comments are always ignored by the compiler.
+			But annotations may not.	RUNTIME annotations are present in compiled code. even at runtime
+		while creating annotations, the "RETENTION" is specified. whether the annotation should be retained till runtime or only in source code.
+		
+		annotations are like comments in compile code.
+
+		they act as meta data
+
+
+		annotations can be targeted on element types like:
+				classes, methods, properties/fields, constructors, package, etc.
+
+
+		some pre defined annotations:
+		@Override			source
+		@Deprecated			runtime
+		
+
+		we can also create annotations
+				
+		//i am going to do reflection
+		//reflection means, reading meta data
+
+@FunctionalInterface
+		this annotation assertain that the interface we create is a functional interface and ensure that it contains only 1 abstract method
+
+
+	How to create annotation?
+		@Interface	to create an annotation
+
+
+	in hibernate
+		@Table(name="EMP")
+		public class Employee	
+		{
+			@Column(name="eid")
+			int employeeId;			//by default, hibernate will create a column employeeId
+		}
+
+Task:
+Create a class Student
+		constructor (without arg) to have deprecated annotation
+		
+		create an user defined annotation and use it in any of the members of Student class.
+
+		create a main method to read the annotations and display along with the class member
+
+
+----------------------------------------------------------------------
+
+how to use regular expressions in java:
+	i) reg exp can be used to check if given input string matches a pattern or not?
+	ii) to extract the portions of string that matches a pattern
+
+	first case was:		true / false		(whether string matches pattern or not)
+	second case was:	String			(extract the portions that matches)
+
+	example:	
+		first:		email id is valid?	phone number is valid or not?
+		second:		an sms comes like "please contact 989898989 and if it is engaged, call 1929"
+					retrieve only numbers from this string
+
+
+
+		String input="E009";
+		// input should be E followed by 3 digit number
+		System.out.println(input.matches("E\\d{3}"));
+
+	Do you know that split() method of String class accepts regular expression (only reg ex)
+	
+	input="192.168.1.1";			//ip address
+						//ipv4		each number should be in a range of 0 to 255
+								totally 4 numbers separated by .
+
+	write a java program to validate whether a given input string is a valid ip address or not?
+
+	if we split a string by ","		, is seen as a character (because , is not a reg ex symbol)
+
+	input.split(".")	//	will not work. because, . is a reg exp symbol means (anything)
+
+	input.split("[.]")	//works because, within [] it is a character (not symbol)
+
+	input.split("\\.")	//escapes from . being a symbol and use . as character
+
+	what are reg exp symbols?
+	.			anything		char, number, symbol,space, anything
+	\d			digit
+	\D			non digit
+	\s			
+	\S			
+	\w
+	\W
+	[]			one among the list or range
+				[aeiou]		any one of the list
+				[a-zA-Z0-9]	ANY ONE FROM a-z A-Z	0-9	totally 1 is considered
+	()			group the patterns	
+				([a-zA-Z]{1}[A-Za-z0-9]+){2}
+	
+
+	each symbol may be followed by multiplicity
+				{1,2}		min 1 and max 2
+				{5,}		min 5 and max unbounded
+				{3}		only 3 times
+				+			one or more times
+				*			zero or more times
+				?			zero or one time
+	
+
+
+String.split()
+	can be compared with StringTokenizer
+	StringTokenizer is used to split a string by delimiter.	Treats the split character always as character not as reg exp symbol
+	StringTokenizer st=new StringTokenizer(str, ".");
+		while(st.hasMoreElements())
+		{
+			System.out.println(st.nextElement());
+		}
+
+in split method, you hold all elements in an array. but in token, we deal with one group at a time
+
+---------------------------------------validating a string against a pattern---------
+
+extract the portions of a string that matches the pattern
+
+suppose, you receive an sms that contains
+	"pls contact admin 98989898 and another number is 292929".
+
+	only numbers found in the string are extracted.
+
+
+
+
+String has replaceAll method that accepts reg ex
+
+
+[] in reg ex, means any one from the list
+	
+()	group
+[]	1 from the list
+
+---------------------------------------------------------------------
+Multi threading
+	single threaded programs
+		whenever a program is executed, there is atleast 1 thread
+		main method is not present in a program, then we cannot excecute the program.
+		main method is the "main" thread found in any process.	
+
+	What is a process?
+		running instance of a program is called as Process.
+
+	Notepad is a program.
+		when i run notepad thrice consecutively, i found 3 processes in my task manager.
+
+	Operating System, allocates resources for every process that is running in a system.
+		resources (cpu time and memory)
+
+	CPU is 3 GHz processor. then in one second, the CPU goes round all processes 3* 1024 * 1024* 1024 times
+
+	CPU time mostly under utilized (esp when a program is waiting for user input)
+
+	CPU utilization is 0%
+
+	suppose, a process contains multiple threads.
+		already 1 thread is there called as "main"
+
+	2 thread?		1 is waiting for input, another thread work is done by CPU
+	CPU utilization is 50%
+
+	3 thread?		66%
+	4 thread?		75%
+	5 thread?		80%
+
+	so adding more threads is not considered as directly proportional efficiency.
+
+	we need to optimally use multi threading
+
+	performance tuning means effective utilization of resources
+
+	say, i am doing 2 tasks using 2 processes.		each process consumes cpu resources
+	say, i am doing 2 tasks uding 2 threaded in 1 process.	each thread shares the process resources
+
+	Multi threading improves process efficiency.
+		what is a thread?	
+			usually a program has only 1 thread ie., main method. execution starts usually from main and ends at main (if there are no static blocks)
+
+		so a thread is a single sequence of execution
+
+	we can add child threads to the main thread. 
+
+	how to create child threads?
+	1) Thread class
+		A class that extends Thread is a child thread
+
+	Thread.sleep method throws InterruptedException
+
+
+	usually a process runs in a synchronous mode
+		method1();
+		method2();
+
+	if method1 does not complete, then method2 never starts	(this is synchronous)
+
+
+	but when method1() is executed using a thread, it starts in asynchronous mode. means, the main thread does not wait for method1 to complete.
+
+
+
+whenever we need to create a child thread, we need to create an object of Thread class (or its sub class)
+
+A class that implements Runnable interface
+	
+
+Race condition:
+	when multiple threads run simultaneously, we cannot predict the order of the execution.
+
+Lock starvation:
+	based on priority, some threads are given less resources or sometimes never executed
+
+	
+
+if we need 5 threads, (in addition to main thread), then we need five classes. But using lambda, we can create anonymous classes.
+
+
+2 different methods to create Threads
+	extends Thread
+	implements Runnable
+
+
+
+by default, every thread we created has a priority = NORMAL	(out of 10 it is 5)
+we can set priority for any thread.	CPU will execute high priority threads first and then only low priority threads.
+
+	however higher the priority, the thread which is sleeping, will sleep
+
+
+Task:
+	create 3 child threads and display output using a loop and give some interval for each iteration of loop
+	demonstrate 2 different ways for creating child threads
+
+
+Song has collection of Artists
+Artist has collection of Songs
+
+relationship between Song and Artist is Many to Many
+
+in RDBMS the many to many relationship is represented using extra/ additional Table
+	ARTIST table	(master)
+	SONG table	(master)
+	ARTISTSONG table	for m-m relationship
+
+1:00 to 1:45 lunch break
+
+advanced multi threading 
+
+what are the issues we face in multi threaded process?
+	deadlock
+	synchronization
+
+concurreny issues
+	before dual core, core 2 duo (multi core processors) were introduced
+	only one cpu processor core was doing multiple threads taks in concurrent mode.
+
+	now, we have processors that have multiple cores, each core is designed to execute threads.
+
+still the problems remain due to concurrency
+
+	when multiple threads access a shared resource at a time, concurrency issues occur.
+
+	variable value is 20
+	t1 increments		20+1
+	t2 increments		20+1		=21
+	t3 increments		21+1		=22
+	finally the variable should be 23	but actually it is 22
+
+how to solve this concurrency issue?
+	we need to ensure only 1 thread is able to access the shared resource at a time. other threads should be made to wait until that.
+	this is synchronous execution. Then why we need multi threading?
+
+
+airpot
+mall
+people roam independantly
+but when they enter security check, they enter 1 by 1
+after security check, they roam independantly
+
+only while accessing / entering a sensitive region, the synchronization is required
+
+bookmyshow
+	any customer explores movies, theatres independantly
+	but while making payment, on a particular seat number, 2 person should not book
+		the same seat at a time
+
+	suppose there is a method
+	public void bookTicket()
+	{
+		.....
+	.......	
+.		....	
+..	
+.	
+.	
+<<sync>>
+
+
+<</sync>>.	
+.	
+.	
+.	
+	}
+
+A thread t1 enters sync block.
+until t1 exits that sync block, other threads are not allowed to enter the sync block
+
+sometimes, a portion of the method is synchronized
+sometimes, entire method is synchronized
+
+Hashtable
+StringBuffer
+	all methods in these classes are synchronized
+
+i) synchronized block
+ii) synchronized method
+
+	only when multiple threads access a SHARED resource, sync block/method can work/ can lock
+
+join method informs other threads, that the current thread need to finish before they start.
+	join:		whoever has started already are not influence. 
+
+
+	wait
+	notify
+	notifyAll
+	yield
+
+

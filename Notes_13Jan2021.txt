@@ -1,0 +1,354 @@
+JSP
+	Java Server Pages
+		java embedded in HTML code
+		is translated into Servlet before execution
+		life cycle
+			init
+			service
+			destroy
+
+		while translating JSP into servlet, 
+			a class is created (servlet is a class)
+			that class is compiled. While compilation, we may get error. That error is 
+				JasperException
+			suppose, jsp file name is "index.jsp". What will be the class name?
+				"index_jsp.class"
+
+	D:\jag\SpringToolSuitProjects\Jan2021\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\work\Catalina\localhost\jan-13-01\org\apache\jsp
+
+		
+basic elements of JSP:
+	1) SCRIPLET
+		<%	%>
+	2) EXPRESSION		(DO NOT CONFUSE THIS WITH EL (EXPRESSION LANGUAGE))
+		<%=	%>
+	3) DECLARATION
+		<%!	%>
+	4) DIRECTIVE
+		<%@	%>
+	5) COMMENT
+		<%--  --%>
+
+Scriplet:
+	this is server side script. allows us to use java code directly in the JSP
+	
+
+		IN SERVLET, there are init()	service()	destroy()
+		where will the scriplets be placed?
+	ans:		service method 		
+
+
+	It is considered as poor/ ameteur practise to use scriplets in JSP.
+	
+Expression:
+	<%=	%>	is always translated into out.print();
+
+		expressions are used to display output in jsp 
+
+Declaration:
+	<%!	%>			declared at class level
+
+Directive:
+		there are only 3 directive	(page, include, taglib)
+	page
+		errorPage="two.jsp"		mention a file name to redirect automatically whenever error occurs
+				(we mention another file name)
+			only if two.jsp has declared as "isErrorPage=true"
+		isErrorPage			=true, then this page name can be used in some other jsp as errorPage=
+			isELIgnored="false"		EL will not work if this is true
+
+		
+	include		is used to include other pages in our page.
+			create jsp pages as segments. (means, no top elements like HTML, HEAD, BODY)
+	taglib
+			to import tag libraries		(JSTL core, sql, html etc)
+			we will also create our own tags and import them using taglib directive	(custom tag)
+
+
+
+TasK
+	In you signup/registration/any form, you have lot of fields. After entering the data,
+	if servlet sends back 
+	(edit page)
+		now the edit page need not be created using servlet.
+	create edit page in jsp.
+	but this edit page should be auto populated while loading itself. use url rewriting
+
+	from display servlet, we select/edit a row. that row data 
+		should be populated in next jsp page (edit page)
+
+
+
+
+we learn IMPLICIT OBJECTS of JSP:		(no need to declare)
+
+	response		HttpServletResponse
+	request
+	config			ServletConfig
+	application		ServletContext
+	session			HttpSession
+interface
+	out			PrintWriter
+	page			represents the jsp page
+	pageContext		
+	exception		
+	
+
+Find out all jsp implicit objects
+
+
+<%
+	if()
+	{
+
+%>
+<><><><><
+<%
+}
+%>
+
+
+
+Task:
+	create 2 jsp files.
+	in first page, raise exception
+	second page should be displayed for exception occurred in first page
+
+	The second page should display the reason for the error
+
+
+-------------------
+JSP Action tags:
+	they are custom tags. they have prefix <jsp:
+	<jsp:include>
+	<jsp:forward>
+	<jsp:useBean>
+	<jsp:setProperty>
+	
+	our aim is to use only markup elements in jsp
+	we need to reduce the use of scriplets in jsp. almost zero java code in jsp. but with same functionality
+	
+	useBean
+
+	suppose, there is a class that has properties
+		properties are variable with getters and setters
+	
+in jsp, whatever tag we write is assumed as HTML tag only.
+	if any other than HTML tag we use, prefix is required.
+
+	<jsp:	this is action tag. and is defined in jsp language itself. so we do not need to import any tag library using taglib directive. NOT REQUIRED
+
+	
+
+
+EL	-	Expression Language
+	expression means it produces result		<%=		is expression and it is always display
+
+	EL is also only for display purpose
+
+	syntax for EL
+		${}		do not confuse with jquery which is $()
+
+
+	in expression language, 
+			request.getParameter("username") is replaced by
+			${param.username}
+
+	to read a value from a cookie, what do we do?
+		Cookie[] cookies=request.getCookies();
+		String username="";
+		for(Cookie c : cookies)
+		{
+			if(c.getName.equals("username"))
+				username=c.getValue();
+		}
+		
+
+
+Try to store a value in cookie and retrieve it using ${cookie.username.value}
+
+			${param.username}		
+			${cookie.username.value}	value is private. here value is translated into getValue()
+
+
+	if there is a getter method 		getDateOfBirth2()
+			${ e.dateOfBirth2 }	this will automatically convert to 	e.getDateOfBirth2();
+		in fact in employee class, there is no variable called "dateOfBirth2"
+	
+
+
+why there is a param constructor. because, we need to give some values to the properties. 
+	so that we can supply those properties using <jsp:setProperty		method
+
+so in dependency injection
+		i) constructor based injection
+		ii) setter based injection
+
+whenever you use <jsp:useBean
+		use setter based injection
+
+symbols/ operators in EL:
+	.			e.id		(member access)
+	[]			arr[0]		(element)
+	()			(a*(b+c))	grouping
+	+	=	*	
+	/	or div		used for division
+	%	or mod		for modulus
+	==	or eq		5==6 is true		5 eq 6 is false
+	!=	or ne		not equal
+	<	or lt
+	>	or gt
+	<=	or le
+	>=	or ge
+	&& 	or and
+	||	or or
+	!	or not
+	empty
+
+EL is very useful with JSTL custom tags
+
+<upper>this line is typed in lower case</upper>
+
+we are going to create an upper tag now
+
+1) XML file		tag library descriptor		(something.tld)
+2) tag handler		java class containing the java code to process the tag
+3) we use the tag in jsp file using
+		taglib directive		<%@ taglib prefix="" uri="" %>
+
+tag handler:
+	a class that is executed in response to a custom tag is tag handler
+	any class? no.
+	a class that extends or implements something
+		Tag
+		SimpleTagSupport
+		BodyTagSupport
+	
+
+There are different type of tags. 
+	simple tag		(no end tag. eg:		<br/>	<hr/>
+	body tag		ex: 	<upper>this is a text</upper.
+
+	both of these tags can have attributes		ex:	<p align="left"></p>
+		align is an attribute here.
+example:
+
+1) XML file		tag library descriptor		(something.tld)
+2) tag handler		java class containing the java code to process the tag
+3) we use the tag in jsp file using
+		taglib directive		<%@ taglib prefix="" uri="" %>
+
+why xml file?
+	xml is best for configuration
+	
+We are going to create a simple tag (empty tag)
+	<copyright />
+
+	<body-content>empty</body-content>
+	<body-content>scriptless</body-content>
+	<body-content>JSP</body-content>
+
+
+
+<jag:upper color="red">This line is manipulated by upper tag</jag:upper>
+for attributes in custom tag,
+	i) tld file 
+		should contain <attribute> inside <tag>
+	ii) in tag handler 
+		there should be a property (setter) for the attribute
+	iii) in jsp custom tag,
+		use the attribute		<jag:upper color="red">this is a line</jag:upper>
+
+
+Task:
+	we are writing lot of code to display a <table> in jsp
+	create a custom tag for that.
+
+	
+
+TasK:
+	create a custom tag that will transform the date (default date format) into dd-MMM-yy format
+
+	usage:
+		<jag:date>
+			<%=new Date() %>				
+		</jag:date>
+
+Wed Jan 13 15:04:11 IST 2021			
+EEE MMM dd HH:mm:ss Z yyyy
+	convert from above format to Date()
+	from Date() convert to String in dd-MMM-yy format
+
+	example:		<tr><td><jag:date>${e.dateOfBirth}</jag:date>
+
+
+------------------------------------
+<body-content>empty | JSP | scriptless | tagdependent</body-content>
+(Optional) Defines the content of the tag body.
+
+empty means that you use the tag in the empty tag format in the JSP page. For example:
+
+<taglib:tagname/>
+JSP means that the contents of the tag can be interpreted as a JSP and that you must use the tag in the body tag format. For example:
+
+<taglib:tagname>...</taglib:tagname>
+scriptless means that the contents of the tag do not contain any scripts or scripting elements.
+
+tagdependent means that your tag will interpret the contents of the body as a non-JSP (for example, an SQL statement).
+
+<attribute>
+-------------------------
+JSTL
+	JSP standard tag library
+
+	we have created few custom tags
+		copyright
+		upper
+		mydate
+
+	JSTL also has lot of custom tags. they are categorized into
+		core		
+			if, choose, foreach, set, out, etc.....
+		html
+		sql
+
+	
+how to use JSTL core lib in our project?
+		where is the 
+			tld
+			tag handler (java)
+		then we can include it in our jsp using		<%@taglib uri="" prefix="" %>
+
+		download jar file for jstl 				jstl 1.1 and 1.2 	(we use 1.2)
+
+
+
+Task:
+	Display the entities using <c:forEach> loop
+
+
+Task:
+	display odd rows in silver background
+	
+	<c:set 	is used to declare a variable with a value
+		i=0
+	inside for each loop, increment variable i
+
+	<c:if test="${i mod 2 eq 1}">
+		<tr bgcolor="silver">
+	</c:if>
+
+	jstl core "if" do not have "else"
+
+	so use
+
+	<c:choose>
+		<c:when test="">
+		</c:when>
+		<c:otherwise>
+		</c:otherwise>
+	</c:choose>
+
+14-Jan-2021	(tomorrow) is holiday
+	Wish you all Happy Pongal/ Sankranti
+

@@ -1,0 +1,384 @@
+	.className
+	{
+		
+	}
+
+<button [class]="classes">Button</button>
+
+ts file
+
+classes:string='className';
+
+
+
+
+<button [class]="classes">Button</button>
+
+<button [style.color]="color">Button</button>
+
+
+
+
+
+pre-defined directives in angular
+
+1) property binding
+	<input type="text" [value]="userName" />	
+		this userName is defined in the .ts class
+		one way binding
+2) Event binding
+	<input type="button" (click)="fn1()" />
+		this fn1() is defined in the .ts class
+3) two-way binding
+	<input type="text" [(ngModel)]="userName" />
+		(FormsModule is imported in app.module.ts file)
+		changes made in the text box reflected in the .ts class variable (userName) and vice versa.
+4) Class binding
+	class here does not mean .ts class
+	class means html class	(ex:	<input type=button class="btn" />)
+		this is the class they mean
+	
+	Task:
+		drop down list to contain (red, blue, green) options. On changing the values, the .ts property called "color" should be bound (two way)
+		the paragraph class should be bound to the "color" of .ts
+		define red, blue, green classes in css file
+
+5) Style binding
+
+	Task:
+		drop down list to contain (red, blue, green) options. On changing the values, the .ts property called "color" should be bound (two way)
+		the paragraph class should be bound to the "color" of .ts
+		define red, blue, green classes in css file
+	
+	now, 
+	1) create a div whose background color should be changed according to the value selected in dropdown list.
+	2) create a paragraph whose color should be changed according to the value selected in the dropdown list.
+
+	<div class="col-md-3">
+
+	this 3 is static
+	<div [class]="colSize">			colSize is a ts variable	
+
+	<button class="btn btn-Success"></button>
+
+
+Parent component
+	Child component
+
+how a parent component give input to child component
+	Ex:
+		Parent:		app component
+		Child:		jag component, sign in component, 	signup component
+		how we use child component in a parent?
+			<app-jag></app-jag>
+
+			suppose, i want to supply some input to this child component.
+			<app-jag name="Jagi"></app-jag>
+
+		<body bgcolor="green">
+		<table border="1">
+		<font color="blue">		color is an input
+		these are some of the ways, a parent(container) component sending inputs to the child component.
+		and the child component is able to use these values inside.
+
+
+
+@Input			directive
+
+Parent component		(app.component.html)
+			<app-jag name="Jag"></app-jag>
+Child component
+			jag.component.html			<app-jag></app-jag>
+			Welcome {{name}}
+
+
+Task:
+	parent component : 	app component
+	child component :	sign in component	(we created)
+	The sign in component you have created, should have a property binding to change the background color of the component.
+	ex: color is a property variable declared in the ts file.
+
+	this color variable should be decorted with @Input() directive.
+
+	In parent component, when they use this sign in component, they should be able to specify the color that applies to the background color of the child component.
+		<app-sign-in color="blue"></app-sign-in>
+
+
+child component:
+html:
+<button (click)="sendValues"> Send Data </button>  
+
+ts:
+@Output() myOutput:EventEmitter<string>= new EventEmitter();  
+
+sendValues(){  
+   this.myOutput.emit(this.outputMessage);  
+} 
+
+
+
+
+parent component:
+html:
+<app-student [myinputMsg]="myInputMessage" (myOutput) ="GetChildData($event)"></app-student> 
+
+ts:
+GetChildData(data){  
+   console.log(data);  
+}  
+
+
+
+Task:		Output
+
+	The child component has a
+		textbox		
+		button
+
+	when the button is clicked, the child component emits an event and send the data (entered in the textbox)
+
+	The parent component should be able to handle the event (emitted by child component). The data sent by the child component should be displayed in <h2> in parent component.
+
+
+
+
+Task:
+	Exercise:
+	 Building a Voter Component
+		the component should have a "Vote" button. On clicking this button, the votes count should increment
+
+
+TasK:
+	Exercise Building a Like Component
+		the Like component should contain, 
+			Like button
+			Dislike button
+
+		the parent component should display
+			Like count
+			Dislike count
+
+		try to use like and dislike icon pictures to make component look nice.
+
+
+---------------------------------
+Pipes
+	pipes are used to transform data from one format to another	(transform)
+
+	what are the different types of pipes?
+		DatePipe: Formats a date value according to locale rules.
+		UpperCasePipe: Transforms text to all upper case.
+		LowerCasePipe: Transforms text to all lower case.
+		CurrencyPipe: Transforms a number to a currency string, formatted according to locale rules.
+		DecimalPipe: number into a string with a decimal point, formatted according to locale rules.
+		PercentPipe: Transforms a number to a percentage string, formatted according to locale rules.
+
+	Custom pipe		(we create pipes)
+
+date pipe all options:	https://angular.io/api/common/DatePipe
+<br><br><br>
+<br><br>
+{{ votes | currency:'INR'}}
+<br><br>
+<br><br>
+{{ votes | currency:'USD'}}
+<br><br>
+<br><br>
+{{ votes | currency}}
+<br><br>
+
+{{title | uppercase }}
+<br>
+{{ title | lowercase}}
+<br>
+{{ title | titlecase}}
+<br>
+{{today | date }}
+<br>
+
+{{ today | date:'dd-MMM-yyyy'}}
+
+<br>
+{{ today | date:'full'}}
+<br>
+{{ today | date:'fullTime'}}
+
+
+{{ 12/13 | percent:'1.1-2'}}
+
+
+display object of a class
+JSON pipe
+
+{{ emp | json }}
+
+
+Task:
+	practise each pre defined pipe with constant data using interpolation.
+
+
+
+Custom Pipes:
+
+x=10
+{{ x | square }}						100 should be displayed
+ 
+how to create a pipe called square???
+	create a class that extends super class. implements interface
+
+	PipeTransform interface
+		override the method transform()
+
+	new versions of angular allows us to generate this code just by
+		ng generate pipe square	(class name: SquarePipe)
+
+
+Task:
+	Create a custom Pipe square root using 
+		ng generate pipe sqrt
+	
+
+	ng g class abcd					this will create a class
+	(or)
+	right click module (app) folder and create a file.		cube.pipe.ts
+	
+	when we learnt typescript operators, did we learn power operator. (symbols is **)
+		to find square root, use x power 1/2	
+		to find cube root, use x power 1/3
+	
+	create square root using (ng generate pipe)
+	and cube root manually
+
+------------------------
+ngClass
+
+.italic
+{
+    font-style: italic;
+}
+
+.red
+{
+    color:red;
+}
+
+.green
+{
+    color:green;
+}
+
+
+
+
+<h1 [ngClass]="{italic:true, red:false, green:true}">This is my heading</h1>
+
+<h1 [class]="myClass">another</h1>
+
+
+
+isHeading:boolean=false;
+  myClass:string="italic";
+
+
+Task:
+	3 check boxes
+		i) bold
+		ii) italic
+		iii) red
+
+	apply the classes whichever is checked to the heading 1 element.
+	bold, italic, red are classes defined in the css file.
+	
+	Hint:	use ngClass directive
+
+
+
+.bold
+{
+    font-weight: bold;
+}
+.italic
+{
+    font-style: italic;
+}
+
+.red
+{
+    color:red;
+}
+
+
+<input type="checkbox" name="chkBold" id="chkBold" [(ngModel)]="bold"><label for="chkBold">Bold</label>
+<br>
+<input type="checkbox" name="chkItalic" id="chkItalic" [(ngModel)]="italic"><label for="chkItalic">Italic</label>
+<br>
+<input type="checkbox" name="chkRed" id="chkRed" [(ngModel)]="red"><label for="chkRed">Red</label>
+<br>
+{{bold}}
+<br>
+{{italic}}
+<br>
+{{red}}
+<h1 [ngClass]="{bold:bold,italic:italic,red:red}">This is the heading</h1>
+
+
+
+
+
+  italic:boolean=false;
+  bold:boolean=false;
+  red:boolean=false;
+
+
+----------------
+ngStyle
+	accepts a json object of key:value pair.	
+				key is the css property
+				value is the value (not boolean) accepted by the css property
+
+
+Task:
+	use ngStyle to accomplish the below task:
+	three text boxes:
+	Color:	....................
+	font family: ................	
+	Bg color: .....................
+
+	H1 element should be applied with the above style using ngStyle directive.
+
+
+---------------------------------------
+ng-content
+
+	in app.component.html
+		<app-sign-in>
+			type something...
+		</app-sign-in>
+
+	in sign-in component		html file:
+		<ng-content></ng-content>
+
+
+in app.component.html
+	<app-jag>
+		 <div class="header"> Bala typed this</header>
+		 <p id="footer">THis is footer </p>
+	</app-jag>
+
+in jag.component.html
+	<p>jag works!</p>
+	<div [style.backgroundColor]="'yellow'">
+		Welcome {{name}}
+		<br>
+		one
+		<br>
+		<ng-content select=".header"></ng-content>
+		two
+		<br>
+		three
+		<ng-content select="#footer"></ng-content>
+		<ng-content></ng-content>	entire content (all selectors are attracted by this element		</div>
+
+--------------------------------
+Exercise:
+	Building an accordion

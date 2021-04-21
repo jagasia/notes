@@ -1,0 +1,281 @@
+yesterday we created a MVC project (we created our own mvc project using our own dispatcher servlet)
+yesterday we created Spring MVC project (because we used the Spring dispatcher servlet not ours)
+we want to create the controller as a pojo class. That gives the role holder a convenience to create java code and test it independently
+
+when a form is submitted, i get lot of inputs from user. text box, email, date, number, pic, etc, etc
+
+but for a person who code controller, 
+	public void add(Vehicle vehicle)
+	{
+		
+	}
+	
+need not worry about the input controls. So controller should be a POJO class
+
+thats exactly why a Dispatcher Servlet is required
+
+yesterday we tried to merge (spring-servlet.xml and bean.xml) and merge (dependencies
+related to MVC and DAO)
+
+once we do that, we can upload a blank project to GitHub. 
+	can we name it as Spring MVC starter project
+
+you feel difficult in bean.xml (xmlns	and schemaLocation) adding p schema, adding context, adding tx OMG
+	IF I give you a space like db.properties	spring.mvc.view.prefix=/WEB-INF/jsp/
+	and corresponding namespace and schemaLocation will be automatically configured
+
+we are aiming to that kind of environment
+
+Now, shall we start demo on Spring MVC with DAO
+
+1) create a dynamic web project		(contain web.xml)
+	spring-mvc-dao-starter-jag
+2) configure-> convert to maven project
+
+-servlet.xml		rigid			we have an option also to change that name 
+	in web.xml	servlets can have <init-param>configLocation</
+
+	 <init-param>
+                    <param-name>contextConfigLocation</param-name>
+                    <param-value>bean.xml</param-value>
+        </init-param>
+
+3) in pom.xml
+
+	<properties>
+		<spring.version>4.0.0.RELEASE</spring.version>
+		<hibernate.version>4.1.9.Final</hibernate.version>
+	</properties>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.ojdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>3.0-alpha-1</version>
+		</dependency>
+4) web.xml
+	configure the dispatcher servlet (ours?	No. spring fw dispatcher servlet)
+	<servlet>
+  	<servlet-name>spring</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>spring</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+5) create spring-servlet.xml		(copy web.xml and paste there itself, it will ask a new name)
+	in this xml file
+		mvc annotation driven
+		context: component scan base package should be set to "controller" 
+
+============================================
+Spring MVC annotations
+---------------------
+@Controller
+	this annotation defines that the class (pojo) is playing the role of a controller. 
+	this class is identified using class path scanning
+		<context:component-scan base-package="com.jag.controller">
+
+
+	By design, every method in the @Controller class should return an "url"
+	but we can manipulate it. 
+	By using @ResponseBody annotation, a method can return body instead of url
+
+@RestController
+	
+@RequestMapping
+	for all type of requests like
+		GET
+		POST
+		PUT
+		DELETE
+
+	@RequestMapping(value="/getAll", method= RequestMethod.POST)
+
+other ways to do this:
+	@GetMapping
+
+	@PostMapping
+	
+	@PutMapping
+
+	@RequestMapping("/")	//this is same as below
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+
+@RequestParam
+==============
+			http://localhost:8080/mycontext/all?id=80
+@RequestParam("id")
+		similar to request.getParameter("id");
+
+if there are 5 text boxes in the form, 
+	only 1 parameter is enough
+	public String all(HttpServletRequest request) 
+		inside the method, we can get all inputs
+
+	now, if i use @RequestParam
+
+	public String all(@RequestParam("id") int id, @RequestParam("name") String name, ......
+
+solution is there in Spring MVC Form
+	public String all(@ModelAttribute("vehicle") Vehicle vehicle)
+
+
+@PathVariable
+=============
+/products/{id}			
+			http://localhost:8080/mycontext/all/80
+public String select1(@PathVariable("id") int x)
+
+
+@ModelAttribute
+	when form is mapped to a model, we receive the entire form as an object (vehicle object) and we use model attribute
+		public String all(@ModelAttribute("vehicle") Vehicle vehicle)
+
+@CrossOrigin(origins="http://localhost:4200/")
+	to enable CORS policy		(CORS stands for Cross Origin Resource Sharing)
+
+
+
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+this uri also depends on jar file / maven dependency
+
+<form:form>
+	
+</form:form>
+
+<form>	this  is html form
+<form:form>	this is spring mvc form	(this can be mapped to a model)
+example:
+	<form:form method="POST" modelAttribute="vehicle" action="add">
+					<form:input path="id"/><br/>
+					<form:input path="name"/><br/>
+					<form:input path="type"/><br/>
+					<form:input path="company"/><br/>
+					<input type=submit value="Add" />
+				</form:form>
+
+next:
+	ModelAndView
+
+in a controller 
+	every method can by default have 
+		return type 	as String
+		parameters 	as String
+
+	the return type usually is the view name
+
+	in a controller, every method usually returns the view name
+
+
+	public ModelAndView home(ModelAndView mv)
+	{
+		System.out.println("working");
+		List<Vehicle> vehicles = vs.read();
+		mv.addObject("vehicles", vehicles);
+		
+		Vehicle vehicle = vs.read(147);
+		mv.addObject("vehicle",vehicle);
+		
+		mv.setViewName("vehicle");
+	
+		return mv;
+	}
+
+
+public ModelAndView home()
+	{
+		System.out.println("working");
+		ModelAndView mv=new ModelAndView();
+		List<Vehicle> vehicles = vs.read();
+		mv.addObject("vehicles", vehicles);
+		
+		Vehicle vehicle = vs.read(147);
+		mv.addObject("vehicle",vehicle);
+		
+		mv.setViewName("vehicle");
+	
+		return mv;
+	}
+
+
+forms validation:
+1) 	 <dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-validator</artifactId>
+	    <version>4.2.0.Final</version>
+	  </dependency>
+
+2) entity class (Vehicle.java)
+	add validation annotations like
+	@NotNull
+	@Size
+
+3) vehicle.jsp
+	<form:error path="name" cssClass="error" />
+4) controller
+	in the method add @Valid and an arg BindingResult result
+		@RequestMapping(method = RequestMethod.POST, value = "/save", params = "update")
+	public ModelAndView updateVehicle(@Valid @ModelAttribute("vehicle")Vehicle vehicle, BindingResult result)
+	{
+		if(result.hasErrors())
+		{
+			System.out.println("Error is there");
+			return home();
+		}
+		System.out.println("No errors");
+		vs.update(vehicle);
+		return home();
+	}
+
+Note:
+	after 
+		if(result.hasErrors())
+		
+	do not call the show() method because, that method re populate the form fields. 
+	so just redirect to the same page (if needed, add model for other purposes. NOT TO REPOPULATE FORM FIELD)

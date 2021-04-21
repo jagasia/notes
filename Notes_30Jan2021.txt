@@ -1,0 +1,264 @@
+class JdbcTemplate
+{
+	DataSource dataSource;
+}
+
+what we injected?
+	DriverManagerDataSource
+
+
+	either using
+		XML configurationfile
+		Annotation
+
+
+ApplicationContext interface is implemented by
+	ClassPathXMLApplicationContext
+	AnnotationConfigApplicationContext
+
+<bean autowire="byName | byType>
+
+</bean>
+
+
+-------------------------------------------
+AOP
+	Aspect Oriented Programming
+	
+
+i am developing a method (java method)
+	withdraw()
+		i am good in implementing the withdraw business logic
+		i need not worry about before and after this withdraw
+
+	cross cutting concerns
+		some services that flow across several bean methods 	(session, logging, transaction, security)
+
+
+	there are 10 methods
+		m1
+		m2
+		m3
+		a2
+		a1
+		a3
+		b1
+		b2
+		b3
+	
+
+		m10
+
+	there are some advices we need to follow while call the methods
+	we are going to create an Aspect that contains advices
+	Aspect is a class
+		advice is a method inside Aspect class
+
+	@Aspect
+	class MyAspect
+	{		
+		* com.mphasis.jag.*.*(..)	
+	}
+
+
+Task:
+	create a bean Student
+
+		containing methods
+			accept()
+			display()
+			attend()
+			design()
+
+	create a bean Logging
+		containing methods
+			beforeAmethods()
+			beforeDmethods()
+			afterAmethods()
+			afterDmethods()
+
+	in bean xml file
+		configure aop so that
+			beforeAmethods() advice of Logging Aspect is called before accept() and attend() methods
+			beforeDmethods() advice of Logging Aspect is called before display() and design() methods
+
+			and so does the after methods also
+
+	App.java
+		get Student bean and call all the four studebnt bean methods
+
+EmployeeDAO
+	create	(do not modify the create method)
+	
+
+before calling the create method
+	display all the records present in tnhe table
+
+after calling the create method
+	display all the records in the table
+
+Aspect
+	methods inside the aspect are called as advices
+		beforeCreate()		is an advice
+		
+
+when should, which advice be called?		expression	point cut expression (SpEL)
+		Join Point is the point of time where, our Aspect 
+
+same example:
+	but using annotations
+
+Join point
+Advice
+Pointcut
+Introduction
+Target Object
+Aspect
+Interceptor
+AOP Proxy
+Weaving
+
+
+Task:
+	Earlier we have done a task 
+	create a bean Student
+
+		containing methods
+			accept()
+			display()
+			attend()
+			design()
+
+	create a bean Logging
+		containing methods
+			beforeAmethods()
+			beforeDmethods()
+			afterAmethods()
+			afterDmethods()
+
+	now the Aspect class contains before... after... methods that advice different JoinPoint methods. 
+	We are not able to specify the JoinPoints so far.
+	
+	use JoinPoint as arg in the before... and after... methods and display jp.toString() method
+
+
+
+============================================
+JdbcTemplate
+	DataSource dataSource
+
+bean.xml
+	we defined atleast 2 beans
+		<bean class=JdbcTemplate
+			<property name=dataSource
+		</bean>
+		<bean class=DriverManagerDataSource
+
+
+
+
+
+JdbcDaoSupport	super class for our DAO class
+	this super class has a dependency
+		DataSource dataSource
+	now in bean.xml
+	i need to define my class 
+
+public class EmployeeDAO extends JdbcDaoSupport
+{
+	// i dont have any dependency. but my super class has a dependency 	dataSource
+}
+
+========================================
+JdbcDaoSupport
+-------------
+1) create a maven project
+	jdbc-dao-support-demo-1
+2) pom.xml
+	     <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-jdbc</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>com.oracle.ojdbc</groupId>
+    <artifactId>ojdbc8</artifactId>
+    <version>19.3.0.0</version>
+</dependency>
+3) in model package, create a class Vehicle.java
+	
+4) in bean.xml
+	configure DriverManagerDataSource 	(dataSource)
+	
+	why the name of this bean is "dataSource"?
+		in JdbcDaoSupport (super class), there is a dependency called dataSource
+
+
+Task:
+	JdbcDaoSupport
+	i) create a Biscut DAO using JdbcDaoSupport	
+		fields	(id, name, type, flavor)
+
+============================================
+HibernateTemplate
+	we do not require to write SQL queries for basic CRUD operations
+
+	1) find dependencies
+	2) configuration
+	3) persistence methods
+
+
+Product
+	id
+	name
+	price
+	
+====================================================
+IN bean.xml
+	DriverManagerDataSource		
+		id="dataSource"	class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+
+	LocalSessionFactory
+		id=sessionFactory class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+here... there are hibernate config properties like dialect, ddl2auto etc
+	
+	HibernateTemplate
+		id=ht class="org.springframework.orm.hibernate5.HibernateTemplate"
+	
+
+
+in your project,
+	you can represent every relationship without M-M
+	M-M creates a new table
+	
+	ex:
+		Customer vs Product 		is Many to Many
+		the relationship becomes table (Sales)
+	sales table
+		invNo	invDate	pid	cid	qty	
+
+	INSTEAD OF IMPLEMENTING MANY TO MANY,
+	Try to create that Sales as a class in java
+	and implement 1-M 	and 	M-1 only
+
+	Customer - Sales	1-M
+	Sales 	 - Product	M-1
+
+
+wherever LOB are there,
+	keep them as a separate table
+
+	Course:
+	cid, cname, desc, video (move this video column to a separate table)
+	

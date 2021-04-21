@@ -1,0 +1,487 @@
+what is the difference between managed and detached entity
+	managed?		(synchronized)	with db record
+
+	i create an object (obj) of Vehicle. Since i have created an object, definitely it is in transient state. 
+	(not in sync with a rec in db table)
+
+	session.merge(obj);	//obj moves to persistent state	(sync)
+
+
+	from local machine to server	(upload)
+	from server to local machine	(download)
+
+	if it is in both ways		(sync)
+
+
+	i say an object created by me (which is in transient state) is also detached entity
+
+	i create an object with primary key value also set. while i use persist() method
+	i get error (detached entity)
+
+
+	session.get()	returns an object (persistent state) is a managed entity
+	session.evict()	the object moves to (detached state) is a detached entity
+	session.merge()	moves the object to (persistent state) is a managed entity
+
+
+yesterday:
+	java project. 
+	add jars
+	add hibernate mapping xml files
+=======================================
+	maven project
+	add dependencies to pom.xml
+		i) hibernate mapping xml file	(or)	vehicle.hbm.xml	(hibernate mapping xml file)
+		ii) annotations to map the entity class, properties to the table, columns	@Entity
+
+	as i always tell, for every configuration we use xml or annotation
+
+	what we are mapping in a xml file???		
+		class to a table
+		properties to the columns
+		id for primary key	
+
+		data types are also mentioned in mapping
+		validations like not null, email, range also can be specified in the mapping
+
+
+
+	1) add dependencies
+		<dependency>
+			<groupId>com.oracle.ojdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.0.1.Final</version>
+		</dependency>
+	2) hibernate.cfg.xml		file
+		here, 
+			<mapping resource="vehicle.hbm.xml" />		means we are using xml mapping file
+			(instead)
+			<mapping class="packagename.Vehicle" />		means we are using annotation mapping
+
+
+
+	
+Task:
+	create or modify the project where, instead of using hbm.xml file, use annotations to map the entity to table
+
+
+annotations for:
+	Table name
+	Column name
+	Data types		identify annotations to mention the data type in the table
+		when we use byte[] for pic, audio, etc. 	
+		use @Lob annotation	when we use byte []
+	Transient
+	Primary key
+	GeneratedValue
+	
+	when there is a primary key - foreign key relationship, 
+	relationship annotations:
+		@OneToOne
+		@OneToMany
+		@ManyToOne
+		@ManyToMany
+
+
+	
+HQL
+	three types of queries:
+	i) query			HQL
+	ii) named query
+	iii) native query
+
+	session.createQuery()		-	Query
+	session.createNativeQuery()	-	we write SQL statements 	(not HQL statement)
+
+	what is this named query?
+		in the entity class itself, some queries are mentioned using annotation
+		so that in DAO, we can execute those queries
+
+
+
+	we can do
+		filter
+		sort
+		order by
+		join
+		sub query
+		group by
+		having
+			
+
+	while executing the queries, we get 
+			result
+			no of rows affected
+
+	
+TasK:
+	write a query that retrieves only few columns of the table, with a condition
+
+In Named query, we write the query in the Entity class using @NamedQuery annotation. We do not write query in the DAO class methods. we refer to the name  of the query to execute them.
+
+
+Task:
+	create a named query
+	@NamedQueries(  
+    {  
+        @NamedQuery(  
+        name = "findEmployeeByName",  
+        query = "from Employee e where e.name = :name"  
+        )  
+    }  
+)  
+  
+@Entity  
+
+	in DAO:
+		get named query and execute
+   TypedQuery query = session.getNamedQuery("findEmployeeByName");    
+            query.setParameter("name","amit");   
+                    
+            List<Employee> employees=query.getResultList();  
+
+
+1) positional parameters
+		where v.company=?1
+2) named parameters
+		where v.company=:company
+
+
+
+
+		Session session = MyConnection.getConnection();
+		SQLQuery query = session.createSQLQuery("SELECT * FROM Vehicle");
+		List result= query.list();		//list method to execute a select statement. executeUpdate() for DML statements
+		for(Object v:result)
+		{
+			Object []r=(Object[]) v;
+			System.out.println(r[0]);
+		}
+
+
+
+EJB	Enterprise Java Beans	(javax.persistance)
+	EJB QL		there was only left outer join
+
+	Entity Manager
+		em.persit(obj);		
+
+	Java Persistence API		-	JPA
+
+JPA Framework
+
+
+
+
+Task:
+	identify the need for Criteria Query
+
+
+Pagination:	Lets discuss after some time
+
+
+Task:
+	Identify the methods equivalent to the various operators used in rdbms
+	ex:
+		like
+		and
+		or
+		between
+	Note: Use Criteria, Criterion, Restrictions 
+
+sample:
+	public void read4()
+	{
+		Session session = MyConnection.getConnection();
+		Criteria c = session.createCriteria(Vehicle.class);
+		Criterion c1 = Restrictions.like("company", "Suz%");
+		Criterion c2 = Restrictions.like("company", "Toy%");
+		c.add(Restrictions.or(c1, c2));
+		c.addOrder(Order.desc("company"));
+		c.addOrder(Order.asc("name"));
+		List<Vehicle> vehicles= c.list();
+		for(Vehicle v:vehicles)
+			System.out.println(v);
+	}
+
+
+
+-----------------------
+class Song
+{
+	id
+	name
+	List<Artist> artistList;
+}
+
+class Artist
+{
+	id
+	name
+	List<Song> songList;
+}
+
+
+Relationships:
+
+class Book
+{
+	id
+	title
+	price
+	Author author;		//this is not authorId	but an object of Author
+}
+
+in table in db
+	Book table contains		id, title, price, authorId (fk) but we want Author object instead of aid
+
+class Author
+{
+	id
+	fname
+	lname
+	List<Book> bookList;		
+}
+
+Book and Author			Many to One
+
+
+in traditional approach:	SELECT QUERY
+
+SELECT * FROM AUTHOR;
+	will produce 		id, fname, lname		author table do not have ref to any book
+		1 to many / many to 1 			1 will be a fk in many table
+	book table 
+		id, title, price, authorId	
+	again, using authorid, i have to write a query to find author
+	select * from book where authorId=?		returns multiple books. store it in author object as List<Book> bookList
+
+when i fetch a record of author, 
+		the corresponding book list is also loaded means (Fetch typeis EAGER)
+		only when i refer to getter method of List<Book> means (Fetch type is LAZY)
+
+while updating, 
+	we fetch all the value of entity and populate in the user fields, he edit only few data. again we send all data back to db. it was discussed as costly. 
+	but hibernate is smart. if no change, it will not transfer those data.
+
+Employee
+	employeeId
+	fullName
+	
+@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="deptId",referencedColumnName="departmentId")
+	Department department
+
+Department
+@Id
+	@Column(name = "departmentId")
+	private int departmentId;
+
+----------------------------------------------------
+Customer
+
+@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="venid",referencedColumnName="vid")
+
+Vendor
+@Id
+	@Column(name = "vid")
+	private int vendorId;
+
+Categories.java
+@ManyToMany(targetEntity=Item.class,cascade=CascadeType.ALL)
+@JoinTable(name="categories_items",joinColumns=@JoinColumn(name="cat_id_fk",referencedColumnName="catid"),inverseJoinColumns=@JoinColumn(name="item_id_fk",referencedColumnName="itemid"))
+private Set items;
+
+
+Item.java (items table)
+@ManyToMany(targetEntity=Categories.class,mappedBy="items")
+private Set  categories;
+
+
+
+
+
+
+
+
+------------------------------------------
+
+Task:
+
+	Person
+		id
+		name
+		@OneToMany (dont want a new table to be created)
+		List<Address>	mapped by = "person"
+
+	Address
+		id
+		doorNo
+		street
+		city
+		state
+		@ManyToOne
+		Person person;		
+
+
+select * from user_tables where table_name like '%PERSON%';
+select * from user_tables where table_name like '%ADDRESS%';
+
+
+bEFORE Migrating to hibernate (in your project)
+generate sql scripts to produce the db tables again in future.
+Keep it as a back up (sql script)
+
+
+
+TasK:
+	Doctor
+		id
+		name
+		
+	Patient
+		id
+		name
+
+	Treatment
+		Doctor_id
+		Patient_id
+
+
+
+Categories.java
+@ManyToMany(targetEntity=Item.class,cascade=CascadeType.ALL)
+@JoinTable(name="categories_items",joinColumns=@JoinColumn(name="cat_id_fk",referencedColumnName="catid"),inverseJoinColumns=@JoinColumn(name="item_id_fk",referencedColumnName="itemid"))
+private Set items;
+
+Item.java (items table)
+@ManyToMany(targetEntity=Categories.class,mappedBy="items")
+private Set  categories;
+
+
+
+
+Cache:
+	what is cache?
+		first level cache	(hibernate) is already enabled
+			is enabled in session level. 
+		
+
+Implement second level cache in hibernate (across diff sessions)
+
+
+------------------------
+log4j.properties
+------------------------
+log4j.rootLogger=debug, stdout, R
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+
+# Pattern to output the caller's file name and line number.
+log4j.appender.stdout.layout.ConversionPattern=%5p [%t] (%F:%L) - %m%n
+
+log4j.appender.R=org.apache.log4j.RollingFileAppender
+log4j.appender.R.File=example.log
+
+log4j.appender.R.MaxFileSize=100KB
+# Keep one backup file
+log4j.appender.R.MaxBackupIndex=1
+
+log4j.appender.R.layout=org.apache.log4j.PatternLayout
+log4j.appender.R.layout.ConversionPattern=%p %t %c - %m%n
+
+------------------
+pom.xml
+------------------
+ <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
+<dependency>
+    <groupId>org.ehcache</groupId>
+    <artifactId>ehcache</artifactId>
+    <version>3.0.1</version>
+</dependency>
+  
+  
+  <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-ehcache -->
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-ehcache</artifactId>
+    <version>4.0.1.Final</version>
+</dependency>
+  
+  
+   <dependency>
+			<groupId>com.oracle.ojdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.0.1.Final</version>
+		</dependency>
+		
+		        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.2.0.Final</version>
+        </dependency>        
+        <dependency>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>4.0.1.Final</version>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>      
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.0.1.Final</version>
+        </dependency>       
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.1.0.CR2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
+
+
+--------------------------------------
+Fetching strategies:
+		EAGER	
+		LAZY
+--------------------------------------
+
+constructor based		when the Patient object is obtained from db, itself, List<Doctor> should also be loaded (EAGER)
+getter based			ONLY when i use getDoctors() method of Patient, they should be loaded (LAZY)
+
+
+

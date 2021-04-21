@@ -1,0 +1,292 @@
+What is Queue?
+	FIFO
+		The element added first are the element removed first.
+		imagine a cylinder horizontally.	
+			we add elements at rear.
+			we remove elements at front.
+		scheduling event.	railway ticket. priority for those who booked first. based on PNR
+		(priority queue).
+		CPU scheduling. job queue.
+		
+		main reason, we need queue is 
+			the request are coming in quick frequency than the time required to process the request.
+
+		server is capable of serving a request in 1 second. but in 1 second, more than 1 request comes to server.
+	so server needs a place where these requests can be stored. and process 1 by 1
+
+		
+
+	types of queues:
+			Priority queue
+				modern elevator (lift)
+			
+
+			Double ended queue.
+
+
+				
+
+What is Stack?
+	LIFO
+		imagine a cylinder vertically.	
+			we add elements at top.
+			we remove elements at top.
+
+
+
+1) properties and methods of Double ended Queue class
+2) properties and methods of PriorityQueue
+
+
+compare
+	peek()	with element()				both returns value of element at first. 
+							peek returns null and element returns error if empty
+	poll() 	with remove()		
+			remove an element at any position based on value
+			remove throws exception if empty
+			poll returns null
+			poll always access the first element (not consuming it)
+
+	offer() 	with add()
+			offer returns false if the element could not be added due to capacity issues
+			add raises exception if element could not be added
+
+	isEmpty()		true/false
+
+	clear()		clear all elements
+	size()
+	iterator()			we cannot remove element while looping in for-each. we can use it.remove() while looping using it.hasNext()
+	
+
+	in jdk1.0
+		there was no iterator
+		there was only enumerable
+			hasMoreElements
+				nextElement()
+
+
+------------------
+
+
+Double ended queue
+==================
+
+addFirst
+addLast		what is the diff between 	add() and addLast() in Deque
+
+push, pop methods work same as Stack.		push to top. pop from top
+add() works like queue
+addFirst(), addLast() 
+
+
+
+
+we should learn to create Entities with LOBS
+ex:
+	Employee
+		employeId
+		name
+		photo		byte[]				in mysql db 	longblob
+								in oracle db	BLOB
+								in mssql	varbinary
+
+HashMap		key is HashSet
+TreeMap		key is TreeSet
+LinkedHashMap	key is LinkedHashSet
+EnumMap		key is enum
+
+
+Identify how PriorityQueue can be used with priority
+
+
+char c='0';
+int i=(int)c;			i was 48		
+
+
+
+1:		2 characters are not found
+		no space 
+2:		1 char
+		space 1 char
+
+
+([1-9]{1})?([0-9][
+
+
+
+if 1 digit
+		1-9		only
+if 2 digit
+		00 is not possible
+
+[0][1-9]|[1-9][0-9]
+
+
+10
+
+[1-9]
+|
+[0][1-9]
+|
+[1-9][0-9]
+
+
+
+
+
+3
+Matt,TN 50 A 7563,Mini,4,10
+Walter,KA 38 V 5412,Micro,4,12
+Dean,KL 56 C 8951,Sedan,5,20
+1
+Mini
+
+
+3
+Matt,TN 50 A 7563,Mini,4,10
+Walter,KA 38 V 5412,Micro,4,12
+Dean,KL 56 C 8951,Sedan,5,20
+2
+5
+
+3
+Matt,TN 50 A 7563,Mini,4,10
+Walter,KA 38 V 5412,Micro,4,12
+Dean,KL 56 C 8951,Sedan,5,20
+3
+
+
+3
+Matt,TN 50 A 7563,Mini,4,10
+Walter,KA 38 V 5412,Micro,4,12
+Dean,KL 56 C 8951,Sedan,5,20
+1
+Lux
+
+9
+Matt,TN 50 A 7563,Mini,4,10
+Walter,KA 38 V 5412,Micro,4,12
+Dean,KL 56 C 8951,Sedan,5,20
+Gustavo,AP 14 F 2315,Mini,4,10
+James,MP 20 G 5748,Lux,10,25
+Rob,MA 51 R 6258,Share,6,5
+Will,PY 48 E 5894,Rental,6,30
+Jesse,KA 58 D 5689,Micro,4,12
+Rene,KL 66 J 2596,Share,6,5
+1
+Mini
+
+
+9
+Matt,TN 50 A 7563,Mini,4,10
+Walter,KA 38 V 5412,Micro,4,12
+Dean,KL 56 C 8951,Sedan,5,20
+Gustavo,AP 14 F 2315,Mini,4,10
+James,MP 20 G 5748,Lux,10,25
+Rob,MA 51 R 6258,Share,6,5
+Will,PY 48 E 5894,Rental,6,30
+Jesse,KA 58 D 5689,Micro,4,12
+Rene,KL 66 J 2596,Share,6,5
+2
+6
+
+5
+James,MP 20 G 5748,Lux,10,25
+Rob,MA 51 R 6258,Share,6,5
+Will,PY 48 E 5894,Rental,6,30
+Jesse,KA 58 D 5689,Micro,4,12
+Rene,KL 66 J 2596,Share,6,5
+-1
+
+
+5
+James,MP 20 G 5748,Lux,10,25
+Rob,MA 51 R 6258,Share,6,5
+Will,PY 48 E 5894,Rental,6,30
+Jesse,KA 58 D 5689,Micro,4,12
+Rene,KL 66 J 2596,Share,6,5
+2
+100
+
+
+
+------------------------------------------------------------
+remaining 3 tasks
+Java 8 features
+	lambda
+	streams
+	new Date 
+
+implement project
+
+
+
+Collectors
+	different collectors in streams api
+		toList
+		toSet
+
+	when will we get map?
+		we got Map when we used Grouping collector
+
+---------------------------
+Task:
+	mock 24 	requirement 5
+
+	public static Map<String,Integer> monthWiseCount(List<Call> callList)
+
+	implement this using method reference in streams api
+	hint:	create a method in Call class (getMonthName	that returns 3 letter format of call date)
+
+
+
+
+Java 8, concurrent
+	java.util.concurrent
+	Executors
+	ExecutorService
+
+	
+
+
+		TimeUnit.SECONDS.sleep(3);
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		executor.submit(() -> {
+		    String threadName = Thread.currentThread().getName();
+		    System.out.println("Hello " + threadName);
+		});
+		executor.shutdown();
+
+
+
+
+Task:
+	use executor service to display a loop in parallel with a loop in main method
+
+
+Date:
+LocalDate
+LocalDateTime
+LocalTime
+ZonedDateTime
+
+	LocalDate today = LocalDate.now();
+
+
+in old Date (java.util)
+	date is long value started from 1900 onwards
+
+
+
+Date 
+SimpleDateFormat
+
+LocalDate
+
+
+tASK:
+	based on manufacturing date, find the expiry date.
+		expiry date is 90 days from the manufacturing date.
+
+		dt2=dt2.plus(-1,ChronoUnit.MONTHS);
+

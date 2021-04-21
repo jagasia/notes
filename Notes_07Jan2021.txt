@@ -1,0 +1,184 @@
+why there are so many types of sorting?
+	1) size of the array/ collection 
+		some sorting algorithms are best suited for smaller list of elements		bubble sort
+		some sorting algorithms are efficient for large list when compared to other algorithms
+
+		some sorting algorithms are efficient when the list is partially sorted
+			ex:	in which algorithm we split the array into 2 using pivot
+
+			if array is already sorted, then the pivot will be in -1 or 0
+			one side, sorted portion is there. in another side, unsorted list is there
+			unsorted side, 0 elements are there. so how many iterations/pass i need to do.	0
+
+		when the list is in descending order
+
+		iterate from last to first. in that case, n elements done in n instructions
+	
+------------------------------------------
+we learn to access various database using java program
+Java DataBase Connectivity		(JDBC)
+
+	we learnt SQL
+		we can do 
+			DML	Data manipulation Language	(INSERT, UPDATE, DELETE)
+			DDL	Data Definition Language	(CREATE, ALTER, DROP, TRUNCATE)
+			DCL	Data Control Language		(GRANT, REVOKE)
+			DQL	Data Query Language		(SELECT)
+			TCL	Transaction Control Language	(COMMIT, ROLLBACK, SAVEPOINT)
+
+ 	for learning purpose, we used 
+			SQL PLUS, Express Edition (apex), 	SQL Developer
+	these tools are only to learn or to test the queries
+	Users of our application will not use these editors. Users will not write queries.
+
+	users will like sophisticated UI to  do transactions. ex:	GUI, web browser where they will fill the forms. On submitting the form, a program should issue these queries to the database
+
+	java program while executing these sql statements may get errors. errors inside a procedure/function. 
+	If the plsql program itself has exception blocks, then they will handle. if not, the error is propagated to the java program. 
+	Java program is capable of handling those exceptions using try-catch		(SQLException)
+
+What is JDBC?
+	is an API		Application Programming Interface		like library	(java code)
+
+	how java program can interact with an RDBMS?	
+		will java jdbc support any type of database in the world?	NO. Only the databases that provide a driver for Java, can be accessed by jdbc.
+
+	the RDBMS vendor should allow. How they allow?	they provide some code that can access their database. what is that code?	DRIVER
+
+	Oracle DB	Oracle vendor writes some java code and give it us as a Driver (jar)
+	MS SQL Server	Microsoft writes some java code and give us as a Driver	(jar)
+	
+	almost popular vendors already have given us the drivers.	
+
+	i am inventing a db now. DhruvaDB	what is this db? some file handling program i have done.
+
+	if db is a file/ files, it can also be accessed by a java program.
+	create that java programs than can access your db. Give this java codes as jar file to the rest of world
+			this is driver.
+
+	Now, all vendors should give jar file in consistent format. only then while learning jdbc, we will feel consistent
+	
+	thats why jdbc defines lot of interfaces. those interfaces are implemented by db vendors.
+
+java.sql package
+	Driver interface		implementation is provided by db vendor.
+	Connection interface		implementation is provided by db vendor.
+	Statement interface		implementation is provided by db vendor.
+	
+	java.sql.Driver driver=new com.mysql.jdbc.Driver();		//Driver() means constructor
+
+
+SQL itself is slightly different for different RDBMS		
+
+		some functions present in oracle are not present in other rdbms
+			NVL()	NVL2()	
+		These differences (slang)	is called as "dialect"
+
+
+JDBC Architecture
+	Java layer				JDBC layer				DB layer
+
+Steps:
+	1) load the driver
+	2) url		location of the database. for login to db, we need uid, pwd. specify the db name/schema name
+		these information will be used by the driver to login to the db.
+		logging into the database gives a reference to Connection object
+		getConnection()
+	3) represent the sql statement as an object using Statement interface
+	4) execute the statement
+	5) close the connection
+
+
+
+--------------
+how to add jar file to a java project
+	right click project-> properties->	java build path->	libraries-> add external jar->locate the jar (idealy from your project folder)
+
+
+
+
+in our computer, we create a data source name	(DSN)
+	Open DataBase Connectivity		
+
+	type 1 drivers use DSN	
+		
+
+Native API
+	c, c++ 
+
+-------------------------------------
+Statement st=con.createStatement();			//simple queries that do not have parameters
+PreparedStatement st=con.prepareStatement();		//paremeterized queries (prevents sql injection)
+CallableStatement st=con.prepareCall();			//calling stored procedures and functions
+
+these are the 3 types of statements available in JDBC
+
+Statement:
+	suitable for simple queries.	what is meant by simple query?
+		1) simple query can have joins
+		2) simple query can have conditions
+		3) simple query can be very lengthy also
+		4) simple query can have sub query also
+		
+	simple query does not require parameters at runtime. the query does not depend on parameters accepted at runtime.
+	
+	SELECT * FROM EMPLOYEES;	//simple query
+	SELECT * FROM EMPLOYEES WHERE EMPLOYEE_ID=102;		//simple because, 102 is not obtained at runtime
+	SELECT * FROM EMPLOYEES WHERE EMPLOYEE_ID=?;	//this IS NOT SIMPLE QUERY. because, id is obtained at runtime only
+
+	CAUTION:	queries framed using string concatenation is dangerous. leads to sql injection
+
+	"SELECT * FROM LOGIN WHERE UID='"+uid+"' AND PWD='"+pwd+"'";
+
+	suppose 
+		uid="rama";
+		pwd="siva";
+	the query is translated into:
+	"SELECT * FROM LOGIN WHERE UID='rama' AND PWD='siva'";
+
+	THIS METHOD LEADS TO SQL INJECTION
+	How?
+
+		Scanner sc=new Scanner(System.in);
+		String uid=sc.nextLine();
+		String pwd=sc.nextLine();
+		Driver driver=new oracle.jdbc.driver.OracleDriver();
+		Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:XE","sys as sysdba","password");
+		Statement st = con.createStatement();
+		String sql="SELECT * FROM user_master WHERE userName='"+uid+"' and password='"+pwd+"'";
+		System.out.println("Executing the query:\n"+sql);
+		ResultSet rs = st.executeQuery(sql);
+		if(rs.next())
+			System.out.println("Login is successful");
+		else
+			System.out.println("Login failed....");
+		con.close();
+
+	execute the above code with following inputs:
+		jag' or 1=1 --
+		i dont care
+
+	so Statement using concatenation is poor practise and it leads to sql injection.
+	
+	so whenever input parameters are obtained at runtime, we should use
+	PreparedStatement only
+
+
+
+Scanner sc=new Scanner(System.in);
+		String uid=sc.nextLine();
+		String pwd=sc.nextLine();
+		Driver driver=new oracle.jdbc.driver.OracleDriver();
+		Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:XE","sys as sysdba","password");
+//		Statement st = con.createStatement();
+		PreparedStatement st = con.prepareStatement("SELECT * FROM user_master WHERE userName=? AND password=?");
+		st.setString(1, uid);
+		st.setString(2, pwd);
+//		String sql="SELECT * FROM user_master WHERE userName='"+uid+"' and password='"+pwd+"'";
+//		System.out.println("Executing the query:\n"+sql);
+		ResultSet rs = st.executeQuery();
+		if(rs.next())
+			System.out.println("Login is successful");
+		else
+			System.out.println("Login failed....");
+		con.close();

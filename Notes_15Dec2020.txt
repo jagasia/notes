@@ -1,0 +1,338 @@
+ng -v			to find the version of angular installed in our computer
+
+What is Angular?
+	Framework		(typescript framework)
+	enable developers to use if, for loop in html code
+	embed script in markup code
+	build interactive dynamic single page application	(SPA)
+	for Progressive web apps
+
+	from Angular 2+, 	(typescript language is introduced)
+	is module/ component based approach
+		because, the first version was named as AngularJs which was controller/module based approach.
+			for angular js, we do not need to install anything.	just like a bootstrap/ jquery
+
+
+Architecture of Angular
+	Modules
+	Components
+	Services
+	Templates
+	
+
+setting up the angular environment.
+	install node js			(done)
+	install typescript compiler	(done)
+	install angular cli		(done)
+	install visual studio code	(done)			(not .net)
+
+Our first Angular 8 app
+	choose a folder where we want to create angular project (Never use c:\ (if s/w are installed there))
+	
+	to create an angular project	(cmd/		vs code command prompt)
+		ng new project-name						(usually - is used in between words)
+
+		choose 2 things:
+			routing required or not			(routing is used to give links between pages)
+			type of style sheet			css		scss
+		these 2 options will be asked while creating a project. we can chooose it.
+		or we can give these options in create command itself
+		
+1)		ng new project-name --routing --style=css		(creates the project)
+2)		ng serve -o						(runs the project)
+
+3) Understand what are all created in this project.
+
+	"app" is the module automatically created
+
+	in "index.html"		notice the selector called <app-root></app-root>
+
+	<app-root></app-root> refers to the component called app 
+	app	module
+		contains		app component		(we can create many components inside a module)
+	a module can contain 
+		components
+		services
+		class
+		interface
+
+	what is a component in angular?
+		in our project, <app-root>	is a selector that represent a component.
+		imagine, our home page containing
+			Login component
+			Signup component
+			search component
+			etc etc
+
+	a component is made of
+			typescript		(code)
+			template		(html)
+			style			(css)
+			selector		(ex:	<app-root>)
+
+		
+	when a component is created: (name of the component is jag)
+			jag.component.ts	(code)			jag.component.spec.ts
+			jag.component.html	(html)
+			jag.component.css	(css)
+			
+
+	use this component somewhere. how to refer this component??????		(SELECTOR)
+
+
+4) we create a new component "sign-up"
+	ng g c sign-up				(or)
+	ng generate component sign-up	ex
+
+	on executing this command, sign-up component will be created
+
+TasK
+	Create an angular project and add couple of components to the app component.
+	Run the app and show the output in the browser.
+
+
+interpolation			{{	}}			(script)
+
+read only			whatever class variables values are, they are displayed in HTML
+				vice versa is not possible in interpolation
+
+
+
+
+binding
+	between		properties of class	 with attributes of html elements	(property binding)
+	between		functions of class	 events of html elements		(event binding)
+	two way binding:		change in html element - reflects in class variable (vice versa)
+
+property binding			use		[]
+event binding				use		()
+two way binding				use		[()]		([])
+	the form controls need name
+	and to use ngModel	we need to import FormsModule in app.module.ts	file
+	once we import FormsModule inside app.module.ts file, this module is available
+		for all the components inside this module.
+
+example for property binding:
+	User Name: <input class="form-control" type="text" name="userName" id="" [(ngModel)]="userName"><br>
+    	<input class="btn btn-success" type="button" value="Submit" (click)="fn1()">
+    
+
+the data entered by the user in a text box is available in typescript.
+
+
+Task:
+	Password: ...............
+	Confirm password: ...............
+	
+	on clicking submit button, the passwords should be checked if equal or not.
+	corresponding message must be displayed.
+
+to bind the HTML input elements to the typescript variable.
+
+
+Templates:
+	html code
+	there are 2 ways, we can use template.
+
+	1) we can create a html file and refer that file in component decorator.
+	ex:
+		@Component({
+		  selector: 'app-jag',
+		  templateUrl: './jag.component.html',
+		  styleUrls: ['./jag.component.css']
+		})
+
+	(or)
+	2) we can paste html code directly in the component decorator.
+		@Component({
+		  selector: 'app-jag',
+		  template: `<FORM>
+					User Name:<input type="text" name="txtUserName" /><br/>
+					Password:<input type="text" name="txtPassword" /><br/>
+					<input type=button value="Submit" />
+				</FORM>`,
+		  styleUrls: ['./jag.component.css']
+		})
+	
+
+Task:
+	Identify the 3 types of directives.
+	Create an user defined directive. (attribute directive)
+
+
+class Car
+{
+	AudioSystem pioneer=new AudioSystem();			//depends on AudioSystem	//sound unnatural
+						//here, audio system is tightly coupled with car
+}
+
+solution:
+	inject audio system into the car later
+
+class Car
+{
+	AudioSystem pioneer;
+	constructor(private x:AudioSystem)
+	{
+		this.pioner=x;
+	}
+}
+this is called dependency injection. We allow user to buy audio system and inject into the car
+loosely coupled.
+
+
+
+
+class Customer					//depends on Address
+{
+	Address address;
+}
+class Address
+{
+}
+
+
+<p appHighlight>this is para</p>
+
+the attribute directive should be able to get the ELement reference in order to influence 
+	the background color of the element.
+
+<p style="background-color:yellow">			HTML
+p.style.backgroundColor="yellow";			ts
+-------------------
+solutions:
+----------
+ng generate directive highlight
+
+inside	"highlight.directive.ts"
+import { Directive, ElementRef, HostListener } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  constructor(private el: ElementRef) { }
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.highlight('yellow');
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.highlight(null);
+  }
+
+  private highlight(color: string) {
+    this.el.nativeElement.style.backgroundColor = color;
+  }
+}
+
+
+
+
+in html files
+<p appHighlight>this is a paragraph</p>
+
+<select>
+	<option selected>India</option>
+</select>
+
+
+
+--------------------------------------------
+
+
+Create an attribute directive "red". When applied on any element, text color should become red.
+
+example:
+	<p appRed>this is </p>
+
+--------------------------------------------------------
+2) Structural directive
+	programming constructs in angular.
+	built-in structural directives:
+		ngIf
+		ngSwitch
+		ngFor
+
+
+	*ngIf	directive
+		used to display an element conditionally
+
+
+Task:
+	if the password and confirm password are same, the error message should not be visible.
+	if they are not same, then the error message should be visible.
+	hint:	use *ngIf
+
+----------------
+for *ngIf	and then	
+	
+
+<div
+      *ngIf="isLoggedIn; then logIn; else logOut">
+</div>
+<ng-template #logIn>
+    Logged in
+</ng-template>
+<ng-template #logOut>
+    Logged out
+</ng-template>
+
+
+https://www.angularjswiki.com/angular/what-is-ng-template-in-angular/
+
+
+Task:
+	A dropdown list (<select>) with below values:
+		Angular
+		TypeScript
+		JavaScript
+		HTML
+
+	when use selects the course dropdownlist, appropriate description should be displayed.
+
+	Hint:	use ngSwitch
+
+
+<div [ngSwitch]="Course"> 
+  <p *ngSwitchCase="'Angular'">Angular Course</p>
+  <p *ngSwitchCase="'TypeScript'">TypeScript Course</p>
+  <p *ngSwitchCase="'JavaScript'">JavaScript Course</p> 
+  <p *ngSwitchDefault>HTML Course</p> 
+</div>
+
+
+
+For Loop:
+
+in ts file, lets have an array
+for as many elements are present in the array, 
+	li	should be displayed
+
+
+Task:
+	Enter the country:................(text)		Add Country (button)
+
+	user enters the name of country in the text. and clicks add country button.
+	The country should be added to the array (ts). The countries list should be displayed below.
+	Hint: use *ngFor		to display unordered list.
+
+Solution:
+
+	ts:
+		  countries:Array<string>=[];
+		  country:string;
+
+
+		 fn3()
+		  {
+		    this.countries.push(this.country);
+		  }
+
+	html:
+	
+		Country:    <input type="text" name="txtCountry" id="" [(ngModel)]="country"> 
+		<input type="button" value="Add country" (click)="fn3()"><br>
+		<ul>
+		    <li *ngFor="let c of countries">{{c}}</li>
+		</ul>

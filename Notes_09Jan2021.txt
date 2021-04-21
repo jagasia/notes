@@ -1,0 +1,418 @@
+Java Backend Development
+	server side scripting.	What is it?
+		compare with client side scripting.
+	-script that runs in server (is server side script)
+	both client side script and server side script are stored in server only. But at runtime
+	the client side scripts are downloaded to the client and execute at client (browser)
+
+	if you display time using 
+		client side script, it will display which time (server's time/ client's time)?
+		-client computer's time
+		server side script, then it will display
+		-server's time
+
+	if we need to access database, ??????	
+		the database is not stored in every client computer. 
+		the database is stored in server. hence, server side script is required
+		to access the database.
+		we use jdbc to access the database. that jdbc java program should run in server
+
+	so we need server side script
+		1) accessing database
+		2) hit counter	(count the number of users accessed our website)
+		3) upload files to central repository
+		4) business logic that changes often
+			program to run in server. so that whenever any changes are done, will reflect to clients
+			ex: current temparature (weather forcast)
+				share market status
+				dollar value
+				gold rate
+				cricket score
+				petrol cost
+
+	when a program runs at server, the program can be updated and it will reflect in subsequent client program calls.
+
+	we create server side scripts in Java language:
+		Java as a language there are 3 editions.
+			i) Java SE
+			ii) Java EE		(this is what we use for server side programming)
+			iii) Java ME		
+
+
+	we create web components:
+		what is component?		
+			is any reusable piece of code 
+			i) servlet							
+			ii) JSP
+
+		both are same
+			servlet:
+				when most of the code is java. few html code is embedded inside java code
+			JSP:
+				when most of the code is HTML. few java code is embedded inside html code
+
+		JSP is translated into servlet at runtime
+
+	we learn servlet first.
+		what is servlet.
+		A java class that extends HttpServlet is a servlet
+					HttpServelt extends GenericServlet
+
+	while creating a project, we can click next->next-> and check the option to generate deployment descriptor (web.xml)
+	
+
+	i create any class that extends HttpServlet. is it enought? NO
+		we need to configure that the class is a servlet.
+		i) in web.xml file make entries to define that this class is a servet
+		i) use annotation
+			@WebServlet("/MyServlet")
+	
+
+	
+	<servlet>
+		<servlet-name>AnotherServlet</servlet-name>
+		<display-name>AnotherServlet</display-name>
+		<description></description>
+		<servlet-class>view.AnotherServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AnotherServlet</servlet-name>
+		<url-pattern>/AnotherServlet</url-pattern>
+	</servlet-mapping>
+
+
+
+
+Task:
+	old version
+
+	create a dynamic web project in module version 2
+	then create a servlet 
+		run the servlet (right click servlet code and run as -> run on server)
+	then add couple of url mapping in web.xml file
+			web content-> web-inf folder 
+	restart the server
+	check in browser with different urls (that are mapped in web.xml)
+
+
+
+we create a servlet class. But we never create an object of this class. (there is no main method)
+	who creates object of servlet???
+		objects of servlet are created by "Container"	(web container)
+	web container is a special JVM
+
+
+	web container will create not just 1 object per request. but multiple objects initially even before any request comes. This is called as instance pool
+	servlets are invoked by URL	that is called as a request.
+
+	life cycle of a servlet:
+		when it is created, 
+		serve the request
+		when it is destroyed
+
+
+	the entire life cycle management is taken care by web container
+		in our project, all generic services (common for any project) are taken care by web container
+		only specific services to our project, are done by our program
+
+		generic services		(container do)		
+		application specific services	(we do)
+
+	generic services by container:
+		life cycle management
+		security		
+		transaction management
+		scalability
+
+	there are some life cycle methods we can code in a servlet
+		init()		only once in life time of a servlet (irrespective of any no of objects)
+		service()	every time a request comes (by entering the url)
+		destroy()	only once when undeploying
+
+
+
+	init is used to initialize the servlet in the beginning of its life cycle
+
+	init(ServletConfig config)
+		use this config object (object representation of server configuration file web.xml)
+
+
+Task:
+
+in web.xml
+	inside <serlvet> element
+			<init-param>
+            <param-name>companyName</param-name>
+            <param-value>ABC corporation</param-value>
+        </init-param>
+  </servlet>
+
+in servlet
+	init method, 
+		config.getInitParameter("companyName");
+	sout... display company Name
+
+
+----------------------
+service method
+	this method will understand the type of request (http method)
+	i)	GET
+	ii)	POST
+	iii)	PUT
+	iv)	DELETE
+
+	if the request comes from brower address bar
+		it is always GET method only
+
+	but in html form
+		<form method="POST">	
+
+		this way, we can make any type of request.
+	if we want to call the servlet using OTHER THAN GET method, but without form? how to call 
+		use Post Man
+
+	HttpServlet				GenericServlet
+
+--------------------------------------
+	1) adding 2 numbers obtained from user.
+
+	http://localhost:8080/jan-09-01/calc?no1=&no2=
+		here the query string is no1=&no2=
+	http://localhost:8080/jan-09-01/calc?no1=25&no2=35
+		
+
+	PrintWriter out=response.getWriter();				//response object is used for output		
+									//request object is used for input
+
+http://localhost:8080/jan-09-01/JagServlet?no1=1&no2=4
+
+
+Task:
+	create a html form that accepts 2 numbers and multiply them
+	on submitting the form, the servlet should be able to get inputs from the query string and multiply. 
+	display the result in browser using response.getWriter
+
+
+-----------------
+lets see a form that contains diff types of input
+	sign up form
+		Name:	
+		Email:
+		Mobile:
+		Password:
+		Gender:			Male/Female/Other		radio
+		Qualification:		dropdownlist	B.E	B.Tech	M.E	M.Tech
+		Other Interests:	Entertainment	Sports	Music	checkbox
+
+
+
+http://localhost:8080/jan-09-02/signup.html?name=Jagadeeswaran&email=rjagadeeswaran%40yahoo.com&mobile=1212121212&password=INDIA%40123&gender=male&qualification=mtech&interests=on&interests=on
+
+
+
+
+http://localhost:8080/jan-09-02/signup.html?name=Jagadeeswaran&email=rjagadeeswaran%40yahoo.com&mobile=98989898&password=password&gender=male&qualification=btech&interests=entertainment&interests=music
+
+
+
+HTML tags are considered as text. so we need to change the resonse type
+currently the response content type is text/plain
+	we need to change it to text/html
+
+
+Task:
+	create a html page that accepts input from the user
+		input should be
+		text
+		number
+		email
+		date	(first display received date as a string. understand the format yyyy-MM-dd and then use simpledateformat and convert String into Date
+		radio
+		checkbox
+		dropdownlist
+
+	accept the details and display them using html elements like <LI> <B> 
+
+
+
+skills
+	Java
+	C#
+	C
+	C++
+
+you want to allow user to add new skills to the db table
+	table name:	SKILL_MASTER
+		id, skill
+
+page:
+	skill.html
+	enter the new skill and submit. it should be added to the database.
+
+
+
+	loop this check box values String []
+		for each iteration, one records should be added.	so call dao.create method inside the loop
+
+You are trying to add a Physician. for physician, there is only 1 row in physician table. how to add multiple skills for a physician.
+	i)	physician table physicianId	
+		skill master is different (from which the skills come and display in html form. he can choose)
+		physicianSkill table
+		physicianId, skillId	are added		
+	ii)	physician table has a column (skill)		store comma separated value of skills
+
+	
+
+
+
+
+
+
+http://localhost:8081/Task1/signup?name=qwerqwer&email=vdfd%40gmail.com&mobile=12345654&password=ere&gender=female&country=india&interests=entertainment
+
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String name=request.getParameter("name");
+    String email=request.getParameter("email");
+    long mobile = Long.parseLong(request.getParameter("mobile"));
+    String gender = request.getParameter("gender");
+    String country = request.getParameter("country");
+    String[] interests=request.getParameterValues("interests");
+    response.setContentType("text/html");
+    PrintWriter out = response.getWriter();
+    out.print(name+"<br/>");
+    out.print(email+"<br/>");
+    out.print(mobile+"<br/>");
+    out.print(gender+"<br/>");
+    out.print(country+"<br/>");
+    for(String s : interests)
+        out.print(s+"<br/>");
+    }
+
+
+we have stored employee object in the database.
+
+after lunch, we will upload employee pic also in the db. Remind me.
+
+break timing:	13:00 to 13:45
+
+
+multiple requests come from multiple clients. are handled using multiple threads. Servlet is multi threaded
+
+
+
+for uploading files, GET method is not allowed.	GET method uses URL re-writing method. address bar of browser has limitation. 256 characters only allowed
+
+file should be sent in multiple parts
+multipart configuration
+	1) <form method=post action="servlet1" enctype="multipart/form-data">	
+			<input type=file name=pic />
+		</form>
+	2) in servlet use annotation
+		@MultipartConfig
+
+		ok. how to read bytes array from the input type file?
+			Part part = request.getPart("pic");
+		InputStream is = part.getInputStream();
+		int len=is.available();
+		byte[] pic=new byte[len];
+		is.read(pic);
+		Employee employee=new Employee(firstName, lastName, dateOfBirth, pic);
+
+
+------------------------------------------------------------------
+Scopes:
+	init(ServletConfig config)
+	
+	i) ServletContext		represents the application	(project)
+	ii) ServletConfig		
+		also called as servlet
+	iii) HttpSession		private context between a browser and the application
+	iv)	page 
+	v)	request		(HttpServletRequest)
+	
+
+
+
+	set initialization parameters of servlet using
+		i) web.xml
+		ii) annotations
+
+	and in any servlet method, you should be able to get init parameter using config. 
+		ServletConfig config = getServletConfig();
+		System.out.println(config.getInitParameter("projectName"));
+
+
+
+
+
+in one page, i give information. That information should be available in other pages.
+	in one page 
+		i setAttribute
+	in other pages
+		i getAttribute
+
+	context.getAttribute	/	setAttribute
+	config.getAttribute	/	setAttribute			
+	session.getAttribute	/	setAttribute
+	request.getAttribute	/	setAttribute
+
+
+	session is created as soon as a request is received by the Servlet.
+
+	setAttribute(String, Object);
+	getAttribute(String)	returns Object
+
+	Session uses a cookie to remember the state
+
+	what is the difference between application and session?
+		application is same across sessions
+
+		application (ServletContext) is same across multiple sessions
+	
+		session (HttpSession) is different for different browsers
+
+
+
+
+how to redirect from one servlet to another?
+	i) redirect			response.sendRedirect();
+	ii)	done using RequestDispatcher
+		a) forward		closes the outputstream of source servlet and moves to next 
+		b) include		stays in same source servlet, include the response of next, and continue here
+
+
+
+
+login is successful, redirect to home page. or inbox.
+	redirect
+
+		response.sendRedirect("two");			//url to redirect
+
+	<form action="one">	if one is an url pattern of a servlet
+	<a href="one">		this is also allowed (GET) method
+
+Task:
+	create a html form to accept user name and password.
+	validate the login (either using jdbc or dummy user name and password)
+	if login is successful, redirect to home page. welcome the user by their user name in home page.
+	if login is failure, display "failure" message and allow user to "click here to go back to login page"
+
+	note:	in home page, how the user name entered in login page is available? use session/ application
+
+
+
+	in every servlet, every jsp, check if the user already has logged in or not.	how?
+		check if session.getAttribute("user")	!=null
+
+		display error message and 
+		return;
+
+
+
+	a change event of dropdownlist
+	a keyup event
+	a focus or blur event
+		these are all client side events
+		we can use client side script only to handle these events.
+
+	http://localhost:8080/login-demo/MathsServlet?no1=2&no2=3&op=Add

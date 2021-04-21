@@ -1,0 +1,197 @@
+Bootstrap
+	css
+	js
+	jquery.js
+		javascript functions
+
+some events	some styles
+
+
+
+
+bootstrapcdn.com
+	content developer network
+
+	there are 2 ways bootstrap can be used in a html page.
+	1) refer to local bootstrap.css file
+	2) refer to bootstrap url in cdn
+
+bootstrap typography
+	if you create a css with almost all elements are defined with some styles,
+	then just placing those elements in html is attracting those css styles
+	(even without id/ class)
+
+bootstrap
+	12 columns
+
+
+
+What is meant by Trigger?
+	is stored in the database as object	like tables, views, functions, procedures, sequences, indexes
+	is a plsql program (like procedures) but they are not called by us. They are called in certain events. (automatically)
+	for example, a trigger can be created which will automatically executed when we insert a record in a table.
+	while updating, while deleting, etc.
+	
+what is the difference between procedures and trigger?
+
+
+
+CREATE OR REPLACE PROCEDURE prc1
+AS
+BEGIN
+	//PLSQL CODE
+	IF
+	FOR
+	WHILE
+	
+END;
+
+Trigger also is a plsql program, but unlike procedures, the triggers are not called. They are invoked on a particular timing.
+	timing:
+		BEFORE
+		AFTER
+		INSTEAD OF
+
+	on:
+		DML
+		DDL
+		System events	like Login/Logoff
+
+
+PRODUCT TABLE
+	PID	PNAME	DESCRIPTION	PRICE	stockInHand
+	121	Pencil	used to write	10	100
+
+
+SALES TABLE
+	INV	INVDATE	PID	CID	QTY	
+	1	SYSDATE	121	c2	50			(Stock was 100. now we sell 50 to customer.											what should be the stock now?)
+
+
+so, whenever, a row is inserted into SALES table, 
+		an update should happen automatically in the PRODUCT table.
+we are going to achieve this using triggers.
+
+
+CREATE TABLE PRODUCT
+(
+    PID INT PRIMARY KEY,
+    PNAME VARCHAR2(100),
+    STOCK INT
+);
+
+
+CREATE TABLE SALES
+(
+INVNO INT PRIMARY KEY,
+INVDATE DATE,
+PID INT,
+QTY INT,
+CONSTRAINT pidFk1 FOREIGN KEY(PID) REFERENCES PRODUCT(PID)
+);
+
+
+
+alter user jag quota unlimited on users;
+GRANT UNLIMITED TABLESPACE TO users;
+
+
+CREATE TRIGGER trgJag1
+AFTER INSERT ON SALES
+FOR EACH ROW
+BEGIN
+	DBMS_OUTPUT.PUT_LINE('trgJag1 trigger is fired now');
+	--when a row is added to the sales table, an update on stock happens in the product table
+	--			pid		and qty	
+	update product set stock=stock-:NEW.QTY where pid=:NEW.PID;
+END;
+
+
+FOR INSERT TRIGGERS,
+	Magic table			:NEW
+FOR UPDATE TRIGGERS,
+	Magic table			:OLD	AND 	:NEW
+FOR DELETE TRIGGERS,
+	Magic table			:OLD
+
+When i update 100 into 50		there is a value, getting deleted. a value getting inserted.
+
+
+
+before
+after
+instead of			will work on DML only
+
+WHEN A USER LOGS IN TO ORACLE INSTANCE, TRIGGER SHOULD ADD A ROW IN LOG TABLE.
+
+
+CREATE OR REPLACE PROCEDURE prc1
+AS
+BEGIN
+	SELECT * FROM EMPLOYEES;
+END;
+
+
+THE PROCEDURE WILL BE CREATED AN NO OUTPUT
+THE PROCEDURE IS CREATED SUCCESSFULLY AND DISPLAYS ALL RECORDS AND COLUMNS OF EMPLOYEES
+THE PROCEDURE WILL NOT BE CREATED.
+
+
+interface Person
+{
+	void speak();		// everything is public by default
+}
+
+class Student implements Person
+{
+	public void speak()		//overriding method cannot be less accessible
+	{
+		System.out.println("Hi this is student");
+	}
+}
+
+x.speak();			// in main	Student x=new Student();		
+
+
+When to use JOIN?
+When to use sub queries?
+
+i) when we need to display columns from more than 1 table, use join.
+
+sub query also instead of join.
+
+if the acnumber is found in loan table, then he has taken loan.		(sub query)
+
+SELECT * FROM ACCOUNT A WHERE EXISTS(
+	SELECT * FROM LOAN L WHERE L.ACNUMBER=A.ACNUMBER)		//CORRELATED SUB QUERY
+
+SELECT * FROM ACCOUNT A JOIN LOAN L ON A.ACNUMBER=L.ACNUMBER;		//product
+
+Both queries for same task.
+
+inner join		equiv	to 		SUB QUERY with EXISTS
+
+NULLIF(A,B)		IF A AND B ARE SAME, RETURN NULL
+NVL(A,B)		IF A IS NULL, USE B
+NVL2(A,B,C)		
+COALESCE(A,B,C,D)	IF A IS NOT NULL, A IS USED
+			ELSE, B IS CHECKED.		The first not null is used. if everything is null, null 
+case (wh
+
+
+INNER JOIN		is the default join		JOIN	means inner join only
+LEFT OUTER
+RIGHT OUTER
+FULL OUTER
+SELF JOIN		not type self join	join between same tables (diff alias)
+NATURAL JOIN USING		When there is common column between two tables (same col name)	
+EQUI JOIN
+NON EQUI JOIN
+CROSS JOIN
+
+
+UNION
+UNION ALL
+INTERSECT
+MINUS
+DIVIDE

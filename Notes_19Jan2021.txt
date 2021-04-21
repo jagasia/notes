@@ -1,0 +1,247 @@
+REpresentational State Transfer
+	is not a protocol		(SOAP is a protocol)
+	is architectural style
+	supports XML, HTML, TEXT, JSON	(SOAP supports XML)
+	
+	state management is to be taken care by application
+	every conversation with service is independant
+	
+Principles of REST
+	Uniform interface:		(not about UI, it is about URI)
+		in REST, everything (page, method, class, parameter, picture, video, document
+		everything is a resource
+		to access any resource, we use a URI (unique)
+		Each resource must have unique URI.
+		SAME URI but DIFFERENT HTTP methods (uniform)
+
+	Statelessness:
+		no client state information is stored (state transfer is diff from storing the state)	
+		server is not overloaded by the number of clients (scalable)
+
+	Layered system:
+		some times, an URI may access a server in term it access another server to fulfill a request
+			REST services are deployed in a server.
+			DB may be deployed in another server.
+			authentication in another server.
+
+		the client may not be able to see the background servers.
+
+	Code on Demand:
+		same data but diff uri to produce diff data format (JSON/XML)
+
+Object Model:
+	class in java is used to define the object model.
+		if the data format is XML, we have to map the class with root element (xml) and each property with the child elements or attribute
+		if the data format is JSON, it is automatically done 
+	
+Model the URI:		(Uniform Resource Identifier)
+		SAME URI but DIFFERENT HTTP methods (uniform)
+		GET	http://localhost:8080/context/employees/		(read)
+		GET 	http://localhost:8080/context/employees/{id}		(read by id)
+		POST	http://localhost:8080/context/employees/		body as JSON
+		PUT	http://localhost:8080/context/employees/{id}		body as JSON
+		DELETE	http://localhost:8080/context/employees/{id}
+
+
+
+URI
+	in XML, 
+		xmlns:xsd="http://www.w3.org/2001/XML/Schema"		(this http:..... is an example for URI)
+	URL is a subset of URI
+	
+	URI=URL+URN
+
+Define Data Format:
+	XML, JSON, HTML
+		what the resource consumes?		(method argument)
+		what the resource produces?		(method return type)
+
+	Date?????		use yyyy-MM-dd		as a date format. This is always understood by REST (JSON)
+
+
+In angular, HttpClient has definite pattern for each HTTP method
+
+		GET		accepts only URL		(http:/.....		/{id})
+		POST		accepts URL, multiple args	
+		PUT		--do--
+		DELETE		only URL	(optional args)
+		PATCH		want to update only few fields
+
+Assigning HTTP Methods:
+	the parameters should be chosen according to the HTTP method (discussed above)
+
+
+
+1) add/remove project in tomcat server (remove if already deployed earlier)
+2) restart the tomcat server
+3) run as 
+		maven build	->	goal should be "clean install"	-> run
+
+
+@Path	
+-----
+	is used to specify the URI mapping to a resource	(class/ method)
+	if it is used to a method, then it is "sub resource locator"
+		ex:		http://localhost:8080/myproject/employees/all		(employees is for class, all is for method and hence it is sub resource locator)
+	
+	URI can contain regular expressions (wild card)		.*
+
+
+@Path("/aaa{param:b+}/{many:.*}/stuff")
+		/aaab/stuff						(here, nothing before stuff)
+		/aaab/one/stuff
+		/aaab/one/two/stuff
+		/aaabbb/one/two/three/stuff
+
+
+@Path("/aaa{param:b+}/stuff/{many:.*}")
+		stuff followed by anything
+		/aaab/stuff/one
+		/aaab/stuff/one/two
+		/aaab/stuff/one/two/three
+		/aaab/stuff/one/four
+
+
+
+@PathParam			when url contains 	/{id}		we can map this url param to a arg 
+	http://localhost:8080/context/employees/{id}/{name}
+		method(@PathParam("id") int id, @PathParam("name") String name)
+
+@QueryParam
+	http://localhost:8080/context/employees?id=20&name=raja%20siva%20kumar
+		method(@QueryParam("id") int id, @QueryParam("name") String name)
+
+@MatrixParam
+	http://host.com/library/book;name=EJB 3.0;author=Bill Burke
+		method(@MatrixParam("name") String name, @MatrixParam("author") String author)
+
+@CookieParam
+  @GET
+   public String getBooks(@CookieParam("sessionid") int id) {
+   ...
+   }
+
+   @GET
+   publi cString getBooks(@CookieParam("sessionid") javax.ws.rs.core.Cookie id) {...}
+
+
+when FORM is submitted using <form action="rest api uri">	<input type=submit>
+	the form has some input elements
+		<input type=text name="uid" />
+
+	the rest api can access the text box value using @FormParam		(using name  not Id)
+	if form is submitted using GET method, then @QueryParam is used
+	but if form is submitted using POST or any other method, @FormParam can be used to get the value of form input elements
+
+
+	CORS
+		Cross Origin Resource Sharing
+
+to enable CORS in restful web services for all http methods:
+------------------------------------------------------------------
+in pom.xml, add the following dependency:
+	<dependency>
+		<groupId>com.thetransactioncompany</groupId>
+		<artifactId>cors-filter</artifactId>
+		<version>2.1</version>
+	</dependency>
+
+in web.xml, add the below filter:
+<filter>
+    <filter-name>CORS</filter-name>
+    <filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
+
+    <init-param>
+        <param-name>cors.allowGenericHttpRequests</param-name>
+        <param-value>true</param-value>
+    </init-param>
+
+    <init-param>
+        <param-name>cors.allowOrigin</param-name>
+        <param-value>*</param-value>
+    </init-param>
+
+    <init-param>
+        <param-name>cors.allowSubdomains</param-name>
+        <param-value>false</param-value>
+    </init-param>
+
+    <init-param>
+        <param-name>cors.supportedMethods</param-name>
+        <param-value>GET, HEAD, POST, DELETE, OPTIONS</param-value>
+    </init-param>
+
+    <init-param>
+        <param-name>cors.supportedHeaders</param-name>
+        <param-value>*</param-value>
+    </init-param>
+
+    <init-param>
+        <param-name>cors.supportsCredentials</param-name>
+        <param-value>true</param-value>
+    </init-param>
+
+    <init-param>
+        <param-name>cors.maxAge</param-name>
+        <param-value>3600</param-value>
+    </init-param>
+
+</filter>
+
+<filter-mapping>
+    <!-- CORS Filter mapping -->
+    <filter-name>CORS</filter-name>
+    <url-pattern>*</url-pattern>
+</filter-mapping>
+
+
+
+-------------------------
+IN JDBC,
+	instead of using 
+		INSERT INTO .....
+	create a procedure that will accept parameters
+
+
+Student
+Course
+
+StudentCourse		(or)	Enrollment		TABLE
+enrollId	enrollmentDate	StudentId	CourseId	Status
+1		today		1		1		Active
+2		today		1		2		Active
+3		today		1		4		Active
+
+
+public List<Course>	retrieveCoursesByStudentId(int sid)
+
+SELECT * FROM Course where courseId IN
+(
+SELECT courseId from Enrollment WHERE studentId=:loggedInSId
+)
+
+
+
+now student 1 logs in. He goes to "My courses"
+
+session.getAttribute("user")==null	?		display "you have not logged in"
+return
+
+Student student=(Student) user;
+loggedInSId=student.getId();
+
+
+
+THE above query will return 3 course objects as a List<Course> display them in "my courses"
+
+1, 2, 4
+
+WHILE login validation is passed
+	session.setAttribute("user",studentObj);
+
+
+create or replace procedure prcDeleteStudent (sid int)
+as
+begin
+    delete from student where id=sid;
+end;

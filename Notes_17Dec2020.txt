@@ -1,0 +1,543 @@
+
+create a copyright component
+
+<copyright></copyright>		( default selector: <app-copyright>. change it in ts file)
+
+this component displays a line "@Copyright: all rights reserved"
+
+wherever we place this component, this line will be displayed.
+
+this line should be placed inside the start and end tag of the component so that it is displayed in the ng-content element
+
+allow the user to change the appearance as follows:
+
+<copyright fontFamily="Arial" color="red" fontStyle="italic">
+	@Copyright: all rights reserved
+</copyright>
+
+
+difference between
+
+ngClass		key is a class		value is a boolean		if value is true, the class is applied to the element. 
+	
+ngStyle
+
+in both cases, we give a json string		{key1=value1,key2=value2}
+
+
+
+
+<p [class]="color">This is a class binding example. Color will change dynamically</p>
+the paragraph class=color		here the color is not a value. color is a variable (whose value is applied)
+
+<p [ngClass]=		json
+<p [ngClass]="{'btn-success':true}";		//true means this class is applied
+
+in ts file
+	var color="btn";
+	var color="btn-danger";		<p class="btn-danger">
+	var color="btn-success";	<p class="btn-success">	class is given a value dynamically
+
+	suppose in ts file, 
+		color:string="btn";
+
+	<p class="btn">
+in property binding, [class]="color", the color is a variable whose value is replaced there
+
+<p [style.color]="color">This is dec 16th paragraph</p>
+
+	again "color" is a variable in ts file.	whose value is applied to 
+	<p style="color:value">			value here is the value of color variable
+
+1st code, the class is set
+so in css
+	.something should be there in css
+
+in 2nd code, css file is not required. you have given inline style
+
+<p [ngStyle]="{'color':'red'}">			single quote, because, they are not variables
+
+
+-------------------------------------------------
+@Input
+
+
+<copyright color="red"></copyright>			jag is creating the component
+	venkat is using the component.
+
+
+<copyright color="blue"></copyright>
+
+app.component.html
+
+	<app-sign-in fontFamily="Arial" color="blue" fontStyle="italic"></app-sign-in>
+
+sign-in
+employee  component
+
+	you will embed this component in the app component
+
+ng g c sign-up
+
+
+----------------------
+
+create a copyright component
+and get input from the parent component	(color)
+based on the input from parent, the color of the paragraph should be changed.
+
+
+
+@Input() directive:
+--------------------
+Parent component is able to give input to Child component
+	parent:		app.component.html			<app-banner></app-banner>
+	child:		banner.component.html
+				@Input() x:string="left"
+
+
+1) create component banner
+	ng g c banner
+
+	in banner.component.html
+		<p>banner works</p>
+
+	add some style:
+		<p [align]="x">banner works</p>
+
+	in banner.component.ts
+		declare the variable
+		x:string="left";
+
+	use @Input() directive to allow parent component to give input:
+		@Input() x:string="left";
+
+
+2) in parent component 
+	app.component.html
+		<app-copyright x="left"></app-copyright>			(in app.component.html)
+
+		<app-banner x="center">type something here??????? that is what ng-content is used for</app-banner>
+
+
+
+
+
+Output directive
+---------------
+
+what is output???????			
+	the child component sends some data to the parent component.		
+
+	how?	when will the child give output?		not sure.
+
+	<app-copyright>			parent is not going to give input here. they want output.	but timing is not known. 
+
+	so solution:
+		child should raise event	(emit event)
+	
+		parent should handle event
+
+
+
+example:
+	login component....			user name, password		login button
+		if login is successful, the parent component should display "success"
+					else					"failure"
+
+	steps:
+		child component declare an event
+				raise the event
+
+
+		parent component handles the event
+
+
+
+-------------------
+
+Like component has only like button
+	if reqd add dislike button also
+
+	every time like button is clicked, the like count should increment
+	every time the dislike button is clicked, the dislike count should be incremented.
+
+	display the counts in the parent component.
+
+
+
+-------------------------------
+Vote component has "Vote" button
+	you can enhance this with multiple candidates to vote.
+	
+
+	Each time user clicks vote button of particular candidate, their corresponding vote count should increment.
+
+	display the count in the parent component.
+
+
+	you may display the photo of candidates and below the photo, "vote" button can be placed.
+	so that users can choose to vote based on "photo" or party logo.
+
+solution:
+
+1) create a login component:
+	ng g c login
+
+	in login.component.html
+		add user interface
+
+2)	need to raise event
+		i) declare the event	(loginEvent)
+			@Output() loginEvent:EventEmitter<string>=new EventEmitter();
+		
+		ii) raise the event
+			loginEvent.emit("success");			like when i click a button
+
+3) in app.component.html
+		use the component using the selector
+		<app-login></app-login>
+
+4) handle the loginEvent (raised by the child component)
+		modify the last line
+		<app-login (loginEvent)="fn11($event)"></app-login>
+
+5)	define event handler
+		app.component.ts
+			fn11(x)
+			{
+				alert(x);
+			}
+
+
+
+@Output is understood?????
+shal we move to next???
+
+
+
+
+-----------------------------------------
+
+child component needs to give output to the parent compoenent!
+
+parent:
+	app component
+
+child:
+	new component:			demo			is the new component	(i am going to create)
+
+	ng new demo
+
+1) demo.component.html
+	<p>demo works!</p>
+
+
+		<input type="button" value="Click me" (click)="fnClick()">
+
+2) demo.component.ts
+	import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+
+@Component({
+  selector: 'app-demo',
+  templateUrl: './demo.component.html',
+  styleUrls: ['./demo.component.css']
+})
+export class DemoComponent implements OnInit {
+  @Output() jagEvent:EventEmitter<string>=new EventEmitter();
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+  fnClick()
+  {
+    //here i will raise my user defined event (emit)
+    this.jagEvent.emit("This is a message from demo component");
+  }
+}
+
+
+3) app.component.html
+	
+<app-demo (jagEvent)="fn200($event)"></app-demo>
+
+4) app.component.ts
+	fn200(data)
+	{
+	  alert("Parent fn200 function: "+data);
+	}
+
+
+
+----------------------------
+ngIf
+
+	I am going to conditionally display a html element.
+
+
+ex:
+	app.component.html
+
+	<input type="checkbox" name="chkDisplay" id="" [(ngModel)]="x">Display
+	<div *ngIf="x">
+	    This is a container. There are lot of components displayed in this container
+	</div>
+
+
+	app.component.ts
+
+		 x:boolean=true;
+
+Task:
+	Create 4 div containing some paragraph
+	create 4 check boxes. 
+	whichever check box i tick, that corresponding paragraph should be visible
+
+soultion:
+	app.component.html
+
+    Hello world
+    <br>
+    <input type="checkbox" name="chkIndia" id="" [(ngModel)]="india">India <br>
+    <input type="checkbox" name="chkPakistan" id="" [(ngModel)]="pakistan">Pakistan <br>
+    <input type="checkbox" name="chkSrilanka" id="" [(ngModel)]="srilanka">Sri lanka <br>
+    <input type="checkbox" name="chkAustralia" id="" [(ngModel)]="australia">Australia <br>
+
+    {{ india }}
+    {{ pakistan }}
+    {{srilanka}}
+    {{australia}}
+
+    <br><br><br>
+    <div *ngIf="india">
+        This is India
+    </div>
+    <div *ngIf="pakistan">
+        This is pakistan
+    </div>
+    <div *ngIf="srilanka">
+        Sri lanka
+    </div>
+    <div *ngIf="australia">
+        Australia
+    </div>
+
+	app.component.ts
+
+	india:boolean;
+	australia:boolean;
+	pakistan:boolean;
+	srilanka:boolean;
+
+
+--------------------------
+*ngIf
+*ngIf else
+*ngIf then; else
+
+
+ngIf makes the element visible or not visible (based on the expression)
+ngIf else
+	this will make the element visible if the expression results TRUE. 	
+	but	if the expr results FALSE, the else will be displayed.
+
+
+
+
+----------------------------
+
+ngSwitch
+	dropdownlist
+		Choose...			in javascript we use change event	onchange="fn1()"
+					in two way binding, there is no need for choose...
+		India
+		Australia
+		Sri lanka
+		Pakstan
+
+	there are 4 div
+		for every country there is one div element
+
+	whichever country i select in dropdown list, the corresponding div should be made visible
+
+	
+
+
+  
+  <select name="countries" id="" [(ngModel)]="country">
+    <option value="india">India</option>
+    <option value="australia">Australia</option>
+    <option value="srilanka">Sri lanka</option>
+    <option value="pakistan">Pakistan</option>
+    <option value="bangladesh">Bangladesh</option>
+</select>
+<br>
+<ul [ngSwitch]="country">				<!-- superhero is a variable in ts file -->
+    <li *ngSwitchCase="'india'">India is our country</li>
+    <li *ngSwitchCase="'australia'">Australia is a continent also country also</li>
+    <li *ngSwitchCase="'srilanka'">Sri lanka is near India</li>
+    <li *ngSwitchCase="'pakistan'">Pakistan is also our neighbor country</li>
+    <li *ngSwitchDefault>Choose a country</li>
+  </ul>
+
+
+----------------------------------------
+*ngFor
+
+	for is a indefinitive loop
+	for each loop
+	we dont have index	 in for loop			(we are not talking about javascript/ts loop)
+	angular loop	
+
+	i will create an array in ts file
+	countries:string[]=["India","Australia","Sri lanka", "Pakistan", "Bangladesh"];
+
+
+classes in typescript
+
+	how will you create an array of objects in javascript:
+	square brackets are used 
+	[{'studentId':12,'firstName':'Rama','lastName':'Krishna'},
+{'studentId':13,'firstName':'Sures','lastName':'Krishna'},
+{'studentId':14,'firstName':'Rama','lastName':'Rajan'},
+{'studentId':15,'firstName':'Gokul','lastName':'Krishna'}
+]
+
+
+	to create a class
+		ng generate class student
+		ng g class student
+
+
+Task:
+	there should be a text box
+	Country: .........................	<<button>	Add
+	
+	the entered country name must be added to the countries array
+
+	countries array should be displayed in a	<li>
+	
+
+	arrays are static. They cannot grow. so how to add elements into an array.
+	do not declare array as
+	countries:string[];	//NOT OK
+
+	countries:Array<string>;	//OK
+
+	now we will be able to add elements into the array using
+	countries.push(this.country);
+	
+solution:
+
+<input type="text" name="" id="" [(ngModel)]="country"><input type="button" value="Add" (click)="addCountry()">
+<br>
+<ul>
+    <li *ngFor="let c of countries">{{c}}</li>
+</ul>
+
+------	in ts	----------------
+ countries:Array<string>=new Array();
+
+addCountry()
+{
+  // alert(this.country);
+  this.countries.push(this.country);  
+}
+
+
+<select name="" id="" [(ngModel)]="studentId">
+    <option *ngFor="let s of students" [value]="s.studentId">{{s.firstName}}</option>
+</select>
+
+{{studentId}}
+
+
+
+
+-------------------------
+Pipes
+	|
+
+custom pipes:
+	we are going to create our own pipe.
+	in angular 8 or later, we can generate pipe using:
+		ng generate pipe pipename
+
+
+
+	a pipe is a class	that implements PipeTransform
+				on override the function 		transform()	
+
+	the class should be decorated as Pipe
+
+	the transform method can take at least 1 argument.	there can be any number of arguments
+
+	first parameter is mandatory
+	second parameter is Rest Parameter	(	ellipsis	means ...)
+		variable length argument	(param array)
+
+
+
+
+example:		square pipe
+			ng g pipe square
+
+	square.pipe.ts
+		transform(value:number):number{
+   		 return value*value;
+  		}
+
+	app.component.html
+		{{ 20 | square }}	
+
+
+you should be able to create a pipe manually also.
+
+@Pipe({key:value})
+
+
+
+css	how class can help in css
+
+	<button class="btn">		in css, we refer			.btn
+
+	<input type=text class="form-control">
+
+	in css how to refer class?		what is the symbol?		dot	.
+
+ngClass		is used to conditionally apply class to an element
+	<button class="btn">		here the class btn is applied for sure.	
+	but based on a condition, i want to apply or not apply
+
+	<button [ngClass]="{xyz:true}">
+
+
+
+----------------------demo
+app.component.css
+
+.bcolor
+{
+    background-color: yellow;
+}
+
+.fcolor
+{
+    color:red;
+}
+
+
+
+app.component.ts
+
+bcolor:boolean=false;
+fcolor:boolean=false;
+
+
+app.component.html
+
+<input type="checkbox" name="" id="" [(ngModel)]="bcolor">Back Gound Yellow
+<input type="checkbox" name="" id="" [(ngModel)]="fcolor">Text Red
+<br>
+<button [ngClass]="{bcolor:bcolor,fcolor:fcolor}">Click here</button>

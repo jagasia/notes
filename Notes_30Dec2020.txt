@@ -1,0 +1,469 @@
+categories of Collection classes in Java
+
+There are some Interfaces
+
+	List
+	Set
+		all implementation classes have some common methods	(add, remove, contains)
+
+	Map	(key, value) pair
+
+		no add method			(put, get)
+
+ArrayList		we have index		
+			to get the element based on index, 
+			marks.get(0);		returns element at index 0
+			
+
+	to sort:				Collections.sort(countries
+	to reverse (not desc. but reverse)	Collections.reverse(countries);
+	to sort in desc:			
+					
+					Collections.sort(countries,Collections.reverseOrder(countries));
+
+
+LinkedList		do not have index.	
+			we cannot access an element directly like arrays/arraylist
+
+
+HashSet		(set does not accept duplicate values. The order of the elements are decide by hashCode method)
+TreeSet
+LinkedHashSet
+
+HashMap
+TreeMap
+LinkedHashMap
+
+
+
+while creating object of collection classes:
+	ArrayList marks=new ArrayList();				//non-generic collection
+						All elements are stored as only 1 type called Object 
+	this is similar to 
+		ArrayList<Object> marks=new ArrayList<>();		//generic syntax where, we specify the type of collection while creating.
+
+Generic collections are:
+	type safe
+
+	they allow only the specified type of elements to be added
+	they are called as generic because, while creating those classes, the author did not create for only 1 type. they created as generic. so that users can use those collections with any type they need.
+
+	ArrayList<T>
+		the Type T is replaced by the type we specify while creating objects
+
+	similar to C++ Templates
+
+
+ArrayList<String> countries=new ArrayList<>();
+		countries.add("Australia");
+		countries.add("Srilanka");
+		countries.add("Japan");
+		countries.add("Pakistan");
+		countries.add("Zimbabwe");
+		countries.add("India");
+		
+
+
+
+Comparator is a Functional Interface. Because, this interface contains only 1 method inside.
+
+
+Object is the super class for any class by default
+
+	Object class itself has some methods
+		equals
+		hashCode
+		toString
+
+
+
+HashSet orders the elements based on their hashCode
+	hash set do not keep elements in sorted order. order is based on hashcode
+
+5
+11,Rama,Krishna,12345
+5,Siva,Kumar,54321
+15,Ravi,Sharma,123456
+15,Raja,Ram,192838
+12,Rama,Krishna,12345
+
+
+
+whenever i add elements to HashSet, 
+	it may not be added at the end.
+	it is added in a location decided by hashCode.
+
+
+So HashSet works fine only when the type override 
+			equals
+			hashCode
+
+
+
+HashSet???????
+	how to sort hashSet?????		NOT POSSIBLE
+Set
+	HashSet
+	TreeSet
+	LinkedHashSet
+		these collections add elements in specific locations based on corresponding algorithm. But once added, we cannot re-arrange the elements.
+	Collections.sort() works only for List	(not for Set)
+
+	to sort the Set, we can add all the elements into a List. Then sort them. it is possible.
+	simply:
+		ArrayList<String> alist=new ArrayList(hset);			hset is a HashSet object
+	vice versa also. List can be converted to Set and vice versa.
+
+Task:
+	create a method "removeDuplicates" that accepts an arraylist as argument. 
+	the method should return another arraylist which excluded all duplicates.
+
+input:
+---------	
+5
+15
+7
+5
+4
+14
+15
+16
+7
+
+output:
+-------
+5
+15
+7
+4
+14
+16
+		
+
+
+---------------------
+HashSet
+	override
+		equals
+		hashCode 
+
+	when we create HashSet of user defined objects
+
+
+TreeSet
+	Tree means sorted
+	how the tree is sorted?
+		the tree compares the elements to decide the position to add elements
+		
+	if i want to add 20,
+		20 is compared to root element.	based on that it may be added to 
+			the left	or
+			the right	
+
+		if there is an element present in left or right, 
+			consider that as root and do the same task of comparing 20 to that root.
+			decide to move left or right
+
+	TreeSet of type Integer.	Integer implements Comparable. and has overridden compareTo method.	Hence TreeSet<Integer> is possible
+
+	not only Integer. All wrapper classes, String, Date, etc implements Comparable. That's why they are allowed to be added into TreeSet
+
+
+10
+11,Raja,Bengaluru,Karnataka
+5,Siva,Coimbatore,Tamil Nadu
+15,Ravi,Ghaziabad,Utter Pradesh
+12,Raja,Bengaluru,Karnataka
+8,Suresh,Mysuru,Karnataka
+1,Raja,Bengaluru,Karnataka
+3,Rajesh,Bengaluru,Karnataka
+2,Raghu,Ayodhya,Utter Pradesh
+9,Jag,Chennai,Tamil Nadu
+14,Sankar,Madurai,Tamil Nadu
+
+to create a treeset of Students in following order
+		State asc, City desc		(same collection)
+
+SQL 
+	select * from tablename order by state asc, city desc
+
+
+
+
+when we tried to sort an array of user defined type
+
+
+Task:
+Create a TreeSet<Integer> which will maintain the elements in descending order
+
+	TreeSet<Integer> marks=new TreeSet<Integer>((a,b)->b-a);
+
+
+TreeSet
+	while creating an object of treeset itself the comparison should be given.
+		i) class itself implementing comparable
+		ii) external comparator class
+		iii) lambda
+
+later, we cannot re arrange the elements.
+	but we can convert this set into a list and use Collections.sort
+
+
+HashSet
+TreeSet
+LinkedHashSet
+	it is hashset only. uses equals() and hashCode() 
+		but the order of elements is based on the order in which we add elements
+
+
+
+
+TreeSet<Student> studentSet=new TreeSet<Student>(new StateCityComparator());
+ArrayList<Integer> marks=new ArrayList<>();
+
+
+good practise is to do like:
+
+	Set<Student> studentSet=new TreeSet<>();		//Set is interface
+	List<Integer> marks=new ArrayList<>();			//List is interface
+
+	this gives an advantage when
+		public void method1(List<Integer> args)
+		{}
+
+	we can pass "marks" here.
+	we can also pass Linked List object to this method.		versatile.
+
+	later if we change from linked list to array list or vice versa, the argument or declaration remains same.
+
+Before we learn Maps
+	lets do some task
+
+SELECT * FROM ARTIST;
+	We get 20 records.
+	how to represent 20 records in java ?
+		every records represent an object		(class Artist)
+	20 Artist objects are created.	to store 20 objects, 
+		we can use ArrayList	or LinkedList	or HashSet	or TreeSet	or LinkedHashSet
+
+		or we can atleast use array of Artist object
+
+
+	List<Artist> artistList=Artist.prefill();			//return list of artists
+
+	find the artist from the artistList using "name"
+	
+
+
+
+
+while removing an element inside the loop of iteration, we get "ConcurrentModificationException"
+
+To remove elements while looping the elements, we need to use iterators.
+Iterator?		iterate means traverse.	Traverse means visiting each element once in a collection
+
+every collection has iterator.
+	arraylist name is mobileList
+	mobileList.iterator()		this method returns an iterator
+
+	methods of iterator!
+	1) next()		moves to next element
+	2) hasNext()		returns true if there is any more element to iterate
+	3) remove()		removes the current element
+
+ListIterator			(they work only for List)
+	1) next()		moves to next element
+	2) hasNext()		returns true if there is any more element to iterate
+	3) remove()		removes the current element
+	4) previous()		moves to previous element
+	5) hasPrevious()	returns true if there is any previous element
+
+
+
+
+to remove
+first you found the ref of a mobile object using reference id.
+you kept that ref in a variable declared outside the loop
+after the loop, you use that ref to remove it
+
+Mobile temp;
+for(Mobile m : mobileList)
+{
+	if(m.getReferenceId().equals(referenceId))
+	{
+		temp=m;
+		break;
+	}
+}
+
+mobileList.remove(temp);		//no errors
+
+
+
+
+
+
+List
+	ArrayList
+	LinkedList
+Set
+	HashSet
+	TreeSet
+	LinkedHashSet
+Map
+	HashMap
+	TreeMap
+	LinkedHashMap
+
+
+
+
+Map is made of Key-value pair
+	Keys are Set
+
+keySet()		returns the Set of keys
+values()		returns the collection of values
+
+
+
+keys
+values
+both are present in EntrySet
+	always see key-value as an Entry
+
+Entry<K,V>
+
+Map:
+	key cannot be duplicate
+	values can be anything	duplicate, null, etc
+
+	if key is already exists, the value is replaced
+------------------------------------
+Task:
+input:	
+	management
+
+m		m is found or not?	NO.	so map.get('m')	returns null.
+		so null means make count=0;	
+		count++ and put		map.put('m',1);
+a		a is found?	NO	map.put('a',1);
+n		n is found?	NO	map.put('n',1);
+a		a is found:	YES	so map.get('a') returns count=1	count++ and put		map.put('a',2);
+g		g is found?	NO	map.put('g',1);
+e		e is found?	NO	map.put('e',1);
+m		m is found?	YES	map.put('m',2);
+e
+n
+t
+
+
+
+
+output:
+	m=2
+	a=2
+	n=2
+	g=1
+	e=2
+	t=1
+
+
+
+Reminder on
+	SortedSet
+	NavigableSet
+	Date
+
+	static Map<String, Integer> calculateLocationCount(List<College> list)
+	{
+		Map<String, Integer> resultMap=new TreeMap<>();
+		for(College c:list)
+		{
+			String key = c.getLocation();
+			Integer count=resultMap.get(key);			//returns null (or)	Integer value
+			if(count==null)
+				count=0;
+			count++;
+			resultMap.put(key, count);
+		}
+		return resultMap;
+	}
+
+
+
+---------------------
+what is sorted set?
+	SortedSet is an interface
+		implemented by TreeSet	(not directly. but TreeSet implements NavigableSet that extends SortedSet)
+
+	
+NavigableSet interface	extends SortedSet
+
+What is NavigableSet?
+	navigation here means, forward and reverse navigation
+		descendingSet()		returns a Set that is in descending order
+
+Date
+	How to find the age based on dateOfBirth?
+
+Date today, dob
+	today-dob		is not possible in java. (possible in c#. returns TimeSpan)
+	cannot use - operator with date
+
+
+		LocalDate dob=LocalDate.of(1998, 11, 1);
+		LocalDate today=LocalDate.now();
+		Period diff = Period.between(dob, today);
+		System.out.printf("You are %d years, %d months and %d days old",diff.getYears(),diff.getMonths(),diff.getDays());
+
+
+Calendar
+GregorianCalendar
+
+how to find if a year is leap year or not?
+
+setLenient(true)	
+
+System.out.println("Please enter the date of registration:(dd-MM-yyyy)");
+		String input=sc.nextLine();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+		sdf.setLenient(false);
+		Date dt=new Date();
+		dt=sdf.parse(input);
+		System.out.println(sdf.format(dt));
+
+
+
+given a date as input, display the week day of that date.
+		whether it is Monday	or Tuesday and so on
+
+In simple date format there are some symbols:
+	d		day of month		1 - 30
+	dd		2 digit day of month
+	ddd		three letter (short) form of month
+	dddd		full letter month		September
+	
+	mm		minutes	
+	MM		months
+	yyyy		year
+
+	E		week day
+
+
+
+public static void computePrice(List<Purchase> list)
+{
+	loop this list for every purchase:
+	for(Purchase p : list)
+	{
+		couponCode
+
+		for(Order o : p.getOrderList())
+		{
+			o.getItem().getPrice();		using this Item, find the price
+			o.getQuantity();		
+		}
+		//sum of all amount of all orders, we got total purchase amount
+		apply the coupon to this total purchase amount
+	}
+}

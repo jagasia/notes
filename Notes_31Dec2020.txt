@@ -1,0 +1,356 @@
+Exceptions in Java
+	what are exception?
+		Checked
+		Unchecked
+
+		exceptions occurs at run time
+		unexpected event during execution of the program
+		disturbs the execution of program
+		occurs due to some logical problem at run time to restrict the flow or normal execution
+			(not logical)
+		terminates program abruptly
+		disrupts the normal flow
+	
+	exceptions notify when something is abnormal
+	
+		exceptions can be handled
+
+		they know that divide by 0 is wrong. but how to react in that case?
+			should i replace 0 to 1?
+			i cannot decide.	They know that it is wrong. but what to do?
+				the decision cannot be made by them.
+
+		now u understand, in you final year project, you never created new exceptions. because, you were the only owner of your code. 
+		but if your code is called by some other, then you may have to notify them that these are abnormal or wrong. and allow them to handle exception.
+		java programs also terminate when an exception occurs (but not handled)
+
+	
+Java compilers check for some exceptions. THey are called as checked exceptions.
+Some exceptions are known only at run time. They are called unchecked exceptions.
+
+
+
+throws		-	informs the compiler that this method throws this exception, but not handle it. Calling 			method must handle it.
+
+throw		-	is used to throw an object of any Exception class/ sub class
+
+try		-	block (also called as guarded section). Any exceptions occurred in this block will look for a 			catch block
+
+catch		-	block handles the exception. This is an exceptional flow for the program to continue
+
+finally		-	block is always excepted if the program enters a try block. If exceptions are handled/ not handled/ not thrown, 	finally is always executed.
+
+
+try
+catch
+finally
+
+try
+catch
+
+try
+finally
+		this is possible
+
+
+
+				Object
+				
+				Throwable
+		
+		Exception			Error
+
+there are so many exception classes.
+	Checked Exceptions are exceptions that are directly derived from Exception class
+	
+
+we can create our own exceptions
+	how?
+		By creating a class that extends 
+				Exception		(you are creating a checked exception)
+				RuntimeException	(you are creating an unchecked exception)
+
+
+-------------------------------------
+IO Streams and Files
+
+Input
+Output
+
+
+
+how to get input.
+	input from where?
+		System.in		from keyboard
+		File object		from file
+
+	from where?	(SOURCE)
+	from a source
+
+how to give output.
+	System.out		monitor
+	to a file		to file
+
+	to Destination
+
+source and destination
+	read from a source
+	write to a destination
+
+in java
+	java.io package has lot of classes for input and output
+	Input
+		i) character 
+		ii) binary 
+
+1234
+
+	in a character stream, this is 4 characters
+
+	in a binary stream, it may be	int, float, double........etc.....
+			1 number (1234)
+			4 numbers
+			12	34		(it depends on how we read this data)
+
+
+Character streams
+		Input:		Reader	
+					BufferedReader
+					FileReader
+		Output:		Writer
+					BufferedWriter
+					PrintWriter
+					FileWriter
+
+Binary streams
+		Input:		InputStream
+					FileInputStream
+					BufferedInputStream
+					ObjectInputStream
+					DataInputStream		(readInt	readFloat)
+		Output:		OutputStream
+					FileOutputStream	
+					BufferedOutputStream
+					ObjectOutputStream
+					DataOutputStream
+
+
+
+
+to choose the right class from java.io package for a purpose:
+		identify the source/ destination
+		identify the type of stream (character/binary)
+		ex:
+			source is a file
+				FileInputStream	(binary)
+				FileReader	(character)
+
+
+
+
+FileWrite is a node stream. because, it points to a definite destination.
+But to enhance the functionality, or for additional functionality, we may use Filter Stream (that works on a node stream)
+
+
+File
+FileInputStream
+FileWriter
+
+all these techniques are mainly for representing the file as an object in memory.
+
+if we can represent file as an object in memory, we can influence the file (write)
+
+after writing data into the object, we flush it to the secondary storage.
+
+
+
+lets see an example for InputStream and OutputStream
+
+	InputStream and OutputStream are derived by
+					FileInputStream
+					BufferedInputStream
+					ObjectInputStream
+					DataInputStream	
+
+
+
+C:\Users\rjaga\Pictures\pixar-cars.jpg
+
+		i am going to read all the bytes from this file.
+
+		i will create a new file and write all those bytes to this file.
+
+when a program terminates normally, the file object will be closed automatically. in that case, flush() method is called by the close method.
+	some times, the program may be waiting for user input. or a windows/web application never close, then the flush method must be called in the program.
+
+	close method releases the lock on the file. so that other programs can open the file
+
+
+
+InputStreamReader			
+
+1) Create a java program that accepts the following input from the user.
+	employee id
+	first name
+	last name
+	date of joining
+
+	store these details in a file "emp.dat"
+
+2) create a new java program that reads those details and display as output.
+
+
+it will be very easy if we store employee object in the file		writeObject()
+	and read the employee object from the file			readObject()
+
+
+
+
+Lets store object of a class in stream 
+	which class helps us to store objects into a stream?
+		FileOutputStream do not have that method writeObject()
+		we borrow that functionality from a class
+			ObjectOutputStream
+
+	In order to store objects into a stream, the class (of the object) should implement Serializable
+		Serializable is a marker interface.	(ie., there are no methods inside that interface)
+	
+	serialization is the process of converting object into a series of bytes so that it can be sent in a stream
+
+
+and read object from the stream
+
+TasK:
+	Student
+		id
+		name
+		dateOfBirth		(dd-MMM-yyyy)
+		
+
+
+2 programs
+
+	to accept input from the user.			
+
+	to read student from the file and display the details. (do not display pic)
+
+
+----------------------
+
+File f=new File("D:\\jag\\MPhasis\\java\\abc");		//			\n is new line \j
+
+no extension (abc) means it is a directory		(folder)
+
+File class is used to represent "file" or "directory"
+
+when File class represents a directory, there are lot of operations we can do:
+	mkdir()				to create the directory. 
+	delete()			remove
+	list()				String [] list the names of a files and folders	(files/folders)
+	listFiles()			list as File[]
+	length()			bytes
+	isDirectory()			returns true if it is a directory
+	exists()			returns true if it exists
+	lastModified()			last modified date (long)
+	renameTo()			rename
+					mv		(rename, move)
+	getParent()			returns the parent folder name
+	getAbsolutePath()		full path		
+--------------------------
+
+how to zip files
+
+	to compress
+	to upload or send as email 
+
+FileOutputStream
+DataOutputStream
+ObjectOutputStream
+
+ZipOutputStream	
+
+
+Task:
+	create a java program to create a zip based on the user input location.
+
+	the program should automatically find the list of files present in the specified location
+		folder contents should be retrieved using (listFiles())
+
+	loop for each file present in the specified folder and put next entry in zip
+
+		
+
+Send email from Java program.
+	1) we need an email address
+	2) gmail should allow this. to make gmail allow sending email from app, 
+		after logging into gmail, click google apps -> accounts
+			search google account : type ...."less secure app access"
+
+				Allow less secure apps:			ON
+
+
+	WRITE a java program to send email from this gmail address to any other address
+
+<dependency>
+    <groupId>com.sun.mail</groupId>
+    <artifactId>javax.mail</artifactId>
+    <version>1.6.1</version>
+</dependency>
+
+
+
+
+Streams API
+
+	in our project
+		we will create methods like
+		getAllPatients
+		getAllPhysicians
+
+	these methods return list of objects
+		ex:
+			List<Patient> patientList=new ArrayList<>();
+
+	once received, we still need to 
+			sort
+			filter
+			group by
+			aggregate		min, max, avg
+
+		the collection.
+
+	public static List<Item> prefill(){
+List<Item> list = new ArrayList<>();
+list.add(new Item("Paneer Fried Rice",Double.parseDouble("150"),"Veg"));
+list.add(new Item("Chicken Fried Rice",Double.parseDouble("210"),"NonVeg"));
+list.add(new Item("Bucket Chicken",Double.parseDouble("479"),"Veg"));
+list.add(new Item("Ghee Roast",Double.parseDouble("75"),"Veg"));
+list.add(new Item("Masal Roast",Double.parseDouble("65"),"Veg"));
+list.add(new Item("Grill",Double.parseDouble("250"),"NonVeg"));
+list.add(new Item("Tomato Soup",Double.parseDouble("100"),"Veg"));
+list.add(new Item("Prawn Fry",Double.parseDouble("185"),"NonVeg"));
+list.add(new Item("Mushroom Briyani",Double.parseDouble("140"),"Veg"));
+list.add(new Item("Baby Corn Chilli",Double.parseDouble("80"),"Veg"));
+list.add(new Item("Barbeque Chicken",Double.parseDouble("400"),"NonVeg"));
+list.add(new Item("Veg Extravaganza",Double.parseDouble("99"),"Veg"));
+list.add(new Item("Margherita",Double.parseDouble("399"),"Veg"));
+list.add(new Item("Tandoori Chicken",Double.parseDouble("500"),"NonVeg"));
+list.add(new Item("Mutton Balls",Double.parseDouble("90"),"NonVeg"));
+return list;
+}
+
+
+
+
+filter method accepts an argument Predicate.	what is Predicate. it is a functional interface
+
+
+		List<Item> items = prefill();
+		items.stream().filter(a->a.getType().equals("NonVeg")).forEach(a->System.out.println(a));
+
+
+
+group by in streams, result in Map<k,v>
+		group name, aggregate
+		type, count
+

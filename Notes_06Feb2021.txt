@@ -1,0 +1,52 @@
+1) image upload from angular to spring controller	
+	(byte[] in java.	@Lob in Entity class) in oracle it is Blob
+	clob can be used in oracle and char[] in java (for char large objects)
+2) how to handle login and logout in angular
+3) many to many relationship jpa repository
+	Student-Courses
+		please represent this M-M with additional table called Enrollment
+	Student - Enrollment - Course
+	Student - Enrollment	(1 to M)
+	Course - Enrollment	(1 to M)
+
+	@OneToMany			any annotation ends with Many will create a new table
+		to avoid that use	mappedBy="students"
+	private List<Enrollment> en;
+4) date field
+
+	in html form, we enter date using <input type=date>
+	this will give date in yyyy-MM-dd
+
+	angular creates a json (create a class in angular and define this field as date)
+	
+
+if the form contains only image upload and you want to update image in a record, 
+it is simple
+
+Person
+	id
+	name
+	age
+	pic
+
+
+while adding a person, id, name, age can be done in one form
+
+in next form, upload your image
+	that is easy
+
+between these 2 pages, how will you remember the id?
+	session / state management
+		localStorage
+	controller is a servlet. that means cookies, session, etc is allowed
+	session.invalidate()
+
+
+in any typescript page, 
+	uid=localStorage.getItem("userName");
+	if(uid == null)
+		you have not logge din
+	else
+		welcome kumar 
+	localStorage.setItem("userName","jag");
+

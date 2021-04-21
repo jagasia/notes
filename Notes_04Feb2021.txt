@@ -1,0 +1,208 @@
+Spring MVC forms validation
+	JSR 303 
+	
+	new annotations were introduced in JSR 303
+		@Size
+		@Min
+		@Max
+		
+		
+	these annotations specify some rules for the properties of an Entity 
+	what validations, who is performing?
+	these annotations are like restrictions added to the setter method
+
+	but there are more validations done in the DAO/ THERE can be a separate java code to validate
+	if there are complex validations that cannot fit into the annotations, 
+		we can do them in controller itself or DAO methods etc
+
+	and in controller, we can add those exceptions to the result object (BindingResult)
+
+Task:
+	In our spring mvc project, 
+		i) add <form:errors path="name" cssClass="error" />
+		ii) in controller, you should be able to add couple of error messages
+			to the BindingResult object that will be displayed near few fields in jsp
+
+================================================
+Spring MVC Exception handling
+-----------------------------
+do you remember error page in jsp?
+	we are creating a JSP page for that purpose (but no need to use isErrorPage=true)
+	lets create error.jsp file and place it (WEB-INF/jsp)
+
+in web.xml
+	specify the error page using 
+<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/jsp/error.jsp</location>
+</error-page>
+
+=========================
+
+TasK:
+	1) create an "error" page in a known location (WEB-INF/jsp/errors)
+	2) in web.xml configure like
+		for error status code 404
+		give error page location as above
+	3) run the program and give an invalid url in address bar
+		instead of 404 error, we should see the error page output
+
+=========================
+Exception handling using customer error page in Spring MVC
+1) throw new ArithmeticException("");		// somewhere in the controller
+	this causes runtime exception which is not yet handled
+2) in order to handle this, use @ExceptionHandler annotation
+	@ExceptionHandler({ArithmeticException.class})		// {} means array of exception classes
+3) How to map an error page to this exception?
+	in spring-servlet.xml		(bean.xml)
+   
+
+<bean class = "org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+      <property name = "exceptionMappings">
+         <props>
+            <prop key = "java.lang.ArithmeticException">
+               arithmetic			<!-- arithmetic.jsp	-->
+            </prop>
+            <prop key="java.lang.NumberFormatException">
+            	number				<!-- number.jsp		-->
+            </prop>
+         </props>
+      </property>
+      <property name = "defaultErrorView" value = "error"/>		<!-- error.jsp -->
+   </bean>
+
+=====================================
+Task:
+create our own (user defined) exception class and throw them
+and handle them
+	i) create an exception class by deriving it from RuntimeException
+	ii) use @ExceptionHandler annotation in controller
+	iii) in bean.xml (spring-servlet.xml), configure the bean SimpleMappingExceptionResolver
+		and specify different jsp file for different exceptions	
+
+
+=====================================
+===================================================
+Web services
+	what are web services
+		any piece of software that makes itself available over the internet
+		communicating each other via the www, or a server running on a computer device
+		a server running on a computer device, listening for requests at a particular port over a n/w serving web documents
+		
+		client and server on www
+
+	web service is a component available through http using url and is inter operable with any program developed in any platform
+	web methods exposed by web service
+	
+Introduction of SOA
+	Service oriented Architecture
+		providing the code as service (rather than as a product)
+
+SOAP vs REST
+	
+SOAP based web service
+	Simple Object Access Protocol
+		each method do not have an URL	(UNLIKE REST)
+		entire web service has an URL	(WSDL link)
+		
+	WSDL
+		Web Services Description Language
+			this provides documentation of the web service
+			provides the list of methods exposed by the web service
+			methods, their signature, their response etc
+	UDDI	
+		Universal Description Discovery and Integration
+		is a registry of SOAP web services
+
+	HTTP
+		is the protocol used to access SOAP web services
+
+	XML
+		SOAP messages are written in XML language
+
+How to create SOAP web services in java?
+	bottom up approach
+	top down approach	(is when WSDL is there)
+		jax 	java api for xml		to create response in XML (soap message)
+		very old technique
+	SOAP supports XML data only		(unlike REST that supports multiple mime types like JSON)
+
+Task:
+	1) create an interface 
+	2) create an implementing class
+	3) create a webservice using Bottom up approach and
+		select the implementing class
+		i) right click the project -> new -> others -> web service
+		ii) choose bottom up apprache and select the impl class from current project
+	4) generate a WSDL url
+
+	check the WSDL url in browser and understand the documentation created by SOAP web service
+
+	in this first task, create simple methods like add, multiply etc
+	IN soap webservices, there are restrictions in the type of data that can be send as arguments and return type
+
+http://localhost:8080/my-soap-ws-1/services/MathsServiceImpl?WSDL
+
+Next task will be creating a client program (in different eclipse) so that web service is running in this eclipse
+
+Task:
+	create a core java project and add web service client that access the WSDL generated earlier in pervious task
+	once the proxies are downloaded, use the proxy to call the web service methods from Main class main method
+
+=================
+ReSTful web services
+	REpresentational State Transfer
+
+	Vehicle	
+		id
+		name
+		type
+		company
+
+	state transfer in multiple possible formats allowed in REST (but SOAP allows only XML state transfer)
+
+	we created RESTful web services using Jersey framework
+
+	we configured the web.xml with dispatcher servlet
+		/rest/*			
+
+	instead of using Jersey, can we use Spring?
+	Yes
+		
+	in spring web services, the controller will be RestController
+
+	@RestController
+
+		we call them as RESTful web service
+
+REST support in Spring 4.x
+
+till yesterday, we create Spring using xml configuration	(old method)
+in Spring 4.x, there is a new approach for configuration 	(annotations)
+
+	instead of using web.xml, 
+		we can configure the dispatcher servlet using annotations
+	in xml, we specify the base-package name?	we can do it in annotation
+	in xml, we specify the bean configuration?	we can do it in annotation	(Component/ Bean)
+
+	@Component is used with class
+	@Bean is used with methods inside component class
+
+-------------
+example for Spring MVC Rest Controller
+	in this example, we are using a dummy DAO
+	what is dummy DAO?
+		like prefill method		List<Entity>	=new ArrayList<>();
+						add.....
+
+
+	Find how to configure DataSource	(DriverManagerDataSource) using annotation, instead of XML
+
+In Restful Web services, 
+	we do not create Views
+	we create only the controllers. What about Dao?	DAO already is created. we can use them in our controllers
+	
+Content negotiation
+	by default, the request body objects are assumed as JSON
+	some times we specify that the controller to expect a format, if not, another format.
+

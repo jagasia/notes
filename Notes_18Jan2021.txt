@@ -1,0 +1,219 @@
+RESTful Webservices
+	What is web service?
+		i) components available through internet
+		ii) interoperable
+		iii) service through internet
+
+	history
+		2001	web services introduced	
+			in 1999 XML was introduced
+
+		interoperability
+			there were lot of softwares developed for different organisations
+			they were developed using different technologies
+
+			enterprises needed to work with other enterprises
+			EI	-	Enterprise Integration
+			EAI	-	Enterprise Application Integration
+
+		what was stopping the applications to interact with each other? (apps developed using diff platform)
+
+		fn1() should be able to call fn2()	(both functions are dev using diff lang)
+			due to different data types, different binary
+		binary data is specific to platform. text data is platform independant
+		but in text data, where is business logic, rule, validation?
+		text allows anything.
+
+		so we need a technique that allows storing data in a text format
+		but no losing validation. Ans:	XML
+
+		DO JAVA SUPPORT XML?		
+			SAX		Simple API for XML		package
+			JAX-RPC		Java API for XML - Remote Procedure Calls
+			
+		web services introduced in 2001.	(beginning of SOA Service Oriented Architecture)
+
+		service vs product
+
+		diff between Redmi and Airtel
+		
+		Redmi	-	Product
+		Airtel	-	Service
+
+		i have a program that will convert dollar to Rs. 
+
+		i keep this program in my server and ask you to call it online.
+
+		the data transfer between client and server to and fro in XML format
+		that format is named as SOAP	Simple Object Access Protocol	(language is XML_
+
+		WSDL		Web Services Description Language	
+		
+		types of webservice:
+		i) SOAP web service
+		ii) RESTful Web service
+
+		
+
+		how to call a web service from our java program?
+			we can call a webservice from any type of application 
+				from any language, any platform
+		
+
+1) create a java project (any name)
+2) right click the project and add new "web service client"
+	paste the url and click "finish"
+3) Create a Main class with main method
+	among the downloaded files in src,
+		create object of proxy class			
+		and call any method and run the project
+
+
+
+----------------------
+creating our web service (SOAP)
+	2 diff approaches
+	i) Top down approach
+		when WSDL is available
+	ii) Bottom up approach
+		the implementation is already available
+			the java code 	(interface, and impl class)
+		WSDL will be generated from impl code
+
+		
+-------------------------
+maven steps:
+	1) download maven apache-maven-3.6.1-bin.zip	(version can be different)
+	2) unzip the file
+	3) create a folder "Apache Software Foundation" under c:\Program Files
+	4) paste the extracted apache folder that contains "bin" under ASF
+
+	set environment variable
+
+	M2_HOME=C:\Program Files\Apache Software Foundation\apache-maven-3.6.1 
+	M2=%M2_HOME%\bin 
+	MAVEN_OPTS=-Xms256m -Xmx512m
+
+	edit Path variable and append %M2%
+
+	project object model	(pom.xml)
+		<dependencies>
+
+
+
+
+RESTful web services:		
+
+	using jersey framework
+		the servlet part is taken care by jersey framework
+			jar files so we need to add dependencies
+	
+
+	1) create a dynamic web project
+
+	the URL
+		http://localhost:8080/rest/something		should be received by a jersey built in servlet 
+
+		and take that portion "something" and understand which method should be called
+
+	our java method will have a @Path annotation 
+
+	IN WEB.XML, we will define a servlet
+
+	<servlet>
+		<servlet-name>
+		</servlet-name>
+		<servlet-class>
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>
+		</servlet-name>
+		<url-pattern>
+				/rest/*
+		</url-pattern>
+	</servlet-mapping>
+
+
+if jersey fw gives you jar file	(that jar file contains class)
+
+
+
+1) dynamic web project		-> add web.xml
+2) right click the project	-> configure	-> convert to maven project
+		maven projects have
+			group id		ms-office
+			artifact id		ms-word
+	we got pom.xml
+3) in pom.xml
+	add "dependencies" above "build"
+	paste the following dependencies
+			            <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>2.29.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>2.29.1</version>
+        </dependency>
+    
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.29.1</version>
+        </dependency>
+
+	<dependency>
+	    <groupId>asm</groupId>
+	    <artifactId>asm</artifactId>
+	    <version>3.1</version>
+	</dependency>
+
+4) go to web.xml and configure jersey servlet
+	
+when a request comes like below,
+http://localhost:8080/rest/something
+
+	since it is like rest/*
+		jersey will look for a method whose @Path value is "something"
+		these classes are looked only in a specific package (folder) 
+		THAT package name should be given in <init-param> of jersey servlet
+
+
+
+
+		http://localhost:8080/rest/
+			pattern is "/"
+
+		http://localhost:8080/rest/something
+			pattern is "something"
+
+	
+
+		http://localhost:8080/rest/employees/add
+		http://localhost:8080/rest/employees/edit
+		http://localhost:8080/rest/employees/
+		http://localhost:8080/rest/employees/{id}
+		http://localhost:8080/rest/employees/delete	
+
+
+for add method
+
+@Path("/employees")				http://localhost:8080/rest/employees
+public class HelloWorld {
+	@GET
+	@Produces("text/xml")
+	public Response getMessage()
+	{
+		return Response.status(200).entity("<b>Hello Jag</b>").build();
+	}
+	
+}
+
+1) dynamic web project
+		web.xml
+2) convert to maven project
+	

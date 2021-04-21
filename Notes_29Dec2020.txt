@@ -1,0 +1,875 @@
+State?
+	A class may contain 
+		static (or) instance variables
+	they are called as state
+
+
+class Employee
+{
+	private int employeeId;
+	private String firstName;
+	private String lastName;
+	private static String companyName;
+}
+
+
+to initialize the state, we can use "constructors"
+
+when i create the object of class, itself, i can initialize the state of the class.
+constructors are special methods which are called when an object is created for the class.
+
+Employee rama;			//this is not an object. This is a reference variable for Employee
+				//rama is null
+rama=new Employee();		//object is created. Heap memory is allocated.
+
+new Employee();			//object is created. but its reference is not stored in any variable
+				//cons is invoked. 
+
+
+
+public class Employee {
+	private int employeeId;
+	private String firstName;
+	private String lastName;
+	private static String companyName;
+	public Employee(int employeeId, String firstName, String lastName) {
+		super();
+		this.employeeId = employeeId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	
+}
+
+
+public class Main {
+
+	public static void main(String[] args) {
+		System.out.println("Hello world");
+		Employee rama=new Employee();		//Error
+		
+	}
+
+}
+
+
+
+
+
+
+1) when we do not define any constructors, the compiler creates a default constructor.
+2) when we define any constructor, the compiler will not create any constructor.
+
+
+
+what will happen if a constructor is declared as private?
+	private means?	only inside the class they are accessible. one mthod calls another method. is allowed.
+
+	cons is private. so we cannot create object of the class.
+
+private cons are useful to create Singleton classes (only 1 object allowed for the class)
+	ex:
+		Runtime
+		gc			
+	
+
+public
+private
+protected
+default			nothing specified
+
+void speak()		this is default access
+
+
+
+private class?????
+	inner classes can be private
+
+public class A
+{
+	private class B			//only used inside A
+	{
+		
+	}
+}
+
+
+What is inheritance?
+from ABHIJEET MASIH (privately):    9:34 AM
+properties can be inherited from one class to another
+from Harshita Khandelwal (privately):    9:34 AM
+relationship of child class and parent class
+from Mahesh Athani (privately):    9:34 AM
+one object acquires all the properties and behaviors of a parent object.
+from P Abhigna Reddy (privately):    9:34 AM
+acquiring properties of parent class to child class
+from Koya Anusha (privately):    9:34 AM
+parent property is acquired by child
+from Dhruva (privately):    9:34 AM
+parent child relationship between classes
+from Pavithra S M (privately):    9:34 AM
+acquiring properties from parent class to child class 
+from Raja gupta (privately):    9:34 AM
+property of parent class in child class
+from Inchara U N (privately):    9:34 AM
+inherit the properties from the super class to base class
+from NAVEEN NARJALA (privately):    9:34 AM
+inherting the properties from one class to another class
+from Pradeep Singh (privately):    9:34 AM
+it acquire the property of another class
+from SAYANTAN JANA (privately):    9:35 AM
+inhritance is one of the feature of oop in which sub class or child class inherits the peroperties of parents class
+from LAVANYA R (privately):    9:35 AM
+one class acquires the properties of other class
+
+inheritance is a process of deriving a new class from existing class.
+instead of creating a class from the scratch, we can create it from existing class.
+
+by inheriting existing class, i get similar functionality 
+	but i can add/ modify existing functionality or properties
+
+Extensibility
+
+in java the spelling for inherits is "extends"
+class B extends A	(A is super class (parent class). B is sub class (derived class))
+
+
+Do the sub class gets all functionalities of super class?	NO. only public, protected, (if both are in same package, default) members are available to the sub class
+
+
+whenever an object of sub class is created, first the super class obj is created. then only the sub class object is created.
+
+What is meant by overriding?
+	when sub class redefines the super class member, then it is called as overriding
+
+@Override	
+	annotation ensures that the overriding rules are followed or not
+what are the 
+
+
+acceptDetails		in super class
+
+acceptdetails		in sub class. "d" is in wrong case. but we do not get error.
+If @Override annotataion is used, "d" will give error.
+
+what are the rules of overriding:
+1) method names of super class and sub class are same
+2) exactly same signature.
+	no of args
+	type  of args
+	order of type  of args
+3) return type also should be same		
+4) sub class method cannot be less accessible.		
+		super class method is public?	then sub class method must be public only
+		super class method is protected?	then sub class method can be i) protected (or)	ii) public
+		super class method is default?	then sub class method can be i) default ii) protected iii) public
+		super class method is private?	cannot be overridden
+			cannot change that visibility when it is private
+
+5) sub class method cannot throw new exceptions.	if super class method throws few exceptions. only those can be thrown by sub class.
+		public void abcd() throws ParseException			SimpleDateFormat
+		{}
+
+
+super class type	obj name	=	sub class type		(this is allowed)
+			this is also called as narrowing
+
+
+
+A fresher joins a company.
+Employee vivek;
+vivek=new ProgramAnalystTrainee();
+vivek=new Developer();
+vivek=new Designer();
+vivek=new TeamLead();
+
+Task:
+	Read the guidelines carefully and create the following:
+
+1) Furniture class has following properties:
+	String color, name
+	method:
+		acceptDetails
+		displayDetails
+2) Chair is a kind of Furniture
+	int noOfLegs
+3) BookShelf is a kind of Furniture
+	int noOfRacks
+
+override the methods in sub classes
+4) Main class
+	declare furniture object.
+	ask user to choose from
+		1) Chair
+		2) BookShelf
+
+5) accept and display details
+
+
+
+------------
+solution
+-------------------
+import java.util.Scanner;
+
+public class Furniture {
+	private String name;
+	private String color;
+	public Furniture()
+	{
+		
+	}
+	public Furniture(String name, String color) {
+		super();
+		this.name = name;
+		this.color = color;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public void acceptDetails()
+	{
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Name:");
+		this.name=sc.nextLine();
+		System.out.println("Color:");
+		this.color=sc.nextLine();		
+	}
+	public void displayDetails()
+	{
+		System.out.println("Name: "+this.name);
+		System.out.println("Color: "+this.color);
+	}
+}
+
+import java.util.Scanner;
+
+public class Chair extends Furniture {
+	private int noOfLegs;
+
+	public Chair(int noOfLegs) {
+		super();
+		this.noOfLegs = noOfLegs;
+	}
+	public Chair() {}
+	public int getNoOfLegs() {
+		return noOfLegs;
+	}
+	public void setNoOfLegs(int noOfLegs) {
+		this.noOfLegs = noOfLegs;
+	}
+	@Override
+	public void acceptDetails()
+	{
+		super.acceptDetails();
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Number of legs: ");
+		this.noOfLegs=sc.nextInt();
+	}
+	@Override
+	public void displayDetails()
+	{
+		super.displayDetails();
+		System.out.println("Number of legs: "+this.noOfLegs);
+	}
+}
+
+
+import java.util.Scanner;
+
+public class BookShelf extends Furniture{
+	private int noOfShelves;
+	public BookShelf() {}
+	public BookShelf(int noOfShelves) {
+		super();
+		this.noOfShelves = noOfShelves;
+	}
+	public int getNoOfShelves() {
+		return noOfShelves;
+	}
+	public void setNoOfShelves(int noOfShelves) {
+		this.noOfShelves = noOfShelves;
+	}
+	@Override
+	public void acceptDetails()
+	{
+		super.acceptDetails();
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Number of shelves: ");
+		this.noOfShelves=sc.nextInt();
+	}
+	@Override
+	public void displayDetails()
+	{
+		super.displayDetails();
+		System.out.println("Number of shelves: "+this.noOfShelves);
+	}
+}
+
+
+import java.text.SimpleDateFormat;
+
+SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+Date dt=sdf.parse(str);			//convert String to Date	(throws ParseException)
+String str=sdf.format(dt);		//convert Date to String	
+
+
+
+-----------------------------------
+
+Abstract and Final
+
+do you remember the furniture program that you did before break?
+	a customer can purchase either a chair (or) a bookshelf
+
+furniture is very abstract	(means		unclear.		incomplete details)
+				(very general term)
+
+OLX website
+buyer can buy
+seller can sell
+
+both of them are consumers.
+Consumer (parent)
+
+but in a transaction, you can be either a buyer / a seller
+
+being a consumer, here is very abstract. not possible
+
+so there are some classes created only to be meant for super class. they cannot participate in business directly
+
+so we do not want anybody to create an object of Furniture.
+
+Furniture f;		now f is null. f is not object.		this is not object.	this is ref var only
+f=new Chair();		this is object
+(i want to allow this (above)
+
+Furniture f;		is not object of Furniture class. it is just ref variable only
+f=new Furniture();	now only f is an object
+(i do not want to allow this. (above))
+
+
+DECLARE FURNITURE AS ABSTRACT.		So that we cannot create an object of Furniture.
+
+Furniture f;
+f=new Chair();
+f=new BookShelf();
+
+this is valid
+
+Abstract class meant for creating super classes
+
+
+abstract class Shape
+{
+	public abstract void calculateArea();
+
+}
+
+class Triangle extends Shape
+{
+	public void calculateArea()
+	{
+		//					1/2*b*h
+	}
+}
+
+class Rectangle extends Shape
+{	
+	public void calculateArea()
+	{
+		//					l*b
+	}
+}
+
+
+
+main
+	Shape s;
+	s=new Triangle();
+	s.calculateArea();			//not availabe because Shape do not have calculateArea
+	
+	s=new Rectangle();
+	s.calculateArea();			//not visible
+
+
+class Laptop
+public void print(Printer p)
+{
+	p.print();
+}
+
+
+HPPrinter hpPrinter;
+
+print(hpPrinter);
+print(canonPrinter);
+
+
+
+interface		CustomPipe
+
+	transform
+
+ngOnInit
+
+
+
+
+
+class A extends X
+class A implements X, Y, Z
+
+what is an interface?
+	interface, like classes, are also way of defining Types
+
+class is used to create Type
+interface also is used to create Type
+
+interface can contain
+	i) public members only
+			in java 8, default is introducted 	(is not same as .... no access specifier)
+	ii) only constants		(no variables allowed)
+
+	an interface contains only
+		public static final data members.		we may not specify public static final (but it is)
+
+	iii) till java 6 
+			interfaces cannot have methods with body (only abstract methods. but do not specify abstract)
+
+	in new version,
+		interface can containt methods with body if it is
+			static
+			default
+
+
+
+
+	
+
+
+sometimes, we have partial implementation
+	in an abstract class, 
+		5 methods
+			3 are defined with body
+			2 are abstract
+
+we define what are all the methods that must be present in implementing classes. But how to implement is left to the impl classes. interface
+
+Person should be abstract class ? or interface ?
+
+Shape should be abstract class? or interface?
+
+
+rule:
+	(Abstract class)
+		if there is a "kind of " relationship between super and sub class.
+
+ContractEMployee is a kind of Employyee.			inheritance abstract class
+
+when there is a contract, we use interface
+
+
+pin for charging
+pin for speaker
+	these are called as interfaces
+
+3.5 mm jack
+can we call it as speaker?		NO
+	but it can interface a speaker
+
+
+
+that is the reason, interface do not have code inside.
+
+
+no kind of relationship but contract to implement whatever defined
+
+class implements multiple interfaces
+
+types of interfaces
+	i) marker interface
+		an interface that do not have any method inside
+		ex:		Serializable
+			typeof		the object
+
+		ex:	an array of objects. each object can be checked if it is a specific type
+			instanceof		
+
+	Person rama=new Student();
+		rama instanceof Person		//true
+		rama instanceof Student		//true
+
+	ii) functional interface
+		an interface that contains only one abstract method
+	
+		ex:	Runnable	(run)
+
+		we can use lambda implementation for functional interface	
+
+
+		subscribe(data=>{});		//there is only 1 function. so you can provide lambda implementation
+
+
+
+StringBuilder			finding Palindrome
+				find if 2 strings are anagrams
+
+what is anagram?		2 strings are anagrams if they are made of same characters
+	ex:		tea and eat		team and meat		ate	eat	
+
+StringBuffer
+
+except that StringBuffere is synchronized.		it will not allow multiple threads to access at a time
+
+
+Wrapper classes:
+	for every primitive type, there is a corresponding wrapper class.
+	8 primitive data types. and hence, there are 8 wrapper classes
+
+type conversions and casting
+	casting is allowed only between types/data types of same category (numeric, string)
+
+	int i=20;
+	float f=12.36f;
+
+	i=f;			//this is wrong		both are different types/
+	i=(int)f;		//this is correct.	casting
+
+	both are numeric types, so casting is possible.
+
+	what is widening?
+		double d=f;				//f is float.
+	what is narrowing?
+		f=(float)d;				//casting is required for narrowing
+
+		i=(int)f;
+int i=20;
+		float f=12.36f;
+//		i=f;		//wrong
+		i=(int)f;	//correct
+		double d=f;		//correct because compatible and destination is larger than source
+//		f=d;			//wrong
+		f=(float)d;		//correct	casting
+						//here we are losing precision. so casting is done
+
+	
+Casting can be done on objects also.
+	Person rama=new Student();
+	Student s=new Student;
+	Person p=s;				//widening.		Person is super class. ie., wider / general
+			//Student is narrow. sub class. ie., specific
+	Student x=(Student)p;		//no use of this casting
+
+
+Conversion:
+	we do conversion across different category of types
+	String to int
+	String to float
+	vice versa also
+
+	Integer.parseInt
+	Double.parseDouble
+	Boolean.parseBoolean
+
+
+	String.valueOf()		several overloaded versions of this method is available to convert any type to String
+
+	valueOf method is available for other classes also.
+	Double.valueOf()
+	Float.valueOf()
+
+	all these classes have some common methods.
+		toString()		returns string rep of the object
+		equals()		returns true if equal
+		compareTo()		returns int.		0 if equal. positive number if first is greater
+					a.compareTo(b)		=>	a-b
+
+
+	char type variables work with int so easily
+
+
+
+	int a,b;
+	a==b
+
+	Integer a,b;
+	a.equals(b)		//correct way. But a==b	returns true if we have not use new operator
+
+	Integer a=20;
+	Integer b=20;		20 was an object. not value. same object pointed by a and b
+
+
+	compareTo method is defined in an interface Comparable
+		all wrapper classes, String, Date, etc implements Comparable interface. and implement the  method compareTo method
+
+
+Final:
+----------
+	final class		
+			cannot inherit
+	final method					(sealed)
+			cannot override
+	final variable
+			cannot change the value	(constant)			
+
+
+
+class Address
+{
+	String doorNo;
+}
+
+class Address extends String		//not possible		because, String is final class
+
+Enumeration:
+------------
+	fixed set of values
+		Monday, Tuesday, Wednesday
+
+	enum is like a type
+
+Inner class:
+-----------
+
+	A class defined inside another class is inner class. This class is useful only inside the enclosing class.
+	
+
+Anonymous class:
+------------
+	A class that do not have a name is called as anonymous class.
+
+
+
+String formatting:
+-----------------
+	String.format()			returns a String
+	System.out.printf()
+	System.out.format()
+
+
+StringJoiner:
+-----------		(introduced in java 8)
+	we converted an object into json		JSON.stringify()
+	{ key:value, key2=value2}
+
+	we can create csv kind of list using joiner.
+
+
+compareTo
+
+	Date dt1, dt2
+	dt1.compareTo(dt2)		returns 0 if equal, postive if first is greater, negative if firt is smaller
+
+Student	rama=new Student(1,"rama",20);
+Student siva=new Student(2,"siva",21);
+	rama.compareTo(siva);		should return -1
+	rama-siva		20-21
+
+Student class should implement Comparable interface and override method
+	compareTo
+
+
+while sorting an array of Student, we are getting error. because, sort() method does not understand how to compare 2 students.
+
+Comparable		if Student class itself implements, then Comparable interface and compareTo method
+Comparator		if external class implements, then Comparator interface and compare method
+
+------------------------------------------------------------------------------------------
+Collections:
+	limitations of arrays.
+		1) array elements are contigeous in memory. adjacent to each other.
+		2) size is fixed. 	static length
+		3) size must be known while creating itself
+		4) same data type. homogenous collection		(rule this out)
+		5) insertion and deletion are possible but shifting other elements
+		6) sorting also needs lot of re arrangements
+
+		point 3:
+
+			create a method that accepts (start, end)	
+				find all prime numbers between start and end. store them in an array. return the array. If this is the task. What should be the array size?
+
+			find(2,100);		returns array of prime numbers between 2 and 100
+				
+
+		Object arr[]=new Object[10];
+		arr[0]="rama";			string is converted into Object
+		arr[1]=20;			int is converted into Object
+		arr[2]=new Employee();		employee is converted into Object
+
+	at the end, it is object array only
+
+		There is no hetrogenous collection at al
+
+
+	
+		ArrayList alist;		it is object type
+		alist.add(10);
+		alist.add("Jag");
+
+
+we need Collections	(collections cannot be primitive) arrays can be primitive
+-------------------
+	Collections are dynamic, they can grow or shrink
+	
+in java, the collection classes are present in "java.util" package.
+
+example for collection classes:		end with (List/Set/Map)
+
+List:		(list allows duplicates. Maintains the order in which elements are added)
+	ArrayList		has index	(only collection which has index)
+	LinkedList
+
+Set:		(set rejects duplicates. order is based on the type of set)
+	HashSet		(order is based on hashCode)
+	TreeSet		(order is based on Comparable/ Comparator)
+	LinkedHashSet	(order in which elements are added)
+Map:		(maps are key-value pair)
+	HashMap			put		(no add methods in map)	
+	TreeMap			put
+	LinkedHashMap		put
+
+
+Legacy collections: 	old classes were synchronized
+	Hashtable	
+	Stack		push	pop
+	Queue		enque	deque
+	Vector		has index
+
+
+
+
+
+
+int arr[];			primitive array
+Integer arr[];			ref type array
+
+but in collections,
+ArrayList<Integer> songs;		//correct
+wrong: 	ArrayList<int> songs;			//NOT ALLOWED
+
+
+
+ArrayList<String>
+ArrayList<Integer>
+	these are generic collections	that allows us to specify the elements type 
+		while creating object of the collection
+
+	Before jdk 1.5, there were no generics. So
+		ArrayList marks=new ArrayList();
+		//here, this is a collection of Objects
+
+
+
+
+old versions till jdk1.4
+		ArrayList marks=new ArrayList();
+		marks.add("Rama");
+		marks.add(new Integer(100));
+		marks.add(new Double(12.36));
+		marks.add(new Float(2.5f));
+
+
+
+jdk 1.5 to 1.6
+	ArrayList<String> countries=new ArrayList<String>();
+		countries.add("India");
+		countries.add("Australia");
+		
+
+jdk 1.7 onwards
+			ArrayList<String> countries=new ArrayList<>();
+		countries.add("India");
+		countries.add("Australia");
+
+
+
+
+ArrayList<String> countries=new ArrayList<>();
+		countries.add("Australia");
+		countries.add("Srilanka");
+		countries.add("Japan");
+		countries.add("Pakistan");
+		countries.add("Zimbabwe");
+		countries.add("India");
+		//how to display all elements of arraylist
+		String str=countries.toString();
+		System.out.println(str);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Main_ArrayList {
+
+	public static void main(String[] args) {
+		ArrayList<String> countries=new ArrayList<>();
+		countries.add("Australia");
+		countries.add("Srilanka");
+		countries.add("Japan");
+		countries.add("Pakistan");
+		countries.add("Zimbabwe");
+		countries.add("India");
+		//how to display all elements of arraylist
+		String str=countries.toString();
+		System.out.println(str);
+		//how to sort this arraylist?
+//		Collections.sort(countries);
+//		System.out.println(countries);
+		
+		System.out.println("Element at index 1 is : "+countries.get(1));
+		System.out.printf("There are %d elements present in countries\n",countries.size());
+		countries.remove(0);	//remove element at index 0
+		System.out.println(countries);
+		countries.remove("Pakistan");	//remove element by its value
+		System.out.println(countries);
+		
+		countries.add(0, "USA");
+		System.out.println(countries);
+		System.out.println(countries.contains("India"));
+		System.out.println(countries.indexOf("Pakistan"));
+		countries.set(0, "United States of America");
+		System.out.println(countries);
+	}
+
+}
+
+
+
+--------------------------------------
+ArrayList and LinkedList?
+	array list has index
+	specify index to add/ set
+	
+
+
+List means by default array list
+

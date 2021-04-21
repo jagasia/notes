@@ -1,0 +1,258 @@
+Maven:
+	1) have you ever created a maven project
+		or
+	   converted a project to maven
+
+	go to command prompt and navigate to the folder that contains pom.xml
+	mvn clean install
+
+	Perhaps you are using JRE than a JDK
+	solution:
+		go to environment variables
+		create a variable
+			JAVA_HOME		value:	C:\Program Files\Java\jdk1.8.0_191
+
+	maven build tool is used to build an application in command line also
+	
+
+creating a java project in maven:
+	there are many archetypes in maven 
+		choose the correct archetype for project	(java project, dynamic web project, etc)
+
+	maven creates the best folder structure for a particular type of project
+
+		maven-archetype-quickstart		(java project)
+
+environment setup:
+	download maven
+		https://maven.apache.org/download.cgi
+	CREATE a folder "Apache Software Foundation" under c:\program files
+		paste the extracted contents into this folder. ensure that the folder contains bin and lib
+	set environment variable:
+			M2_HOME=C:\Program Files\Apache Software Foundation\apache-maven-3.3.1 
+	M2=%M2_HOME%\bin 
+	MAVEN_OPTS=-Xms256m -Xmx512m
+
+	append the following to the PATH variable (at the end)
+	%M2%
+
+
+Convention over Configuration
+	we follow the conventions		(src/main is for code artifacts.		src/test is for junit testing codes)
+		we specify some path in configuration. 		"package name" that contains controllers (this is configuration)
+	if some convention is followed as industry practise, then it is easy for any developer to understand any project be it is developed by me or you
+
+
+
+	in command prompt:
+		jar -cfm . something.class
+
+Super POM
+	all artifacts derive the POM from the super pom.
+	to check super pom:
+		mvn help:effective-pom
+
+check the maven respository in our local computer:
+	c:\users\yourusername\.m2
+
+
+various other project build tools:
+	Ant
+	Gradle
+
+DATE
+	form has a <input type=date />
+	
+	the servlet receives it as a String yyyy-MM-dd
+		the we convert it into a Date using sdf.parse(request.getParameter("dt"));
+
+restful web services
+	consider the method as a servlet service method
+		parameter should be String that receives date as yyyy-MM-dd
+
+
+
+images
+	in servlet we use @MultipartConfig
+
+	we can use it here also. the class or method can have as many annotations		
+		
+create following type of projects:
+	maven-archetype-quickstart			(java project)	(console app)
+	maven-archetype-webapp				(web application)
+		add targeted runtime (apache tomcat) 
+
+------------------------
+right click project (in eclipse)
+	run as
+		maven build
+			in goals:	type	
+				clean install
+		run
+
+error:
+	Perhaps you are using JRE than JDK
+solution:
+	eclipse:
+		windows -> preferences
+				-> java	-> Installed JREs
+			choose jdk by clicking "Add" button and select the jdk path in the Directory
+
+
+mvn eclipse:eclipse
+
+in spring boot project, to change the port number,
+expand "src/main/resource"
+		application.properties
+			server.port=8082
+
+
+------------------------------
+
+Ant build tool:
+	Ant works on JVM layer		
+	Apache 
+		download bin zip of Ant
+		extract to a folder
+		set environment variables
+			ANT_HOME		C:\Program Files\Apache Software Foundation\apache-ant-1.10.9
+			Path			C:\Program Files\Apache Software Foundation\apache-ant-1.10.9\bin
+	
+
+	in maven, we navigated to a folder that contains pom.xml	and build the app using mv clean install
+	in ant, we navigate to a folder that contains build.xml		and build the app using ant
+
+	in maven, 	mvn -version
+	in ant,		ant -version		(ant -v) this will give version and also check build.xml
+
+
+
+create a file "build.xml" in a known location and type the below code:
+<?xml version="1.0"?>
+   <project name="Hello World Project" default="info">
+   <target name="info">
+      <echo>Hello World - Welcome to Apache Ant!</echo>
+   </target>
+</project>
+
+	run this using "ant" command in a folder that contains build.xml
+
+
+<?xml version="1.0"?>
+   <project name="Hello World Project" default="info">
+	<property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />
+	<property file="db.properties" />
+   <target name="info">
+      <echo>Hello ${username} - Welcome to Apache Ant!</echo>
+	<echo>Password is ${password}	</echo>
+	<echo>URL is ${url}	</echo>
+   </target>
+</project>
+
+-------------------------
+build a hello world project using ANT
+------------------------------
+1) Create a Java Application	
+2) Add a class "Main" with main method
+	sout		"Hello world"
+3) in project, directly add a "build.xml" file
+	<project name="MyApplication" default="dist" basedir=".">
+    <description>
+    simplest example build file
+  </description>
+    <!-- set global properties for this build -->
+    <property name="src" location="src" />
+    <property name="build" location="build" />
+    <property name="dist" location="dist" />
+    <property name="version" value="1.0" />
+ 
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp />
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}" />
+    </target>
+ 
+    <target name="compile" depends="init" description="compile the source">
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac srcdir="${src}" destdir="${build}" />
+    </target>
+ 
+    <target name="dist" depends="compile" description="generate the distribution">
+        <buildnumber />
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist}/lib" />
+ 
+        <!-- Put everything in ${build} into the MyApplication-${version}.${build.number}.jar -->
+        <jar destfile="${dist}/lib/MyApplication-${version}.${build.number}.jar" basedir="${build}" />
+    </target>
+ 
+    <target name="clean" description="clean up">
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}" />
+        <delete dir="${dist}" />
+    </target>
+</project>
+
+4) go to cmd to the folder that contains "build.xml"
+5) ant
+	(run ant command)
+6) notice that "dist" folder is created that contains "lib" that contains the jar file generated by ant build.
+
+
+---------------------
+change the build.xml file name to some other file name
+use -build (command line arg) to build using some other file name
+
+
+
+-----------------
+change directory (cd) to src or any folder and issue ant command that will check build.xml in parent folder
+use -find (command line arg) to find the build.xml in parent or its parent until found
+
+	-build
+	-find
+	-Dproperty
+	-quiet
+	
+
+
+
+-----------------------------------------------------
+i login 
+	i call a method
+	i call another method	
+		between thse calls, my login is persistent. i should be identified as a logged in user by the application. if logged out, then every attempt to call a DAO method, should be rejected.
+
+	
+i do not allow client programs to call DAO methods directly.
+model package:
+	BO classes
+		ProductBO
+		CustomerBO
+		SaleBO
+			all the methods are public
+
+	DAO classes
+		ProductDAO
+		CustomerDAO
+		SaleDAO
+			all the methods are default		(only accessible within the model package)
+
+	if i allow client applications to access my DAO directly, they may call the methods without logging in also
+
+	withdraw	(BO)	controllers serve the same purpose
+		validate atm card
+		validate pin no
+		validate the amount 	
+			against	 daily limit
+			against a/c balance
+			agains atm machine balance
+		update database		DAO
+		print receipt
+
+
+		
+
+
+con.prepareCall("{ call prcDeleteStudent(?)}");		//calling procedures

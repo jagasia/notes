@@ -1,0 +1,452 @@
+Object oriented language
+High level programming language
+OOPS language
+provides high security when compared to other languages
+platform independent
+compiler and interpreter based
+supports inheritance, polymorphism, data hiding/ encapsulation
+language which is used to write instructions to perform the task
+multithread
+secure, fast, powerful, it is open source
+pure object oriented
+WORA
+robust
+
+
+
+is a language
+platform independent
+	
+
+in c language
+	what is the size of int data type?	
+		ans:	2 bytes		4 bytes
+
+	header files		conio.h		
+	gcc
+	turboc
+	
+c language itself is different for different platform
+
+why platform dependent?
+	we code the program in c language
+	after compilation it is translated to machine language	(compilation)
+	machine lang is different to different platform
+	0-255		=256
+divide by 2
+	-128	to 127
+
+0000 0000			0
+0000 0001			1
+0000 0010			2
+0000 0011			3
+0000 0100			4
+
+1111 1111			255	
+
+
+
+
+A	is translated into 	65	0100 0001	0000 0000 0100 0001 (16 bit representation)
+
+0000 0000 0000 0000 0000 0000 0100 0001			A		(32 bit representation)
+
+
+java is platform independent
+	because
+	while compiling java code, we are not translating it into machine code.
+	it is byte code which will be further translated again during run time.
+		where we run the program? according to the machine where it runs, it is going to be translated
+
+	so can we say java runs in any platform?
+		NO
+	IT WILL RUN Only in a ,machine where JRE is present
+
+	while downloading JRE, we can choose the platform
+
+	to run java program (which is already compiled in any platform)
+	 
+
+again at runtime, a compilation happens
+	just in time compilation
+		translate only the portions required in the flow of execution
+
+
+	JIT 
+
+jdk	or jre
+javac	is java compiler	to compile
+java	is java interpreter	to execute 
+
+
+Java Runtime Environment
+	java virtual machine
+		JIT compiler		translate byte code into machine code
+		class loader
+		garbage collector
+
+
+
+eclipse
+intelliJ
+netbeans
+
+IDE	they compile java code as soon as you save
+
+compile java code		javac		java to byte code
+execute java code		java		byte code to machine code and execute
+
+create a java code
+compile it
+again decompile it	
+
+
+	printf
+
+
+this java is going to be your connecting language between
+		SQL
+		typescript
+
+data types in java language	(8)	we cannot create user defined data types in java. in c language, we create structures
+data type means value type.		classes are reference type.
+
+to under stand variables and data types,
+visualize a locker room
+
+int x=20;	a locker whose label is x is allocated. if you open the locker, what you see inside?					i see 20 inside
+
+float y=12.36f;			12.36 is found inside the locker "y"
+
+String str="hello".		str is a locker. i do not see a value. i see a key for another room
+				that room key is kept inside the locker.
+
+
+what is locker?		stack
+what is room?		heap
+
+String str="this is a sentence";	when i open the locker "str" i do not see a value. I see a reference.		
+
+only the below 8 data type variable values can be accommodated in the locker.
+
+ 
+	byte		1	8 bit			-128	to	127
+	short		2	16 bit			-32768	to	32767
+	int		4	32 bit			
+	long		8	64 bit
+
+	float		4	32 bit
+	double		8	64 bit
+	
+	char		2	16 bit		'a'	'\0'	'\t'	'\n'	'\\'	'\"'	'\''	
+		
+	boolean		1 bit	1 bit	(0/1)	you cannot assign 0 or 1	true/false	
+
+in java, String use ""			char use ''
+
+scalar = single value
+
+scalar <> composite
+
+String	
+
+
+when i create variable of any of these 8 data types, their values are directly present in the "stack"
+when i create object of reference type (anything other than these 8 primitive types)
+	the stack contains (not the value but) the reference to a heap memory
+
+
+
+why locker is called as stack?
+
+byte		Byte
+short		Short
+int		Integer
+long		Long			
+
+float		Float
+double		Double				google map	lat	lon
+
+char		Character		isDigit		isLetter	
+boolean		Boolean
+
+
+
+factorial		3!	3*2*1
+	5 factorial 	is nothing 	but		5*4!
+
+
+x:number;
+
+int x;
+byte x;		-128 to 127	
+short x;
+
+
+
+operators
+arithmetic
+logical
+comparison
+increment
+assignment
+shift
+ternary
+
+
+
+inputs
+
+
+
+there are only 4 options
+5%4	=1
+22%4	=2
+32%4	=0
+
+
+
+
+x=20;
+
+x==20			compares if equal or not		returns boolean		true/false
+
+
+
+
+x=4			0000 0100		4
+
+x>>1			0000 0010		2
+
+
+x=4			0000 0100
+x<<1			0000 1000		8
+
+
+
+new operator
+instanceof operator
+typeof operator
+
+
+
+case conventions:
+
+variables/ objects			start with lowercase. each next word first letter in uppercase
+	ex:
+			studentId
+			firstName
+			serialNumber
+			dateOfBirth
+
+functions/ methods
+			same convention as above but
+			combination of doThis	verb+Noun
+			calculateSimpleInterest()			(calculate is a verb)
+			displayDetails()	
+			validatePinNumber()				validate is a verb 
+			
+
+Class Names
+			first letter also caps. every word first lett caps.
+			Should be a noun
+
+			SignUp	is not good class Name
+			User is a class name
+			Employee
+			Student
+			Patient
+			Doctor
+					ArrayIndexOutOfBoundsException
+
+
+constants		in java, "final" keyword is used to declare constant
+			final String COMPANY_NAME="ABC";
+
+			constants means FULL CAPS
+
+			ex:			EXIT_ON_CLOSE		NORTH_EAST
+
+
+operators:		full small letter
+			new
+			instanceof
+			valueof
+			typeof
+
+
+variable names cannot be keywords
+
+except for array indexing or loop variable, 
+		variable names must be meaning ful.
+
+
+		int x;
+		float f;
+
+		for(int i=0;i<20;i++)
+
+
+	Student
+		studentId;
+		
+
+IDE
+	Integrated Development Environment
+		eclipse, intelliJ, Spring tool suite, netbeans
+
+
+
+String is immutable.		//means cannot change
+	we cannot change the value of string at all.
+	we cannot edit the content of string variable.
+		like insert character between
+		append
+		delete character
+		replace characters
+
+
+
+
+
+
+		String str1="hello";
+		String str2="hello";
+		System.out.println(str1==str2);		//true / false
+		//	== compares the ref if the operands are ref types
+		//	== compares the values if the operands are value types
+		
+--------------------------------------------------------------------------
+
+
+	String str1=new String("hello");
+		String str2=new String("hello");
+		System.out.println(str1==str2);		//true / false
+		//	== compares the ref if the operands are ref types
+		//	== compares the values if the operands are value types
+		
+		//whenever new operator is used, a new memory is allocated for sure
+		
+		System.out.println(str1.equals(str2));
+
+
+
+
+StringBuilder sb=new StringBuilder();
+		sb.append("this is a string");
+		System.out.println(sb);
+			//	sout automatically calls the toString() method.
+
+String str=sb;			//error
+String str=sb.toString();	//correct
+
+
+identify as many methods and properties in 
+	StringBuilder
+
+	
+
+
+StringBuilder and StringBuffer classes share the same set of properties and methods.
+only difference is StringBuffer is synchronized. (means, when multiple threads try to modify a string buffer at a time, only 1 thread is allowed to modify. other threads are made to wait).
+
+
+StringBuilder is fast
+
+
+
+reverse()
+
+
+convert string into sb and vice versa
+
+if String is there
+
+String str="abcd";
+StringBuilder sb=new StringBuilder(str);			//here str contents are copied to sb
+
+StringBuilder sb1=new StringBuilder();
+sb1.append(str);
+
+how to convert sb into String?
+str=sb1.toString();
+
+
+find if the given string input is a palindrome or not?
+
+String str="abcd";
+reverse  is dcba
+if both are same then palindrome
+else
+not palindrome
+
+java 
+c
+c++
+
+how to get input from command prompt
+	Scanner
+
+
+
+next()				this will read only 1 string (upto 	\n	\t	space	delimiter)
+
+Scanner sc=new Scanner(System.in);
+		String input=sc.next();
+		System.out.println(input);
+nextLine()			this will read string until a \n is found
+
+		Scanner sc=new Scanner(System.in);
+		String input=sc.nextLine();
+		System.out.println(input);
+
+nextInt
+
+
+()
+nextFloat()
+nextDouble()
+nextLong()
+
+Scanner sc=new Scanner(System.in);
+		int x;
+		String str;
+		x=sc.nextInt();
+		str=sc.next();
+		System.out.printf("The number is %d and string is %s",x,str);
+		
+
+
+
+
+
+Scanner sc=new Scanner(System.in);
+		int sno;
+		String name;
+		int score;
+		sno=sc.nextInt();
+		name=sc.nextLine();
+		if(name.equals(""))
+			name=sc.nextLine();
+		score=sc.nextInt();
+		System.out.println(sno);
+		System.out.println(name);
+		System.out.println(score);
+
+Scanner sc=new Scanner(System.in);
+		Scanner sc1=new Scanner(System.in);
+		int sno;
+		String name;
+		int score;
+		sno=sc.nextInt();
+		name=sc1.nextLine();			//diff scanner
+		score=sc.nextInt();
+		System.out.println(sno);
+		System.out.println(name);
+		System.out.println(score);
+
+
+
+How will you get input for a 
+	char variable
+	

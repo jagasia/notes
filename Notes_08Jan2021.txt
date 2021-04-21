@@ -1,0 +1,327 @@
+1) select query should include all columns that are not null
+	if a table contains 10 columns. 5 allows null. 5 does not allow null.
+	the select query should include all those column which are mandatory (not null)
+
+2) select query should not contain derived columns (functions or expression)
+
+3) if select query has join, then the column list should contain all not null columns of both tables. but we cannot insert a row here. because, a statement that affects more than 1 table does not exists.
+
+DML on views. there are some rules. all of them apply here.
+
+4) SELECT * FROM TABLE		* is not allowed if we need to update result set.
+	we used * yesterday
+
+5) if * is not allowed, there was no error.	We used updatable. but it was showing readonly
+	the method was to automatically create next suitable result set
+
+	if the select query does not follow the rules for updatable resultset, it is created as next option (readonly)
+
+
+
+--------------
+for updating a result set:
+	1) position the result set to required row	
+		rs.next()			move to next row. (first time cursor was before first. so it will move to first row)
+	2) first(), last() to move to first or last respectively
+	3) absolute(int)	to position the row using row number
+	4) relative(int) 	to position the row to relatively n rows or -n rows
+	
+	and then updateX()	updateString	updateInt	updateFloat	
+		and specify the column number and value
+		updateString(2,"Jag");
+
+	finally call the rs.updateRow()
+
+for insert row
+	rs.insertRow()
+
+
+when should we use updatable result set?
+	only when the user works on his private set of records.
+	for ex:	online test.	The moment, a user starts test, some 30 questions will be fetched from the database. The user is the only person, who is updating the result set. like answering for each question.
+	when he submit the test, the changes done in the result set should reflect in the database.
+
+	DO NOT USE updatable result set where multiple transactions can modify same records.
+
+	suppose, i call executeQuery() at 9 am. till 10 am i will scrolling to and fro. after few minutes i will update. 	
+	between these time periods, if some other user also updates, there is a problem
+
+--------------------------------
+
+	select col1, col2, col3 from table 
+	but if i do not know the column name?
+
+	programmatically, we can find the column names
+		col data types
+		how many columns
+		
+	using metadata
+		ResultSetMetaData
+		DatabaseMetaData
+
+
+	EmployeeDAO
+		create(Employee)
+			we can create code that can adapt automatically change in database table
+				if a new column is introducted
+				if a column is remove, or renamed or data type is changed etc
+
+		out create method in java can adapt automatically
+
+		if i have an object "employee". Is it possible to find all methods present inside?
+			employee, get class. using class, we can get all methods, properties/fields etc.
+
+		for each field, we can loop isnt it
+
+		on other hand, in select * from tablename. the result set also allows us to find the number of columne, what are they (name, data type)
+
+
+		jdbc code that adapts to the changes in model class and db
+
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+
+import oracle.net.aso.m;
+
+public class Main_metadata_1 {
+
+	public static void main(String[] args) throws SQLException {
+		Driver driver=new oracle.jdbc.driver.OracleDriver();
+		Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:XE","sys as sysdba","password");
+		DatabaseMetaData dbmd = con.getMetaData();
+		System.out.println(dbmd.getDatabaseProductName());
+		System.out.println(dbmd.getDatabaseMajorVersion()+"."+dbmd.getDatabaseMinorVersion());
+		System.out.println(dbmd.getDriverName());
+		
+		ResultSet rs = con.createStatement()
+		.executeQuery("SELECT * FROM EMPLOYEE");
+		
+		//get meta data from result set
+		ResultSetMetaData rsmd = rs.getMetaData();
+//		System.out.println(rsmd.getColumnCount());
+		for(int i=1;i<=rsmd.getColumnCount();i++)
+		{
+			System.out.println(rsmd.getColumnName(i)+"\t"+rsmd.getColumnTypeName(i)+"\t"+rsmd.getColumnType(i));
+		}
+		System.out.println("----------------");
+		Employee employee=new Employee();
+		Method[] methods = employee.getClass().getMethods();
+		for(Method m:methods)
+		{
+			if(m.getName().substring(0,3).equals("get") && !m.getName().equals("getClass"))
+			System.out.println(m.getName());
+		}
+	}
+
+}
+
+
+
+
+
+-----------------------------
+Task:
+just create a dao impl create method
+that accepts an object of entity class
+	the code inside this create method should be automatically adapting to the table / class structure
+	hint: use meta data
+
+
+---------------------------
+
+what is callable statement?
+	con.createStatement()
+	con.prepareStatement()
+	con.prepareCall()		return CallableStatement
+
+		is used to execute stored procedures
+
+
+
+CREATE OR REPLACE PROCEDURE PRCFIND
+(EID EMPLOYEES.EMPLOYEE_ID%TYPE,
+FNAME OUT EMPLOYEES.FIRST_NAME%TYPE,
+LNAME OUT EMPLOYEES.LAST_NAME%TYPE,
+SAL OUT EMPLOYEES.SALARY%TYPE)
+AS
+BEGIN
+    SELECT FIRST_NAME, LAST_NAME, SALARY INTO FNAME, LNAME, SAL
+    FROM EMPLOYEES WHERE EMPLOYEE_ID=EID;
+--    DBMS_OUTPUT.PUT_LINE(FNAME||' '||LNAME||' '||SAL);
+END;
+
+
+CREATE OR REPLACE PROCEDURE PRCABHIJEET
+(NO INT,
+SQ OUT INT)
+AS
+BEGIN
+	SQ:=NO*NO;
+END;
+
+
+
+Scanner sc=new Scanner(System.in);
+		int eid=sc.nextInt();
+		Connection con = MyConnection.getConnection();
+		CallableStatement st = con.prepareCall("{call PRCFIND(?,?,?,?)}");
+		//SELECT * FROM EMPLOYEES WHERE EMPLOYEEID=?
+		st.setInt(1, eid);
+		st.registerOutParameter(2, java.sql.Types.VARCHAR);
+		st.registerOutParameter(3, java.sql.Types.VARCHAR);
+		st.registerOutParameter(4, java.sql.Types.INTEGER);
+		st.execute();
+		//rs.getString(2)	
+//		System.out.println(st.getInt(1));		not allowed because 1 is input parameter
+		
+		System.out.println(st.getString(2));
+		System.out.println(st.getString(3));
+		System.out.println(st.getInt(4));
+
+
+
+
+
+SELECT * FROM USER_SOURCE;
+SELECT * FROM USER_PROCEDURES;
+
+
+
+
+in jdbc statements, there is something called
+		addBatch()
+		executeBatch()
+
+
+
+		Connection con = MyConnection.getConnection();
+		Statement st = con.createStatement();
+		st.addBatch("INSERT into employee values('E014','Balagangathara','Thilak','01-Jan-1850',null)");
+		st.addBatch("UPDATE employee set lastname='abc'");
+		st.addBatch("DELETE from employee where id='E011'");
+		int[] status = st.executeBatch();
+		System.out.println(Arrays.toString(status));
+		con.close();
+
+
+if a proc does not have IN and OUT, THEN the proc is meant to do something in db. 
+
+
+-------------------------------
+Transaction:
+	What is a transaction?
+		several task
+		set of statements atomic
+		set of actions as single, atomic
+		ACID
+
+	Every DML itself is a transaction. (implicit transaction)	automatically commited or rolled back
+
+		if a DML statement is executed to affect 5 records, any interference like power cut, n/w failure or IO failure or memory issue, whatever it is, 
+		either all 5 records are affected
+		or none of the records are affected
+
+	SELECT query is not a transaction
+
+
+	Then why we need explicit transaction
+		ans: 	when multiple DML statements are executed together as a single unit, we can use transaction (not batch). Batch is not atomic.
+		multiple dml statements to be considered as 1 transaction. that is why we need explicit transactions.
+		
+	What are explicit transactions?
+		we demarcate the beginning and end of transaction. 	the end of transaction is done using:
+			commit
+			rollback
+
+	our jdbc connections are autocommit by default.
+		when we con.setAutoCommit(false);		//this is how we create explicit transactions
+
+		con.commit();
+		con.rollback();		//usually in catch block
+
+
+	Atomicity		all / otherwise none
+	Consistency		leave the db in consistent state in both successful or failure transaction
+	Isolation		locking	the records under manipulation so that other transaction can wait
+	Durability		logging every activity so that rollback / commit is possible
+
+lets see example how to do explicit transaction in jdbc.
+
+Connection con = MyConnection.getConnection();
+		con.setAutoCommit(false); 				//auto commit is disabled now
+		//2 statements from 1 connection
+		Statement st1 = con.createStatement();
+		Statement st2 = con.createStatement();
+		st1.executeUpdate("UPDATE employee set lastname='Peter' where id='E011'");
+		st2.executeUpdate("INSERT into employee values('E012','Netaji','Subash C Bose','01-Sep-1870',null)");
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Are you sure you want to save changes?");
+		String choice=sc.next();
+		if(choice.toLowerCase().substring(0,1).equals("y"))
+			con.commit();
+		else
+			con.rollback();
+		con.close();
+
+
+----------------------------
+Concurrency issues:
+	what are the situations we will face concurrency issues?
+	transaction a		is doing some modification, and before commit, trans b is reading uncommitted data. If A rolls back, then b has read a data which is not present. This is called dirty read	
+	transaction b
+
+
+	1) dirty read:			when a transaction reads uncommitted data of another transaction
+			what is the solution?		set trans isolation level to "read committed"
+	2) panthom read:			a trans read some set of records, another trans does not affect these records, but adds or removes records in this range.
+							"repeatable read"
+	
+	setting isolation level for the transaction. lets see what is the isolation level used in our previous example.
+
+
+	a snap shot is taken to ensure the versions are same
+
+	9 am we take a result set and modify and update at 10 am
+	while updating at 10 am, there is a risk, that others might have modified the data in between
+
+
+
+i am modifying a record and set a value which is same as already present. this is considered as no lock. 
+
+Connection.TRANSACTION_NONE			0
+TRANSACTION_READ_UNCOMMITTED			1
+TRANSACTION_READ_COMMITTED			2
+TRANSACTION_REPEATABLE_READ			4
+TRANSACTION_SERIALIZABLE			8
+
+these are the various isolation levels we can set to the connection object.
+
+
+
+complete the transaction, see the outcome and decide to commit or rollback.
+
+
+Task:
+	include atleast 2 dml statements in 1 connection
+	set con autocommit to false
+	set transaction isolation level to Read committed
+	ask the user if they want to commit or rollback
+
+	observe in sql developer that the transaction locks certain records until commit/rollback
+
+
+-----------------------------
+Java Back end development
+	In eclipse/sts
+		create a new project "Dynamic Web Project"
+			in "Target runtime", if <None> is found, click "New Runtime" button
+			check the latest verson of "Apache Tomcat" server and download that version and unzip.
+			choose the folder that contains "lib" and "bin" and finish

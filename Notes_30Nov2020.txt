@@ -1,0 +1,601 @@
+SELECT queries
+	WHERE
+	ORDER BY
+	GROUP BY	HAVING
+	UNION		INTERSECT
+	UNION ALL		(DIFF between UNION and UNION ALL)
+	SUB QUERIES
+		INLINE
+		CORRELATED	
+	JOINS
+		INNER/	LEFT OUTER/	RIGHT OUTER/	FULL OUTER/ SELF JOIN
+		EQUI JOIN/ NON EQUI/ CROSS JOIN
+	OPERATORS
+		IN	NOT IN
+		BETWEEN	NOT BETWEEN
+		>=ALL		>=ANY
+		EXISTS		NOT EXISTS	(ALWAYS CORRELATED SUB QUERY)
+
+When to use joins, when to use sub queries
+DISTINCT/		HAVING
+	
+	
+DML
+	INSERT
+	UPDATE
+	DELETE
+	MERGE	(Oracle)
+DDL
+	CREATE
+	ALTER
+	DROP
+	TRUNCATE
+
+
+PLSQL	(sql + procedural capabilities)		Procedural Language extension to SQL
+
+high
+medium
+low
+
+
+MySQL		Free product	
+
+Oracle corporation
+Oracle 12c		commercial product
+
+
+	Oracle 12c Express edition		Free
+
+
+Oracle v2
+
+7			we had oracle server & client s/w	client is installed in every terminal
+all these terminals were accessing the server (1 server)
+in 8i we need not install the client in every computer
+i just used a browser to access the oracle server from all these 25 computers
+isqlplus
+
+Oracle 8		vs 8i
+8i
+9i
+10g
+11g
+12c
+18c		2018
+19c		2019
+
+
+i can use client tools like SQL Developer
+
+
+Oracle database
+can be accessed from
+	a java program
+	any program
+	SQL developer
+	apex	(express edition)
+	etc etc
+
+
+create database
+
+CREATE DATABASE Jag;		// this is how you create a database
+
+Oracle DBA	
+	when we intall oracle itself, few users are already created
+users:
+	scott/tiger
+	system/password			system	(dba)
+	sys				sys	(dba)
+	hr
+
+these dba can change the password of any users	(without being knowing the old password)
+
+express edition / enterprise edition (commercial)
+
+db name for the database created when we install oracle express edition? free
+	XE	
+
+db name for the database created when we install oracle enterprise edition?
+	ORCL
+
+to be able to create database in oracle, we need to use Oracle DB Configuration Assistant	(ODBCA)?
+
+
+	
+schema is relationship between oracle application and user.	that means for every user, there is a schema
+
+table employees.	i grant permission only to certain users to access my employees table.
+
+
+DBA can do lot 
+	i just droped table accidentally
+i can ask DBA to do flashback
+	FLASHBACK TABLE TNAME TO BEFORE DROP;
+
+DROP TABLE TNAME PURGE;
+
+ROLLBACK is only for DML
+	will not work for DDL
+
+thats why TRUNCATE cannot be rolled back.	because TRUNCATE is DDL
+
+DELETE vs TRUNCATE
+	DELETE Will not remove the schema of table. table will remain. Only data is removed.
+	So does the TRUNCATE. the table is not removed. only the data is removed.
+	what is the diff
+
+DELETE is DML
+TRUNCATE is DDL			it is like DROP and CREATE
+
+DELETE:
+DELETE can delete only specific records also.
+DELETE can be rolled back.		undo
+DELETE will cause triggers to invoke.			TRIGGERS	
+
+
+any DDL cannot be rolled back
+CREATE
+ALTER
+DROP		can be flashed back	(DBA can use FLASHBACK)
+TRUNCATE
+
+DELETE can delete only specific records also. TRUNCATE do not have condition. it will always remove all records.
+
+
+DROP vs TRUNCATE		
+	both are DDL		drop removes table.		TRUNCATE remove data inside the table. table is still present.
+	truncate will leave the table with 0 rows.	drop will remove table with data together. table is not found after drop.
+
+ create table emp_copy as select * from employees;
+
+ insert into emp_copy  select * from employees;
+
+
+Enterprise edition
+
+identify the oracle memory structures:
+System global area
+Program global area
+Mandatory Background Processes
+Optional Background Processes 
+
+
+
+em 
+
+em console
+
+
+instance is running. 
+start up
+shut down
+
+
+db operator
+system
+sys
+sysoper
+sysdba
+
+
+physical 
+	files
+		data files
+		control files
+		parameter files
+logic
+	table
+	tablespace		this is where physical and logical are mapped
+				is a logical representation of data file
+	table(s) belong to tablespace
+
+	multiple tables belong to 1 tablespace
+
+	database
+
+
+1 TB for uploading web pages
+1 GB for database
+
+hard disk may have huge space. But i want to limit the space allocated for a tablespace. because the user has subscribed less.
+
+
+
+
+ms access		mdb		accdb extensions
+
+
+DICTIONARY TABLES:	they have schema information 
+	USER_TABLES	all tables created by currently logged in user.
+	ALL_TABLES	all tbales created by currently logged in user + the tables they have access
+	DBA_TABLES	only dba can query this table, all user tables
+
+
+
+CREATE USER username IDENTIFIED BY password;
+
+in oracle, as soon as we create a user, the user cannot login immediately. 
+he should be given privileges to login, to create table, to query other tables, to do everything
+
+Entity 	Relationship
+i am creating a project for departmental store.
+
+how i define the business in departmental store. 
+
+CUSTOMER PURCHASE PRODUCT
+
+customer
+product
+	these are the nouns. they become Entity. PURCHASE becomes the relationship between these 2 entites.
+
+if the relationship is * to *	(many to many) then the relationship also becomes Entity
+
+1.. 1 relationship means	(1 will bcome primary key in another 1)
+1.. M relationship means	(1 will bcome foregin key in M)
+M.. M relationship means	(relationship becomes a table ie., Entity)
+
+Department vs Employee		(what is the multiplicity of the relationship?)
+1	..	M		(departmentId will become foreign key in EMployee table)
+
+CUSTOMER is an entity in E-R diagram
+	Entity becomes table in the database, so CUSTOMER is a table
+	EVERY RECORD (ROW) IN THE CUSTOMER TABLE IS 1 CUSTOMER
+	if there are 10 records in the table, then there are 10 customers 
+
+
+INTEGRITY		correctness
+	Entity		every entity is identifiable uniquely
+			how to identify each entity uniquely
+			customerId		(name can be same for 2 customers some times)
+			phoneNo			(can be primary key. there are many app now a days using phone number as unique identifier)
+			primary key is the technique to implement Entity integrity
+	
+	Domain		domain integrity?		what is meant by domain
+			in USA 	zip code is 5 digits
+			in India pin code is 6 digits
+			some domain specific rules are implemented in a column
+			column specific rules are domain integrity
+			how?	data types, CHECK constraint	NOT NULL
+	Referential
+			in sales table, i cannot add a record where product id (not found in product table)
+			I cannot mark attendance for a student whose id is not found in student table
+			FOREIGN KEY
+	User defined
+			we may implement any other integrity using
+				TRIGGERS
+				example, if a record is inserted in purchase table, update happen in stock of product table
+				purchase/ sale updates the stock of product table automatically using triggers to ensure some integrity
+				
+
+define domain:
+	how do you specify customer in 
+		hospital domain?		Patient
+		transport domain?		Passenger
+		education domain?		Student
+
+Primary key never allows NULL
+Foreign key allows NULL
+
+Will foregin key allow duplicates? YES	 it allows duplicate
+if we enter a value, the value should be found in the primary key column in the parent table
+
+
+while creating the foreign key itself we can specify 
+	ON DELETE NULLIFY	(SET NULL in mysql)
+	ON DELETE CASCADE	(CHAIN REACTION)
+	ON DELETE RESTRICT	(DEFAULT)
+
+
+
+
+Index
+	how index help us			query (select)	
+	if we do not query table based on a particular column at all, then we do not need index on that column at all
+
+If your query returns less than or equal to 2 percent of records, then we need index.
+
+
+what is index?
+
+
+
+
+
+for every primary key, there is an index for sure.	while creating a primary key, a clustured index is been created.
+
+what is the difference between unique and primary key?	
+
+primay key =	UNIQUE + NOT NULL	(IF YES, CAN YOU CREATE FOREGIN KEY on a column which is not referencing primary key but unique and not null)	
+
+table 1:
+	col1		UNIQUE, NOT NULL
+
+table 2:
+	col21	REFERENCES table1(col1);		// col1 is not primary key, so it cannot be referenced by another column col21 as foreign key
+
+
+PRIMARY KEY	
+UNIQUE
+	these constraints create UNIQUE INDEX
+
+what is meant by clustured index?		(primary key creates clustured index)
+		how many clustured index can be present in a table?
+		only 1 clustured index per table.
+why there should be only 1 clustured index? i can create clustured index without primary key also	
+
+
+INDEX has 2 columns
+	key	offset
+	
+the original records are stored in the location decided by the clustured index. the original
+records can exist in only 1 particular order. 
+
+index based on author name. 
+
+index based on book name.
+
+index based on year of release.
+
+the index is useful only if we search based on indexed column.
+
+candidate key is an idea. not syntax.
+PRIMARY KEY	(SYNTAX)
+FOREGIN KEY	(SYNTAX)
+
+composite key	(idea)		when more than 1 column together achieves
+candidate	(idea)		a column or columns candidate to be primary key
+alternate	(idea)		a column which is not primary key, but eligible to be
+
+	decide the order of records
+
+what is meant by non clustured index?
+		
+
+1 receipt:	(invoice/bill)
+if inv is primary key, then it will not duplicates? so what to do?
+invno+productno		together is composite primary key
+
+inv:1
+1	soap	2
+1	paste	1
+1	sugar	3
+	
+
+how to store these records in the table?
+
+do not create index on columns which are not used in where condition/ having/ join on conditions
+
+they are additional overhead for the DML operations.
+every DML operation may update the index
+
+
+display the following using EMPLOYEE table of HR schema:
+
+EMPLOYEE_ID, FIRST_NAME, LAST_NAME, MANAGER_ID, MANAGER_FIRST_NAME
+Hint:	use SELF JOIN
+Paste the query in chat window 
+
+from manager id, you need to derive the name and display
+
+SID	
+
+initORCL.ora			(initialization parameter file)	
+
+
+ORCL
+JAG		SID
+
+When oracle instance starts up, this init param file is looked up
+
+db lock timeout	
+
+a database is made up of 
+data files
+control files
+log files
+
+
+
+9 am i took a backup
+copy 
+	the files in a back up device
+restore the backup 
+	physical file backup and restore are done offline	(after shutting down oracle)
+
+
+dba execute the startup command in em console
+STARTUP
+1. Start an instance.
+2. Mount the database.
+3. Open the database.
+
+	start instance
+	mount
+	open	- the clients are allowed to do transactions/ queries with the oracle server 
+
+SHUTDOWN
+1. Shutdown normal: This is the default mode of shutting down the database. During this state, oracle server waits for all the users to disconnect.
+
+2. Shutdown Transactional: Waits until all the transactions are completed and then shts down the database. During this state, no new connections are permitted.
+
+3. Shutdown immediate: This option will disconnect all the sessions; roll back all the running transactions and shutdown the datababase. During the next startup no instance recovery is needed.
+
+4. Shutdown abort: This option doesn’t rollback any transactions and simply brings down the database. In layman’s term, it just likes pulling the power plug of the television. Any subsequent database startup needs an instance recovery to be initiated by smon.
+
+DML operation
+	INSERT
+	UPDATE
+	DELETE
+	MERGE
+
+By design, every DML itself is a transaction. 
+==============================================
+ex:	UPDATE EMPLOYEES SET SALARY=SALARY+1000;	--Without any condition (all records are updated)
+
+if there are 10,000 records. The updation happened for first 100 records, power cut.
+
+remaing 10000-100 employee records are not updated???????
+	THIS NEVER HAPPENED. Either all 10000 records were updated.
+	or the DML operation failed to update any record.
+
+we can create explicit transactions. we demarcate the beginning and end of the transaction. PL/SQL if, if-else
+to check the outcome of the transaction and decide to commit or rollback.
+
+ex:
+	i will increase the salary of all employees by 100. 
+	outcome:?	if the total salary of all employees go beyond the budget,
+			i will be rolling back the transaction.
+
+threshold is a percentage we specify to generate alert.
+
+100	-	110
+<80	
+	
+TRANSACTION properties
+ACID			
+	Atomicity:		All / None	(never does partially)	
+	Consistency:		failure/success but in both cases, the db was left in consistent state.
+	Isolation:		2 transactions concurrently. each running independantly (LOCKING)
+	Durability:		(Logging)
+				(whatever change that a transaction does, is recorded in log files)
+
+when server crash (abrupt switching off), we can minimize the data loss, using these logs
+
+If both transactions try to affect SAME RECORD, then the first transaction should lock those records, so that second transaction will wait until first commits or rolls back.
+
+shall we see an example for isolation. locking?	( we can see this in auto commit=false)
+
+when auto commit is false, the transaction is live till we commit/roll back.
+
+the beginning and end of a transaction is not defined when it is auto commit. but in autocommit=false, we need to decide the end of a transaction by commit / rollback.
+
+task1
+task2
+task3
+	tea break
+task4
+task5
+
+when oracle server instance is running, the files are used by oracle process. so we cannot overwrite these files from my backup.
+
+so during backup or restore, we need to shutdown the instance and later startup.
+
+ticket was booked
+ticket was not booked and amount was note debited from my account. also fine. I will retry booking the ticket
+
+success/ failure	 in both cases, the transaction should leave the database in consistent state.
+
+
+every transaction will be recorded in redo log files
+
+so recovery is possible
+
+	
+Dynamic Performance Views	(Also called as v$ queries)
+
+PL/SQL	
+	what is the need for plsql?
+	We need procedural capabilities... means, declare variables, if, if-else, if elsif else case when, while loop, for loop
+
+	writing sub queries becomes complicated. ex: display the list of employees, whose salary is less than the average salary and greater than the minimum salary.
+	if we split this into steps, it will be managable.
+	
+	1) find avg salary	and store it in variable avgSal;
+	2) find min salary	and store it in variable minSal;
+	3) find employees whose salary < avgSal and > minSal
+
+this is how plsql can help. 	in terms of simple block programs
+
+
+
+DBMS_OUTPUT	package		(what is package?	package groups functions and procedures)
+	example for a procedure inside this package?
+	PUT_LINE('HI');			//Example
+
+procedure vs function
+functions:	return 1 value or reference
+procedures:	do not return value. they may have input/output parameters
+example for functions in c:
+	getc()			ex: 	char c;		c=getc();		the input character is stored in c;
+	getch()
+	getchar()
+
+example for procedures in c:	in c lang, we dont call them as procedures. we call everything as functions.
+	scanf()			unlearn scanf() now:
+			ex:		int marks=0;
+					scanf("%d",&marks);		//marks is output parameter
+	printf("this is printed in console");
+		
+usually, c language:
+		sum(a,b);		the values of a and b are sent inside sum() function.
+		swap(&a,&b);		a and b are IN OUT parameters
+		sqr(a,&b);		a is IN. 			b is OUT parameter
+
+return value:
+	int sum(int i, int j);
+	int result=sum(2,3);		now result=????
+
+what are all stored in the database? (which an user can create). These are all called as database objects:
+TABLES
+VIEWS			(sql queries are not usually stored in db. but views are named sql queries)
+INDEXES
+PROCEDURES	(pl/sql)
+FUNCTIONS	(pl/sql)
+TRIGGERS	(pl/sql)
+SEQUENCES
+
+
+
+
+1) PLSQL	programs
+	anonymous blocks		Which are not stored in the database. (plsql programs but are not stored inside the database). ie., these programs are executed to do some task. but code is not stored.
+		BEGIN
+			
+		END;
+
+a plsql program MAY HAVA DECLARE Block (optional)
+	MUST HAVE 	BEGIN BLOCK
+	MUST HAVE 	END;
+
+{
+}
+
+
+DECLARE
+    SAL INT:=100;        --Scalar variable   because, it can hold only 1 value
+    FNAME VARCHAR2(50);
+BEGIN
+    SELECT FIRST_NAME, SALARY INTO FNAME, SAL FROM HR.EMPLOYEES WHERE EMPLOYEE_ID=100;         --DISAPPOINTED
+    DBMS_OUTPUT.PUT_LINE('Hello the salary of '||FNAME||' is '||SAL);       --|| IS concatenation operator in PLSQL language
+END;
+
+
+--                  = MEANS COMPARING EQUALITY ONLY         A=B         MEANS A IS EQUAL TO B OR NOT?
+--                  := MEANS ASSIGNMENT             EX:     SAL INT:=10;
+
+%TYPE	 to declare (scalar) variables based on column type
+%ROWTYPE to declare (record type) variable based on a table
+	EMPLOYEES%ROWTYPE
+
+
+
+1) FIND THE SALARY OF EMPLOYEE WHOSE ID is 102 and 104. Display the employee first name
+	as
+	ex:
+		Neena earns higher than Kochar
+
+	you should retrieve the salaries of both 102 and 104 in separate variables.
+	and use IF condition
+	hint:
+		IF A>B THEN
+			BEGIN
+				//IF THERE IS ONLY 1 LINE INSIDE BEGIN .. END, WE MAY NOT USE BEGIN END
+				//Like in other lang, {} are not require if only 1 line, right?	
+			END;
+		ELSE
+			BEGIN
+	
+			END;
+		END IF;

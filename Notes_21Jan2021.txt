@@ -1,0 +1,68 @@
+GIT
+	version control
+	create main branch and work together as a team
+	open source
+	collaboration
+	Git is a distributed revision control and source code management system
+	
+	github.com
+download git from (for windows)
+	https://git-scm.com/download/win
+install
+	Git-2.30.0.2-64-bit
+go to cmd
+	git --version
+----------------------------
+goto	github.com
+		create an account.
+		if already have account, login
+		(note down the user name and email)
+-----------------------------
+set up global variable
+	git config --global user.name "yourGitUserName"
+	git config --global user.email "yourGitEmail"
+
+	(check c:\users\yourname\.gitconfig 		(or)
+
+	git config --list --show-origin
+
+
+ex:
+	git config --global user.name jagasia
+	git config --gloabl user.email rjagadeeswaran@Yahoo.com
+-------------------------------------------------
+create a new repository on the command line
+echo "# MLA" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/jagasia/MLA.git
+git push -u origin main
+		
+
+first time:
+	echo "# java-batch" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/jagasia/java-batch.git
+git push -u origin main
+
+
+second time: (onwards)
+	git add .
+	git commit -m "second commit"
+	git push -u origin main	
+git task->
+    step 1 create a basic java program in eclipse named it as your-name-java ex dhruva-java.->contains main class only
+    step 2 create a new repo in github account named it as project-name-repo ex dhruva-java-repo
+    step 3 open git bash from dhruva-java.and run all the commands that is displayed on github page
+    step 4 open repository settings and add 1 collaborator to your project
+    step 5 everyone clone that project to your known location -> add a new function to main class maned it as hello
+    step 6 push project B that code 
+    step 7 pull project A that is your code and you got the hello method
+    step 8 create a new branch in local system
+    step 9 create a new branch on github
+    step 10 merge two branches

@@ -1,0 +1,696 @@
+in cmd
+	check "ipconfig"
+	for "media disconnected", there is no ip address.
+in sql developer, 
+	use "localhost" for host
+
+in cmd
+	check ipconfig
+	if there is an ip address, 
+in sql developer
+	use that ip address for host
+
+pl/sql
+	procedural language extension to SQL
+	procedural means?
+		programming constructs
+		variables
+		declaration
+		loops
+
+
+	anonymous blocks in plsql
+		the programs that are executed. but not stored in the database
+		structure of anonymous blocks:
+		DECLARE		(Optional)
+		BEGIN
+		EXCEPTION 	(Optional)
+		END;
+
+	mandatory blocks are 		BEGIN	END	
+
+	sql engine
+	plsql engine
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Hello world');
+END;
+
+
+later these sql (or) plsql programs can be embedded inside a java code
+	ex:
+		String sql="SELECT * FROM EMPLOYEES WHERE FIRST_NAME='Steven'";
+
+ctrl+/		is used to comment / uncomment		(toggle)
+
+
+--BEGIN
+--    DBMS_OUTPUT.PUT_LINE('Hello world');
+--END;
+-- CREATE TABLE branch
+--   (
+--    bid VARCHAR(6),
+--    bname VARCHAR(30),
+--    bcity VARCHAR(30),
+--    CONSTRAINT branch_bid_pk PRIMARY KEY(bid) 
+--   );
+
+--INSERT INTO branch VALUES('B00001','Asaf ali road','Delhi');
+--INSERT INTO branch VALUES('B00002','New delhi main branch','Delhi');
+--INSERT INTO branch VALUES('B00003','Delhi cantt','Delhi');
+--INSERT INTO branch VALUES('B00004','Jasola','Delhi');
+--INSERT INTO branch VALUES('B00005','Mahim','Mumbai');
+--INSERT INTO branch VALUES('B00006','Vile parle','Mumbai');
+--INSERT INTO branch VALUES('B00007','Mandvi','Mumbai');
+--INSERT INTO branch VALUES('B00008','Jadavpur','Kolkata');
+--INSERT INTO branch VALUES('B00009','Kodambakkam','Chennai');
+
+
+--SELECT * FROM BRANCH;
+
+--CREATE TABLE customer
+--   (
+--       custid VARCHAR(6),
+--       fname VARCHAR(30),
+--       mname VARCHAR(30),
+--       ltname VARCHAR(30),
+--       city VARCHAR(15),
+--       mobileno VARCHAR(10),
+--       occupation VARCHAR(10),
+--       dob DATE,
+--      CONSTRAINT customer_custid_pk PRIMARY KEY(custid)   
+--   );   
+--select sysdate from dual;
+--SELECT TO_DATE('01-12-20', 'dd-MM-yy') FROM DUAL;
+--INSERT INTO customer VALUES('C00001','Ramesh','Chandra','Sharma','Delhi','9543198345','Service',TO_DATE('1976-12-06', 'yyyy-MM-dd'));
+--INSERT INTO customer VALUES('C00002','Avinash','Sunder','Minha','Delhi','9876532109','Service',TO_DATE('1974-10-16', 'yyyy-MM-dd'));
+--INSERT INTO customer VALUES('C00003','Rahul',null,'Rastogi','Delhi','9765178901','Student',TO_DATE('1981-09-26', 'yyyy-MM-dd'));
+--INSERT INTO customer VALUES('C00004','Parul',null,'Gandhi','Delhi','9876532109','Housewife',TO_DATE('1976-11-03', 'yyyy-MM-dd'));
+--INSERT INTO customer VALUES('C00005','Naveen','Chandra','Aedekar','Mumbai','8976523190','Service',TO_DATE('1976-09-19', 'yyyy-MM-dd'));
+--INSERT INTO customer VALUES('C00006','Chitresh',null,'Barwe','Mumbai','7651298321','Student',TO_DATE('1992-11-06', 'yyyy-MM-dd'));
+--INSERT INTO customer VALUES('C00007','Amit','Kumar','Borkar','Mumbai','9875189761','Student',TO_DATE('1981-09-06', 'yyyy-MM-dd'));
+--INSERT INTO customer VALUES('C00008','Nisha',null,'Damle','Mumbai','7954198761','Service',TO_DATE('1975-12-03', 'yyyy-MM-dd'));
+--INSERT INTO customer VALUES('C00009','Abhishek',null,'Dutta','Kolkata','9856198761','Service',TO_DATE('1973-05-22', 'yyyy-MM-dd'));
+--INSERT INTO customer  VALUES('C00010','Shankar',null,'Nair','Chennai','8765489076','Service',TO_DATE('1976-07-12', 'yyyy-MM-dd'));
+
+
+select * from customer;
+
+
+CREATE TABLE account
+   (
+      acnumber VARCHAR(6),
+      custid  VARCHAR(6),
+      bid VARCHAR(6),
+      opening_balance INT,
+      aod DATE,
+      atype VARCHAR(10),
+      astatus VARCHAR(10),
+      CONSTRAINT account_acnumber_pk PRIMARY KEY(acnumber),
+      CONSTRAINT account_custid_fk FOREIGN KEY(custid) REFERENCES customer(custid),
+      CONSTRAINT account_bid_fk FOREIGN KEY(bid) REFERENCES branch(bid) 
+    );
+
+INSERT INTO account VALUES('A00001','C00001','B00001',1000, to_date('2012-12-15','yyyy-MM-dd'),'Saving','Active');
+INSERT INTO account VALUES('A00002','C00002','B00001',1000, to_date('2012-06-12','yyyy-MM-dd'),'Saving','Active');
+INSERT INTO account VALUES('A00003','C00003','B00002',1000, to_date('2012-05-17','yyyy-MM-dd'),'Saving','Active');
+INSERT INTO account VALUES('A00004','C00002','B00005',1000, to_date('2013-01-27','yyyy-MM-dd'),'Saving','Active');
+INSERT INTO account VALUES('A00005','C00006','B00006',1000, to_date('2012-12-17','yyyy-MM-dd'),'Saving','Active');
+INSERT INTO account VALUES('A00006','C00007','B00007',1000, to_date('2010-08-12','yyyy-MM-dd'),'Saving','Suspended');
+INSERT INTO account VALUES('A00007','C00007','B00001',1000, to_date('2012-10-02','yyyy-MM-dd'),'Saving','Active');
+INSERT INTO account VALUES('A00008','C00001','B00003',1000, to_date('2009-11-09','yyyy-MM-dd'),'Saving','Terminated');
+INSERT INTO account VALUES('A00009','C00003','B00007',1000, to_date('2008-11-30','yyyy-MM-dd'),'Saving','Terminated');
+INSERT INTO account VALUES('A00010','C00004','B00002',1000, to_date('2013-03-01','yyyy-MM-dd'),'Saving','Active');
+
+
+
+
+CREATE TABLE trandetails
+    (   
+     tnumber VARCHAR(6),
+     acnumber VARCHAR(6),
+     dot DATE,
+     medium_of_transaction VARCHAR(20),
+     transaction_type VARCHAR(20),
+     transaction_amount INT,    
+     CONSTRAINT trandetails_tnumber_pk PRIMARY KEY(tnumber),
+     CONSTRAINT trandetails_acnumber_fk FOREIGN KEY(acnumber) REFERENCES account(acnumber)  
+    );
+
+
+INSERT INTO trandetails VALUES('T00001','A00001',to_date('2013-01-01','yyyy-MM-dd'),'Cheque','Deposit',2000);
+INSERT INTO trandetails VALUES('T00002','A00001',to_date('2013-02-01','yyyy-MM-dd'),'Cash','Withdrawal',1000);
+INSERT INTO trandetails VALUES('T00003','A00002',to_date('2013-01-01','yyyy-MM-dd'),'Cash','Deposit',2000);
+INSERT INTO trandetails VALUES('T00004','A00002',to_date('2013-02-01','yyyy-MM-dd'),'Cash','Deposit',3000);
+INSERT INTO trandetails VALUES('T00005','A00007',to_date('2013-01-11','yyyy-MM-dd'),'Cash','Deposit',7000);
+INSERT INTO trandetails VALUES('T00006','A00007',to_date('2013-01-13','yyyy-MM-dd'),'Cash','Deposit',9000);
+INSERT INTO trandetails VALUES('T00007','A00001',to_date('2013-03-13','yyyy-MM-dd'),'Cash','Deposit',4000);
+INSERT INTO trandetails VALUES('T00008','A00001',to_date('2013-03-14','yyyy-MM-dd'),'Cheque','Deposit',3000);
+INSERT INTO trandetails VALUES('T00009','A00001',to_date('2013-03-21','yyyy-MM-dd'),'Cash','Withdrawal',9000);
+INSERT INTO trandetails VALUES('T00010','A00001',to_date('2013-03-22','yyyy-MM-dd'),'Cash','Withdrawal',2000);
+INSERT INTO trandetails VALUES('T00011','A00002',to_date('2013-03-25','yyyy-MM-dd'),'Cash','Withdrawal',7000);
+INSERT INTO trandetails VALUES('T00012','A00007',to_date('2013-03-26','yyyy-MM-dd'),'Cash','Withdrawal',2000);
+
+
+
+SET SERVEROUTPUT ON;
+DECLARE
+    X TRANDETAILS%ROWTYPE;
+BEGIN
+    SELECT * INTO X FROM TRANDETAILS WHERE TNUMBER='T000011';
+    DBMS_OUTPUT.PUT_LINE(X.TNUMBER);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred. but stopping gracefully');
+END;
+
+
+
+
+
+DECLARE
+    X TRANDETAILS%ROWTYPE;
+BEGIN
+    SELECT * INTO X FROM TRANDETAILS;
+    DBMS_OUTPUT.PUT_LINE(X.TNUMBER);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred. but stopping gracefully');
+    WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE('the query returned more than 1 record');
+END;
+
+
+
+
+
+identify various data types used in PL/SQL.
+
+char
+nchar
+
+timestamp
+date
+ 
+
+
+11 am
+1 pm
+4 pm
+
+
+123
+	integer
+	three characters
+
+
+
+
+char 
+	1aA_&
+
+
+--CREATE TABLE EMP
+--(
+--    X CHAR(2),
+--    Y NCHAR(2)
+--);
+
+insert into EMP VALUES('ac','こん');
+
+CHAR DOES NOT MEAN 2 CHARACTERS. IT MEANS 2 CHAR SPACE
+NCHAR(2) means 2 characters (each being any size). 2 means 2 chars
+1 CHAR TAKES 2 BYTES SPACE
+SO CHAR(2) MEANS TOTALLY 4 BYTES
+
+char(10)    =   9898989898
+
+JAPANESE CHARACTERS
+ASCII
+A   =   65
+a   =   97
+
+0   =   null
+13  =   enter/return key
+48  =   0
+.
+.
+.
+.
+255     (ascii has 256 characters code is beetwe 0 and 2550
+beyond 256 
+65536 possible char in unicode char set
+each char is 2 bytes
+if we go beyond 65535 onwards...
+3 bytes per char
+
+download hr_cre.sql			to create hr schema 
+download hr_popul.sql			to insert records
+
+
+select rowid,bid, bname from branch;
+
+
+Display the employee_id, first_name of employees whose id is between 100 and 105
+Hint: use basic loop
+
+example for basic loop
+
+
+DECLARE
+	X INT:=100;
+BEGIN
+	LOOP
+		DBMS_OUTPUT.PUT_LINE(X);
+		X:=X+1;	
+		EXIT WHEN X>=105;
+	END LOOP;
+END;
+
+SOLUTION FOR THE TASK:
+DECLARE
+	X INT:=100;
+    EID EMPLOYEES.EMPLOYEE_ID%TYPE;
+    FNAME EMPLOYEES.FIRST_NAME%TYPE;
+BEGIN
+	LOOP
+        SELECT EMPLOYEE_ID, FIRST_NAME INTO EID, FNAME 
+        FROM EMPLOYEES WHERE EMPLOYEE_ID=X;
+		DBMS_OUTPUT.PUT_LINE(EID||' '||FNAME);
+        X:=X+1;
+		EXIT WHEN X>105;
+	END LOOP;
+END;
+
+livesql.oracle.com
+
+
+PLSQL RECORD TYPE
+
+	EASIEST WAY IS TO CREATE 		TABLENAME%ROWTYPE		This will create record of all colummns in the table
+	CUSTOM TYPE				I am specifying the columns whichever i need in table(s).
+define  the type:
+    TYPE EMPREC IS RECORD
+    (
+        EID INT, FNAME VARCHAR2(30)
+    );
+
+create a variable of that type:
+	X EMPREC;			-- EMPREC is a custom type	(user defined type)
+
+
+TASK:
+Write a plsql program to display the 
+employee_id, first_name, department_name
+for employees whose employee_id is between 100 and 105
+1) must use loop		(1 loop variable)
+2) must use record type variable(1 rec variable)
+3) create variables using %type inside custom record
+hint: for department_name,
+	join departments table
+
+
+DECLARE 
+TYPE EMP IS RECORD
+(FIRSTNAME VARCHAR(20),
+EMPLOYEEID VARCHAR(20),
+DEPTNAME VARCHAR(20));
+Y EMP;
+X NUMBER;
+BEGIN 
+X:=100;
+LOOP
+SELECT FRIST_NAME,EMPLOYEE_ID,DEPARTMENT_NAME INTO Y FROM HR.EMPLOYEES,HR.DEPARTMENTS WHERE EMPLOYEE_ID= X AND DEPARTMENTS.DPEARMENT_ID =  EMPLOYEES.DEPARTMENT_ID;
+DBMS_OUTPUT.PUT_LINE(Y.FIRSTNAME || Y.EMPLOYEE_ID||Y.DEPTNAME);
+X:= X+1;
+EXIT WHEN X>105;
+END LOOP;
+END;
+
+
+
+
+
+WHILE LOOP
+FOR LOOP
+
+
+DECLARE
+    X INT;
+BEGIN
+    X:=100;
+    WHILE X<105
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(X);
+        X:=X+1;
+    END LOOP;
+END;
+
+TASK:
+Write a plsql program to display the 
+employee_id, first_name, department_name
+for employees whose employee_id is between 100 and 105
+1) must use loop		(1 loop variable)
+2) must use record type variable(1 rec variable)
+3) create variables using %type inside custom record
+hint: for department_name,
+	join departments table
+
+4) SOLVE this problem using WHILE loop
+
+
+basic loop with an EXIT WHEN condition
+WHILE LOOP
+	is better because the condition is easily visible
+	in basic loop, we need to search the code for exit condition
+
+
+FOR LOOP
+	is ideal for loops where the number of iterations is known
+DECLARE
+--    X INT;
+BEGIN
+--    X:=100;
+--    WHILE X<105
+    FOR I IN REVERSE 100..105
+    LOOP
+        --I:=I+1;           FOR LOOP VARIABLE CANNOT BE ASSIGNED A VALUE INSIDE THE LOOP. CANNOT BE USED OUTSIDE THE LOOP
+        DBMS_OUTPUT.PUT_LINE(I);
+--        X:=X+1;
+    END LOOP;
+END;
+
+5) solve this problem using FOR Loop and display the result in reverse order
+
+
+
+
+BREAK	CONTINUE
+EXIT	CONTINUE	both statements skip the remaining statements inside the loop.
+EXIT skips the remaining statements in the loop and exit the loop.
+CONTINUE skips the remaining statements in the loop and move to next iteration.
+Display the bonus for each employees.
+calculation:
+	the bonus is calculated based on forumla:
+		SALARY+(SALARY*COMMISION_PCT)
+	If there is no COMMISSION_PCT, then no bonus
+
+
+Task:
+	Display first 3 department details:
+	DEPARTMENT_ID, DEPARTMENT_NAME
+			for each department, display employee details:
+		------	EMPLOYEE_ID, FIRST_NAME
+	
+SELECT * FROM EMPLOYEES WHERE DEPARTMENT_ID=10;		//WE GET MORE THAN 1 RECORD
+When we select employees based on department id, 
+	for each department id, we get more than 1 employees. 
+
+1) WHEN A PLSQL SELECT QUERY RETURNS MORE THAN ONE ROW, WE CANNOT HOLD IT USING INTO CLAUSE.
+2) To be able to execute SELECT queries that return more than 1 row, we need to use CURSOR.
+
+
+WHAT IS A CURSOR.	by definition is a workspace that contains the query result.
+if there is a SELECT statement, then there is a cursor.
+	CURSOR IS LIKE A POINTER POINTING TO 1 RECORD AT A TIME. 
+	IMPLICT CURSOR	(Every select query itself has a cursor).
+	EXPLICIT CURSOR
+
+SELECT query, the cursor is implicit. it is created opened, fetched, displayed, closed.	(automatic)
+
+when we create a cursor, explicit cursor, 
+we need to 
+	DEFINE	(DEFINE THE CURSOR IN THE DECLARE BLOCK)	Without select query, no cursors
+	OPEN	( OPEN CUR_JAG;)
+	FETCH
+	CLOSE (DE ALLOCATE)
+
+Task:
+	Display first 3 department details:
+	DEPARTMENT_ID, DEPARTMENT_NAME
+			for each department, display employee details:
+		------	EMPLOYEE_ID, FIRST_NAME
+we will solve this task using cursor
+
+Cursor is also anonymous program.	because, cursor is not stored in a db at all.
+this is just like a plsql variable.
+
+ CURSOR CUR_JAG IS SELECT * FROM DEPARTMENTS;
+
+CURSOR ATTRIBUTES
+	%FOUND
+	%NOT_FOUND
+	%EXISTS
+	%ROWCOUNT
+
+
+DECLARE
+    CURSOR CUR_JAG IS SELECT * FROM DEPARTMENTS;
+    X DEPARTMENTS%ROWTYPE;
+BEGIN
+    OPEN CUR_JAG;
+    LOOP
+        FETCH CUR_JAG INTO X;
+        DBMS_OUTPUT.PUT_LINE(X.DEPARTMENT_NAME);
+        EXIT WHEN CUR_JAG%NOTFOUND;
+    END LOOP;
+    CLOSE CUR_JAG;
+END;
+
+TASK:
+	Display the average salary of each department.
+	DEPARTMENT_ID, DEPARTMENT_NAME, AVERAGE_SALARY
+	Hint: use cursor.
+
+
+GROUP BY
+	whenever an aggregate function is used in SELECT query, only aggregate functions are allowed (or) group by columns are allowed in the select column list.
+
+	SELECT MIN(COL), SUM(COL), AVG(COL), COUNT(COL), MAX(COL) FROM TABLE1;	//ALLOWED
+	SELECT COL2, AVG(COL) FROM TABLE1;		//NOT ALLOWED. "COL2" IS A NON AGGREGATED COLUMN WHICH IS NOT PRESENT IN GROUP BY.
+	SOLUTION:
+	SELECT COL2, AVG(COL) FROM TABLE1 GROUP BY COL2;	// COL2 IS ALLOWED BECAUSE IT IS PRESENT IN GROUP BY
+Solution:
+
+DECLARE
+    CURSOR CUR_JAG IS SELECT E.DEPARTMENT_ID, DEPARTMENT_NAME, AVG(SALARY) 
+        FROM EMPLOYEES E JOIN DEPARTMENTS D
+        ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
+        GROUP BY E.DEPARTMENT_ID, DEPARTMENT_NAME;
+    TYPE RECTYPE IS RECORD
+    (
+        DID EMPLOYEES.DEPARTMENT_ID%TYPE, 
+        DNAME DEPARTMENTS.DEPARTMENT_NAME%TYPE,
+        ASAL EMPLOYEES.SALARY%TYPE
+    );
+    X RECTYPE;
+BEGIN
+    OPEN CUR_JAG;
+    LOOP
+        FETCH CUR_JAG INTO X;
+        DBMS_OUTPUT.PUT_LINE(X.DID||' '||X.DNAME||' '||X.ASAL);
+        EXIT WHEN CUR_JAG%NOTFOUND;
+    END LOOP;
+    CLOSE CUR_JAG;
+END;
+
+
+----
+CURSOR FOR LOOP
+BEGIN
+    FOR XY IN (SELECT E.DEPARTMENT_ID, DEPARTMENT_NAME, AVG(SALARY) ASAL
+        FROM EMPLOYEES E JOIN DEPARTMENTS D
+        ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
+        GROUP BY E.DEPARTMENT_ID, DEPARTMENT_NAME)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(xy.DEPARTMENT_ID||' '||XY.DEPARTMENT_NAME||' '||XY.ASAL);
+    END LOOP;
+END;
+
+
+
+1) IDENTIFY THE CURSOR ATTRIBUTES
+	IMPLICIT CURSOR ATTRIBUTES		
+		SQL%FOUND
+		SQL%NOTFOUND
+		SQL%ROWCOUNT
+After we do a DML operation, we can use SQL cursor to find how many rows affected.
+	EXPLICIT CURSOR ATTRIBUTES
+		%FOUND
+		%NOTFOUND
+		%ROWCOUNT
+		%ISOPEN
+
+
+
+
+
+If there is a cursor, there is a result set. (set of records).
+while iterating the records, we may some times want to update the record also. This is by default, not allowed.
+to be able to update the current record, we need to declare cursor with "FOR UPDATE" clause.
+
+suppose, there is a row, where employee id =100
+the salary is 24000
+i want to update the salary as 25000.
+if the cursor is (a select query) with "FOR UPDATE OF SALARY" clause, then we can update salary using the conditino
+	UPDATE EMPLOYEES SET SALARY=25000 WHERE CURRENT OF CURNAME;
+
+Lets discuss complex queries after demo
+dml operations have locks	(implicit transactions)
+A select query never create locks on the records.
+
+View is based on select query.
+	can we update view?
+	UPDATE VIEWNAME SET COL1=VALUE		(is this possible?)
+	yes sometimes
+	no sometimes
+	when it is yes? when it is no?
+
+DML is allowed on a view, when the view is based on simple query only when, it affects columns of only 1 underlying table.
+a query that joins 2 tables. but i do dml that affects only 1 underlying table. then it is allowed.
+
+DECLARE
+    CURSOR CURJAG IS 
+        SELECT * FROM EMPLOYEES
+        FOR UPDATE OF SALARY;
+    X EMPLOYEES%ROWTYPE;
+BEGIN
+    OPEN CURJAG;
+    LOOP
+        FETCH CURJAG INTO X;
+        IF X.SALARY>15000 THEN
+            UPDATE EMPLOYEES SET SALARY=SALARY+100 WHERE CURRENT OF CURJAG;
+        END IF;
+        EXIT WHEN CURJAG%NOTFOUND;
+    END LOOP;
+    CLOSE CURJAG;
+END;
+
+--SELECT * FROM EMPLOYEES;
+
+some times, a function returns value.
+some times, a function returns record.
+some times, a function return plsql table. but the table is values. we want to return cursor as return type. so that those who call the function, will get a cursor. then they may loop the cursor.
+like in c language, a function returns pointer.
+ref cursor is like a variable holding a cursor.
+
+EXCEPTIONS
+	NOT SYNTAX ERRORS.
+	RUNTIME EXCEPTIONS	
+		Ex:		exact fetch returned no result
+		for every exception, there is a exception type
+			TOO_MANY_ROWS
+			NO_DATA_FOUND
+			
+
+1) Identify oracle internal exceptions
+2) RAISE APPLICATION ERROR
+3) user defined exceptions
+
+when an exception occurs in oracle database engine, the exception caused the current plsql program to terminate abruptly.
+suppose, we call a plsql procedure/ function from a java program, this exception may terminate the java program also (if it was not handled there). 
+The exception at oracle db, propagates to the calling environment.
+
+Angular project for Web UI.
+	From angular project (typescript), we call a service. the service calls a spring boot rest controller (java method)
+	
+Java method calls the stored procedure in oracle
+
+Oracle plsql procedure encounters an error.
+
+source is oracle. So the exception can be handled in any of these layers in a distributed application.
+
+why we need to handle exception? 
+	if exception is not handled, it will terminate the program abruptly. transaction to rollback.
+
+we cannot avoid exceptions. we can handle the exceptions.
+
+by handling exceptions, we provide the application a path to continue. 
+
+
+task for case:
+display the acnumber, balance for all account numbers
+Note: balance=sum(transaction_amount when transaction_type is deposit)-(transaction_amount when it is withdrawal)
+
+only SELECT Query using CASE
+
+
+
+in product table:
+	there is no STOCK column	(purchases sum - sales sum)=stock
+in account table:
+	there is no BALANCE column	(deposits sum - withdrawal sum)=balance
+
+Yes Dhruva, to maintain the integrity is the reason.
+
+we are getting bank account statement every month. in that, we see, account balance in the report.
+that is derived attribute.
+for example, dob is attribute. age is derived attribute.
+
+
+reason is,
+in commercial projects, we do not want to manipulate data.	(update/delete). why?
+after update/ delete, the previous status is gone.
+
+ex: some customer requests for address change. it is easy to update the address of customer
+using UPDATE statement.
+
+but what was the address earlier??? 
+
+they only do INSERT records that will contain "last_modified_by"	"last_modified_date"
+so if you want address of a customer, you will more than 1 records some times, 
+based on last modified date, we will consider that is his current address.
+
+you purchase, the stock is considered as increased
+you sell (sales), the stock is considered as decreased. how to find?
+
+
+different ways to use CASE 
+
+CASE columnname/expression
+WHEN value THEN what to do
+WHEN value THEN what to do
+WHEN value THEN what to do
+WHEN value THEN what to do
+END
+
+
+CASE
+WHEN CONDITION THEN WHAT TO DO
+WHEN CONDITION THEN WHAT TO DO
+WHEN CONDITION THEN WHAT TO DO
+WHEN CONDITION THEN WHAT TO DO
+END
+
+SOLUTION:
+SELECT acnumber, sum(
+case transaction_type
+when 'Deposit' then
+transaction_amount
+when 'Withdrawal' then
+transaction_amount*-1
+end
+) Balance 
+FROM trandetails
+GROUP BY acnumber
+order by acnumber;
+
+-------------pl sql--------------solution for the same task-----------
+DECLARE
+    withdrawal int;
+    deposit int;
+BEGIN
+    for ac in (select distinct acnumber from trandetails)
+    loop
+        SELECT SUM(transaction_amount) INTO deposit 
+        FROM trandetails WHERE transaction_type='Deposit'
+        GROUP BY acnumber
+        HAVING acnumber=ac.acnumber;
+        
+        SELECT SUM(transaction_amount) INTO withdrawal
+        FROM trandetails WHERE transaction_type='Withdrawal'
+        GROUP BY acnumber
+        HAVING acnumber=ac.acnumber;
+        dbms_output.put_line(ac.acnumber||' has deposited: '||deposit||' and withdrawn '||withdrawal||'. Balance is '||(deposit-withdrawal));
+    end loop;
+END;

@@ -1,0 +1,205 @@
+command line application
+	Patient
+	Student
+	Teacher
+	Donor
+	Applicant
+	Passport		
+
+
+update profile details of Applicant
+	in dao, it is update method
+
+	but in UI, we may show the options to the user (foreign key)
+	1: Visa
+	2: Passport
+
+	here, the user can enter either 1/2 only. he cannot enter a value which is not present in table (parent)
+
+	instead of asking user to type the value for foreign key, we may show options to choose by 1, 2, 3
+	
+	but for sensitive information, never
+
+for update,
+	i may want to update only few details. not all the details
+	we ask all details to the user, but user may choose to just press enter (if no change req for that field)
+	then before calling the DAO, we usually tend to create a NEW OBJECT and fill (set) values entered by the user.
+	INSTEAD
+		ID is definitely required for update.
+		use that ID to find an existing Object from db			read(id)
+		and use conditions to update the fields using setter methods	
+	ex:
+		pid, pname, pprice
+
+		i want to update product by id
+		read(pid);		returns 0 or 1 record. if 0 rec, sorry no product found for this pid
+		
+		user has entered few details only. for other details, he just pressed return key
+
+		if(!pname.equals(""))
+			product.setPname(pname);
+
+		int pprice=0;
+		String sprice=sc.nextLine();
+		if(!sprice.equals(""))
+		{
+			int pprice=Integer.parseInt(sprice);
+			product.setPprice(pprice);
+		}
+
+
+
+different entities
+	individual responsibility for each entity
+	integrate 
+
+
+Main UI
+	showMenu();
+	choose your role:
+
+	1) Patient
+	2) Doctor
+
+	PatientUI patientUi=new...			created by Abi
+	DoctorUI doctorUi=new...			created by Dru
+	
+	switch(role)
+	{
+		case 1:	//patient
+			patientUi.showMenu();
+			break;
+		cae 2:	//doctor
+			doctorUi.showMenu();
+	}
+
+
+
+1) while user enters time
+	String stime="13:45";
+	SimpleDateFormat sdf=new SimpleDateFormat("HH:mm");
+	Date time=sdf.parse(stime);
+
+2) DAO to store this date to oracle
+	INSERT INTO TABLE1 VALUES(TO_DATE(?,"HH:mm"))
+	SimpleDateFormat sdf=new SimpleDateFormat("HH:mm");
+	st.setString(sdf.format(time))
+	
+
+int i=0;
+try
+{
+	i=sc.nextInt();
+}catch(		handle string instead of number)
+
+
+
+
+
+
+
+
+YOU are creating an object and sending it to update(obj)
+do not create an object
+obtain object using read(id)
+and conditionally call 
+	if(!fname.equals("")
+		obj.setFIrstName
+	setLastName
+
+
+
+Patient patient=new Patient();			//WRONG
+Patient patient=edao.read(id);			//retrieve existing record from db	ID is compulsory
+patient obj already has values in every field.
+conditionally update any field using setter method
+if(!fname.equals(""))
+	patient.setFirstName(fname);		//otherwise, if it is blank, i will not update that field.
+if(!lname.equals(""))
+	
+edao.update(patient);			//patient should not be new object
+
+
+there are 2 strategies to update an entity
+1) write the SQL statement itself according to the user choice
+		UPDATE TABLENAME SET F1=?, F2=? WHERE ID=?
+	this when F1, F2 are updated
+	else
+		UPDATE TABLENAME SET F1=?, F2=?, F3=? WHERE ID=?
+
+	advantage:
+		only the data undergoing change is sent to the database
+	disadvantage:
+		you have write lot of code 	(this is never a disadvantage)
+
+2) read(id)
+	read the existing object from db.
+	wherever use gives data, update only those fields using setter method
+	
+	advantage:
+		easy to code (this is never an advantage)
+	disadvantage:
+		even if user wants to update only 1 field, all data are sent to the db. (also, all data are retrieved from the db first)
+
+	but if you see GUI, we auto populate the data in the fields so that user can choose to edit only required
+
+
+------------------------------------------------------------
+db contains time field		hh:mi	(oracle)
+	if you store date in oracle, dd-MMM-yy		(here hour and minute is not found). so it is always storing 00:00
+	INSERT INTO T1 VALUES (?, ?, TO_DATE(?,'hh:mi'), ?)
+	but we have Date object in entity
+	sdf=new SimpleDateFormat("HH:mm");
+	str=sdf.format(dt);
+	st.setString(3, str);
+
+
+while retrieving
+	SELECT c1, c2, TO_CHAR(dt,'hh:mi') from t1
+	
+	dt=sdf.parse(str);
+
+	assertEquals(a,b);
+
+	create(entity)
+		i) if the entity. getId() is null	fail
+		ii) if getId is ""			fail
+		ii) if getId is negative		fail
+	
+	read(id)
+		i) if id is 
+	update(entity)
+		if updation affects >1 row, or <1 row	then fail
+		
+	delete
+		if delete affects >1 rows, dangerous		fail
+
+	for every test case, create one @Test method
+
+	String sql="UPDATE PATIENT SET ";
+	if(!patient.getFirstName().equals(""))
+	{
+		sql+="firstname=?";
+		fnameFlag=true;
+	}
+
+	if(!patient.getLastName().equals(""))
+	{
+		sql+="lastname=?";
+		fnameFlag=true;
+	}
+
+	later
+	if(fnameFlag)
+		st.setFirstName(1,patient.getFirstName());
+
+	if(lnameFlag)
+		st.setLastName(1,patient.getLastName());
+
+	
+
+in this technique
+	i)	read(id)		is not required
+	ii)	not all the values are sent to db	only updating fields are sent to db
+
+	imagine if there is a LOB	i am updating only my firstname	

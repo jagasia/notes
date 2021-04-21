@@ -1,0 +1,554 @@
+ref cursor
+	when we want to store a cursor, in a variable.
+	the reference of the cursor is stored in a variable.
+
+Mandatory block
+	BEGIN
+	END
+Optional blocks
+	DECLARE
+	EXCEPTION
+
+example:
+declare
+    TYPE ec IS REF CURSOR;
+    x ec;
+    y employees%rowtype;
+begin
+    open x for SELECT * FROM EMPLOYEES;
+    LOOP
+        fetch x INTO y;
+        dbms_output.put_line(y.first_name);
+        exit when x%notfound;
+    END LOOP;
+    close x;
+    dbms_output.put_line('Hello world');
+end;
+
+A Function can return
+	scalar value
+	composite value	/ row/ record
+	table
+	table as reference (updated)	ref cursor
+
+
+we have done lot of plsql programs. but they are not store in the database.
+named programs like
+	procedures
+	functions
+	packages
+
+	these are stored inside the database (as database objects).
+	when i run this code (procedure) will not do the task mentioned in the procedure. rather they are going to be created in the database as object.
+	to execute the code, we need to call the procedure from another plsql program.
+
+	in c language,	
+		we defined functions. but unless we call those functions, they do not perform the task.
+
+	Instead of DECLARE block, we can declare variables  before BEGIN
+
+WE CAN CALL A PROCEDURE ONLY FROM 
+	ANOTHER PROCEDURE
+	A PLSQL PROGRAM
+	A FUNCTION
+	A TRIGGER
+	... only from plsql block
+
+Task:
+	create a procedure that will display the employee full name, department name
+
+CREATE OR REPLACE PROCEDURE prcJag2 
+AS
+    FULLNAME VARCHAR2(100);
+    DNAME VARCHAR2(100);
+BEGIN
+ SELECT FIRST_NAME||' '||LAST_NAME, DEPARTMENT_NAME INTO FULLNAME, DNAME
+FROM EMPLOYEES E JOIN DEPARTMENTS D
+ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
+WHERE EMPLOYEE_ID=100;  
+    DBMS_OUTPUT.PUT_LINE(FULLNAME);
+    DBMS_OUTPUT.PUT_LINE(DNAME);
+END;
+
+BEGIN
+    PRCJAG2;
+END;
+
+SELECT * FROM USER_PROCEDURES WHERE OBJECT_NAME='PRCJAG2';
+
+Task:	create another procedure/ replace existing procedure
+	to display the same (full name, dept name) for all employees
+	hint: use cursor
+
+PROCEDURES CAN HAVE
+For DECLARE block, we have CREATE OR .....
+	BEGIN
+	EXCEPTION
+	END;
+
+OPTIMIZE LEVEL=0		MORE TIME TAKEN
+0.049
+0.06
+0.07
+0.05
+
+OPTIMIZE LEVEL=2
+0.047
+0.046
+0.051
+
+
+OPTIMIZE LEVEL=3
+0.036
+0.043
+0.053
+
+TASK:
+	Create a procedure that will display the same output for all the employees who belong to the given department id.
+	full name and dname 
+
+	how can i give input to a procedure?
+		using parameters
+	f(x)		here, x is the argument.	argument is also called as parameter.
+
+CREATE OR REPLACE PROCEDURE PRCJAG4(X INT)
+AS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(X);
+END;
+
+EXECUTE PRCJAG4(20);
+
+
+SOLUTION:
+
+CREATE OR REPLACE PROCEDURE PRCDID(DID INT)
+AS
+BEGIN
+    FOR X IN (SELECT FIRST_NAME||' '||LAST_NAME AS FULLNAME, DEPARTMENT_NAME AS DNAME
+    FROM EMPLOYEES E JOIN DEPARTMENTS D ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
+    WHERE E.DEPARTMENT_ID=DID)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(X.FULLNAME||' '||X.DNAME);
+    END LOOP;
+END;
+
+EXECUTE PRCDID(50);
+
+Task:
+	Create a procedure prcFind that will take employee_id as parameter and return the following
+		FIRST_NAME, LAST_NAME, SALARY
+
+	Note: the procedure prcFind should not display the values. 
+there should not be DBMS_OUTPUT.PUT_LINE inside the prcFind procedure.
+The output should be returned as OUTPUT parameters.
+	call the procedure and obtain the results in variables. Then display them.
+
+CREATE OR REPLACE PROCEDURE PRCSQR 
+(X INT, Y OUT INT)
+AS
+BEGIN
+    Y:=X*X;
+END;
+
+How will you call this procedure, as there is an output parameter.
+A VARIBLE is required to be passed as output parameter. If we need variable, we need a plsql program.
+
+DECLARE
+    result int;
+BEGIN
+    prcsqr(11,result);
+    dbms_output.put_line(result);
+END;
+
+Solution:
+CREATE OR REPLACE PROCEDURE PRCFIND
+(EID EMPLOYEES.EMPLOYEE_ID%TYPE,
+FNAME OUT EMPLOYEES.FIRST_NAME%TYPE,
+LNAME OUT EMPLOYEES.LAST_NAME%TYPE,
+SAL OUT EMPLOYEES.SALARY%TYPE)
+AS
+BEGIN
+    SELECT FIRST_NAME, LAST_NAME, SALARY INTO FNAME, LNAME, SAL
+    FROM EMPLOYEES WHERE EMPLOYEE_ID=EID;
+--    DBMS_OUTPUT.PUT_LINE(FNAME||' '||LNAME||' '||SAL);
+END;
+
+--HOW CAN I CALL THIS PRCFIND. AS THERE ARE OUT PARAMETERS. WE NEED TO DECLARE VARIABLES
+
+DECLARE
+--    EID INT:=101;
+    FN EMPLOYEES.FIRST_NAME%TYPE;
+    LN EMPLOYEES.LAST_NAME%TYPE;
+    SAL EMPLOYEES.SALARY%TYPE;
+BEGIN
+    PRCFIND(100, FN, LN, SAL);
+    DBMS_OUTPUT.PUT_LINE(FN);
+    DBMS_OUTPUT.PUT_LINE(LN);
+    DBMS_OUTPUT.PUT_LINE(SAL);    
+END;
+
+f(x,y,z)	this is function/prc definition
+	x,y,z	are called as formal parameters
+
+f(2,3,4)	this is when i call the function/proc
+	2,3,4	are called as actual parameters
+
+Positional Parameters: we are supplying parameters in correct position. 
+Named Parameters:	f(y=>2, x=>3, z=>4)	the parameters are supplied with their name and value
+
+when a function has out parameters, we must pass variable for out parameters. we cannot pass constant for out params.
+
+
+Task:
+	The PRCFIND procedure is working absolutely fine. now the user wants all the columns of the employee as output. Kindly modify the procedure so that the output will be all columns of employees table.
+
+
+Solution:
+CREATE OR REPLACE PROCEDURE PRCFIND2
+(EID EMPLOYEES.EMPLOYEE_ID%TYPE,
+REC OUT EMPLOYEES%ROWTYPE)
+AS
+BEGIN
+    SELECT * INTO REC
+    FROM EMPLOYEES WHERE EMPLOYEE_ID=EID;
+END;
+-------------------------------------------------to call prcfind2
+declare
+    eid int:=105;
+    result EMPLOYEES%ROWTYPE;
+begin
+    prcfind2(eid, result);
+    DBMS_OUTPUT.PUT_LINE(result.first_name||' '||result.last_name);
+end;
+
+
+Task: 		IN OUT
+
+CREATE OR REPLACE procedure PRCJAG5
+(X IN OUT INT)
+as
+BEGIN
+    X:=X*X;
+END;
+
+DECLARE 
+    X INT:=12;
+BEGIN
+    PRCJAG5(X);
+    DBMS_OUTPUT.PUT_LINE(X);
+END;
+
+IN OUT is like passing the reference as parameter.
+
+Exception block in procedure:
+CREATE OR REPLACE PROCEDURE PRCFIND2
+(EID EMPLOYEES.EMPLOYEE_ID%TYPE,REC OUT EMPLOYEES%ROWTYPE)
+AS
+BEGIN    
+    SELECT * INTO REC    
+    FROM EMPLOYEES WHERE EMPLOYEE_ID=EID;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        REC.FIRST_NAME:='UNKNOWN';
+END;
+--------when we call this procedure with unknown employee id, we get 'UNKNOWN' instead of getting error.
+DECLARE
+    EID INT:=207;
+    REC EMPLOYEES%ROWTYPE;
+BEGIN
+    PRCFIND2(EID, REC);
+    DBMS_OUTPUT.PUT_LINE(REC.FIRST_NAME);
+END;
+---
+
+what is the difference between procedure and function
+
+
+sum()		multiple row function	(produces 1 return value for multiple rows together)
+avg()
+substring()
+upper()		single row function	(produces 1 return value per row)
+ceiling()
+floor()
+abs()
+
+these functions can be called from select query.
+users can create procedures and functions. but procedures cannot be called from select query.
+user defined functions can be called from select query.
+
+functions suppose if called from a select query, should the function be executed once per statement? or once per row?
+
+single row functions
+multiple row functions
+
+create or replace NONEDITIONABLE FUNCTION fnJag1
+(X INT, Y OUT INT)		Y should be considered as ref type
+RETURN INT
+AS
+BEGIN
+    Y:=50;
+    RETURN 100;
+END;
+
+----CALLING FUNCTION
+
+DECLARE
+    I INT:=20;
+    J INT:=11;
+    K INT;
+BEGIN
+    K:=FNJAG1(I,J);
+    DBMS_OUTPUT.PUT_LINE(I||' '||J||' '||K);
+END;
+
+
+
+drop function fnjag1;
+
+
+elsif
+
+NOT
+AND
+OR
+
+
+swap(int a, int b)
+	when i call this function, swap(x,y);		//value of x and y are copied to a and b.
+swap(int *a, int *b)
+	when i cal lthis function, swap(&x,&y);		//value of x and y are not copied to a and b. rather their references are copied.
+
+
+OUT parameters in oracle as pointers.
+IN OUT where the actual parameter is copied to the formal parameter and also the function is able to update the actual parameter.
+
+
+
+Task:
+	Create a function fnBonus that accepts
+		Employee id as parameter and returns the bonus.
+	Note: bonus is calculated as follows:
+		SALARY * COMMISSION_PCT if commission_pct is not null
+		SALARY * .10		if commission_pct is null
+
+call the function in a select query as follows:
+	SELECT EMPLOYEE_ID, SALARY, fnBonus(EMPLOYEE_ID) FROM EMPLOYEES;
+
+
+Packages:
+	dbms_output	is a package. put_line() is a procedure stored inside the package
+
+	packages that group the functions and procedures and types also as logical group.
+
+	adv of packages is that suppose, there are many functions, procedures, i can grant permission for a user to only specific package. 
+
+	in oracle PL/SQL, the packages are created as:
+		package specification			(like an interface where only declarations found)
+		package body				(implementations/ real code)
+
+	so a package body can contain suppose 100 programs inside.
+	But not all the programs are allowed to be accessed by caller.	Only the programs declared in the specification are exposed to the outside world.	
+
+users can call the functions/procedures like
+	packagename.functionname
+	dbms_output.put_line
+
+package specification:	(should be created first)
+	fn1()
+	fn2()
+	fn10()
+package body:
+	fn1()	--public
+	fn2()	--public
+	fn3()
+	fn4()
+	fn5()
+	fn6()
+	fn7()
+	fn8()
+	fn9()
+	fn10()	--public
+
+when i create package, which one should i create first?
+
+functions
+procedures
+types
+
+
+create or replace PACKAGE pkJag AS
+    procedure prc101;
+    function fn101 return int;
+end;
+
+
+CREATE OR REPLACE PACKAGE BODY pkJag AS
+    PROCEDURE prc101
+    as
+    begin
+        DBMS_OUTPUT.PUT_LINE('prc101 is executed');
+    end;
+    
+    FUNCTION fn101 
+    RETURN INT
+    AS
+    BEGIN
+        RETURN 1290;
+    END;
+END;
+
+When dropping a package, 
+	if we drop package (specification), then both package and its body are dropped together
+	if we drop package body, then the body alone is dropped. the specification exists.
+
+
+Task:
+	we create a package with 3 procedures. but declare only 2 procedures in the specification.
+	we observe that we are able to call only those 2 procedures declared in the specification.
+
+
+Stateful and Stateless packages:
+	suppose, there are 2 procedures in a package:
+		sum(2,3)
+		product()		should be able to result 2*3=6 (???????
+
+	i have not supplied any parameters for product. But the parameters supplied
+	for sum should be remembered in the package
+
+	global variables in the package.
+
+create or replace package pk2
+as
+procedure sum(no1 int, no2 int);
+procedure product;
+end;
+
+
+create or replace package body pk2
+as
+    x int:=0;
+    y int:=0;
+    procedure sum(no1 int, no2 int)
+    as
+    begin
+        x:=no1;
+        y:=no2;
+        dbms_output.put_line(no1+no2);
+    end;
+    
+    procedure product
+    as
+    begin
+        dbms_output.put_line(x*y);
+    end;
+end;
+
+EXECUTE pk2.sum(2,3);		--5
+execute pk2.product;		--6 	because, the package pk2 is stateful. it remembers
+					the values in global variables
+
+
+calling functions:
+	from where?
+		plsql program (begin ... end)
+		procedures
+		select queries
+		computations
+		DML also
+			INSERT INTO TABL1 VALUES(FN1(20),,,,);
+	
+			UPDATE TABLE2 SET COL1=FN1(20);
+	
+			DELETE FROM TABL2 WHERE COL1=FN1(20);
+	
+			SELECT .......
+			WHERE FN1(COL1)=SOMETHING
+	
+			SELECT....
+			GROUP BY 
+			HAVING FN1(COL1).....
+
+			NOT ALL FUNCTIONS CAN BE CALLED WHILE USING GROUP BY...
+
+
+IF AN USER DEFINED FUNCTION IS TO BE CALLED FROM SQL STATEMENTS, THEN
+	THE FUNCTION MAY NOT DO CERTAIN THINGS IN ITS BODY
+
+	CREATE OR REPLACE FUNCTION fn1
+	RETURN INT
+	AS
+	BEGIN
+		///I AM DOING A DML OPERATION ... TRANSACTION
+	END;
+
+I CANNOT CALL THIS FUNCTION FROM SELECT QUERY...
+
+IF THE USER DEFINED FUNCTION contains DDL or OUT paramters, then we cannot call
+		the function from sql query
+
+identify the procedures and functions inside 	DBMS_OUTPUT
+						DBMS_UTILITY
+
+
+startup
+shutdown
+create tablespace
+allocate quota
+create tables inside tablespace
+
+
+in E-R diagram
+	Entity		- 	rectangle		TABLE
+	Attributes	-	oval			column
+	relationships	-	diamond			M-M relationship will become table
+							1-M relationship, 1 will become foreign key in M table
+	connectors	-	lines
+
+we may require to store pictures/ videos in the db
+
+char
+nchar
+
+In oracle
+CLOB	/NCLOB
+BLOB
+BFILE
+
+Mysql
+	varbinary
+	tinyblob
+	mediumblob	
+	longblob
+
+
+display the departments
+	display the employees
+
+
+BEGIN
+    FOR D IN (SELECT DEPARTMENT_ID AS DID, DEPARTMENT_NAME AS DNAME FROM DEPARTMENTS WHERE DEPARTMENT_ID<50)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(D.DID||' '||D.DNAME);
+        FOR E IN (SELECT FIRST_NAME FNAME, LAST_NAME LNAME FROM EMPLOYEES WHERE DEPARTMENT_ID=D.DID)
+        LOOP
+            DBMS_OUTPUT.PUT_LINE('--------'||E.FNAME||' '||E.LNAME);
+        END LOOP;
+    END LOOP;
+END;
+
+
+
+BEGIN
+<<OUTER>>
+    FOR D IN (SELECT DEPARTMENT_ID AS DID, DEPARTMENT_NAME AS DNAME FROM DEPARTMENTS WHERE DEPARTMENT_ID<50)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(D.DID||' '||D.DNAME);
+        <<INNER>>
+        FOR E IN (SELECT FIRST_NAME FNAME, LAST_NAME LNAME FROM EMPLOYEES WHERE DEPARTMENT_ID=D.DID)
+        LOOP
+            DBMS_OUTPUT.PUT_LINE('--------'||E.FNAME||' '||E.LNAME);
+            EXIT INNER;
+        END LOOP;
+    END LOOP;
+END;

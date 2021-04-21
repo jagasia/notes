@@ -1,0 +1,456 @@
+Introduction to XML
+	eXtensible Markup Language
+	1999		approved by w3c	
+
+before xml,
+	we used CSV (Comma Separated Values)
+	1, rama krishna, 20
+	2, siva, 22
+	3, ravi, 21
+	4, raja, 20
+
+	csv was the format for data exchange between hetrogenous data sources.
+	for interoperability	
+
+
+why xml?	
+	same data represented in csv above, can be done in XML as below:
+	<STUDENTS>
+		<STUDENT DEPT="ECE">		//why DEPT is an attribute
+			<STUDENTID>1</STUDENTID>	//why not DEPT be a child element
+			<NAME>Rama Krishna</NAME>	//STUDENTID should have been an attribute
+			<MARK>20</MARK>
+		</STUDENT>
+		<STUDENT>
+			<STUDENTID>2</STUDENTID>
+			<NAME>Ramesh</NAME>
+			<MARK>21</MARK>
+		</STUDENT>
+		<STUDENT>
+			<STUDENTID>3</STUDENTID>
+			<NAME>Suresh</NAME>
+			<MARK>22</MARK>
+		</STUDENT>
+	</STUDENTS>
+	
+	More descriptive. data representation format.
+
+	data inside a tag, can be validated for 
+		type		studentId must be integer
+		range		studentid must be between 21 and 30
+		pattern		emailId must conform to the given regular expression
+		
+
+	XML data is a structured data. (every rdbms table has structured data). 
+	we can query the structured data.	I can ask, if student id is 2, what is his name
+	but we cannot use XML as a replacement for rdbms at all.
+
+	xml is plain text (usually UTF-8)		
+	a text is supported by all platforms. but still we need data validation / integrity
+	tags are subject to restrictions of data we enter. tags/attributes.
+
+	ELEMENTS
+	ATTRIBUTES
+	TEXT
+	ENTITIES
+	NAMESPACE	package of type definitions
+
+	<html xmlns:th="http://www.thymeleaf.org">
+		<p th:text="hello">
+
+	<a href="">		href is an attribute
+
+	when we create XML, we define our own tags. how to decide between child element/ attribute?
+
+	1) if we display the data often, it may be child element
+	2) if we filter/ sort the data based on a field, define the field as attribute
+	3) attribute field should not be updated. ex: primary key values are never updated.
+	4) if the field is unique/distinct, use it as attribute
+
+	<STUDENTS>
+		<STUDENT STUDENTID="1">
+			<NAME>Rama Krishna</NAME>	//STUDENTID should have been an attribute
+			<MARK>20</MARK>
+		</STUDENT>
+		<STUDENT STUDENTID="2">
+			<NAME>Ramesh</NAME>
+			<MARK>21</MARK>
+		</STUDENT>
+		<STUDENT STUDENTID="3">
+			<NAME>Suresh</NAME>
+			<MARK>22</MARK>
+		</STUDENT>
+	</STUDENTS>
+	xml is an interchage format not only between databases.
+	sometimes, we create a java method that will accept parameters and return value.
+	if this method is very useful, this method must be called from any other platform also.
+	ex from c# program, they want to call this java method.
+	why?
+		icici bank debit card. can you withdraw money from a SBI atm?
+		yes it is possible. but imagine, SBI bank atm has a c# program. this program should be able to call the ICICI bank program to update ICICI database.
+	
+	PROGRAMS from different platform must be able to interact to do business. 
+	now, c# program should be able to call java method. then the parameters, return types data types are different.	we need a common data format in between these method calls. ANS: 	XML
+
+	XML was started to be used as data interchange format in web services in 2001 onwards 
+	SOAP web services. SOAP message is in XML format.
+
+	if we want to file Income Tax Return.	this procedure in govt website, needs your data to be uploaded in XML format only.
+	<?xml version="1.0" encoding="UTF-8"> 
+	what is unicode?
+		unicode is encoding format.	what is encoding?
+		encrypt is different. encrypt means tranforming data into unreadable format
+			using algorithm.	secret 
+		in encoding there is no secret.
+	0	48
+	
+	A is translated into 65
+	B 	66
+	a	97
+	
+	0
+	a
+
+	this process of converting a character into a numeric equivalent is called as encoding.
+	but we call this as ASCII value right?
+	ASCII was the first encoding we learnt 
+	the ascii set has 256 characters
+	0.......48(for 0),.......65(A),,.......97(a)......255		(0-255) characters	0 being null
+	
+	0	0000 0000
+	1	0000 0001
+	2	0000 0010
+	.....
+	255	1111 1111
+
+so if we have more than 256 characters, it cannot be represented using code in 8 bit. (1byte)
+	
+	later, more characters were introduced. so we needed 2 bytes
+	for 2 bytes (16 bit) representation, unicode was introduced
+	unicode represent every character as 16 bit
+	0	0000 0000 0000 0000
+	255	0000 0000 1111 1111	end of 1 byte (8 bit)
+	256	0000 0001 0000 0000	begining of 2 byte (16  bit)
+	65535	1111 1111 1111 1111
+
+
+	in unicode (16 bit), the first 256 characters are called UTF-8	(because, 8 bit representation is enough)
+	UTF-8 stands for Unicode Text Format 8 bit
+
+	so every character we type in xml must be utf-8 character
+
+	0 - 65535 characters are there in unicode.	
+
+
+bama
+
+	b is represented as 98	(98 is represented as 0110 0010)
+	a is represented as 97	(97 is represented as 0110 0001)
+	m is represented as 109 (109 is represented as 0110 1101)
+	a is represented as 97	(97 is represented as 0110 0001)
+
+	what is a well formed xml file/data? (well formed ness)
+		
+there are rules to say that an xml file is well formed.
+	1) All elements must be enclosed inside a root element only.	(not doctype or processing instructions )
+	2) There must be only 1 root element in the document.
+	3) elements and attributes are case sensitive.
+		upper/lower case is allowed. but start tag and end tag must match the same case.
+	4) Tags must be nested properly.	no overlapping
+	5) attributes values in double quotes OR single quotes
+	6) entities to be used instead of SPACE, <,> SYMBOLS 
+		if we want to use > symbol, use &gt;
+
+
+	if we open the xml file in a browser, the browser will check for well formedness.
+
+1) take any 1 table in your oracle database and create a well formed xml document. 
+	test it with a browser.
+	paste the code in chat window.
+
+
+imagine, if 3 branches are sending data to the head office, every week end.
+	1 branch is missing some elements
+	1 branch is adding extra elements
+
+	so while collating these data into main database, the ho person feels uncomfortable.
+	in order to ensure that these branches send the data correctly, he needs to find a mechanism.
+
+Introducing schema. schema means? structure of the data.
+	like in rdbms, before we add records, we need to create table. by creating table, we are defining data.
+
+	in xml, we have 2 type of schema:
+	DTD		(Document Type Definition)
+	XSD		(Xml Schema Definition)
+
+
+DTD:
+	own syntax
+	can specify the elements and attributes that must be present in a XML file.
+	can specify the order of elements
+	can specify the multiplicity of elements
+	can add restricts like (possible values that can be present in an element/attribute)
+	
+	but cannot add more restrictions like the data must be in this range/ pattern/ data type
+
+the head office person, sends the DTD to all the branches. Branches should ensure that their XML data conforms to the DTD.
+	validate the XML data against a DTD
+
+
+ <EMPLOYEES>
+  <Employee EID="100">
+      <FirstName>Tanmay</FirstName>
+      <LastName>Patil</LastName>
+      <ContactNo>1234567890</ContactNo>
+      <Email>tanmaypatil@xyz.com</Email>
+      <Address>
+           <City>Bangalore</City>
+           <State>Karnataka</State>
+           <Zip>560212</Zip>
+      </Address>
+  </Employee>
+   <Employee EID="101">
+      <FirstName>RAJA</FirstName>
+      <LastName>BABU</LastName>
+      <ContactNo>1234567890</ContactNo>
+      <Email>RAJABABU@xyz.com</Email>
+      <Address>
+           <City>KUCHBHI</City>
+           <State>Karnataka</State>
+           <Zip>560212</Zip>
+      </Address>
+  </Employee>
+</EMPLOYEES>
+
+
+there are 2 ways we can use a DTD
+	i) embedded
+	ii) external
+
+
+
++	means	1 or more
+?	means	0 or 1
+*	means	0 or more
+
+<!DOCTYPE EMPLOYEES [
+<!ELEMENT EMPLOYEES (Employee)+>
+<!ELEMENT Employee (FirstName,LastName,ContactNo,Email,Address)>
+<!ELEMENT FirstName (#PCDATA)>
+<!ELEMENT LastName (#PCDATA)>
+<!ELEMENT ContactNo (#PCDATA)>
+<!ELEMENT Email (#PCDATA)>
+<!ELEMENT Address (City,State,Zip)>
+<!ELEMENT City (#PCDATA)>
+<!ELEMENT State (#PCDATA)>
+<!ELEMENT Zip (#PCDATA)>
+<!ATTLIST Employee EID CDATA #REQUIRED>
+]>
+ <EMPLOYEES>
+  <Employee EID="101">
+      <FirstName>Tanmay</FirstName>
+      <LastName>Patil</LastName>
+      <ContactNo>1234567890</ContactNo>
+      <Email>tanmaypatil@xyz.com</Email>
+      <Address>
+           <City>Bangalore</City>
+           <State>Karnataka</State>
+           <Zip>560212</Zip>
+      </Address>
+  </Employee>
+   <Employee EID="102">
+      <FirstName>RAJA</FirstName>
+      <LastName>BABU</LastName>
+      <ContactNo>1234567890</ContactNo>
+      <Email>RAJABABU@xyz.com</Email>
+      <Address>
+           <City>KUCHBHI</City>
+           <State>Karnataka</State>
+           <Zip>560212</Zip>
+      </Address>
+  </Employee>
+</EMPLOYEES>
+
+tASK:
+	For the XML data you coded for previous activity, you need to create DTD now.
+		INTERNAL/EMBEDDED DTD
+
+	if we use external DTD, then how to refer that dtd in our xml file?
+	in our xml file, add below code in the top of xml file.
+	<!DOCTYPE ROOTELEMENT SYSTEM|PUBLIC "filename.dtd">
+
+1) Attribute Types 	CDATA	PCDATA
+2) Required types	
+		#ID		(UNIQUE)
+		#REQUIRED	
+		#IMPLIED	
+		ENUMERATED (ex: "INDIA", "AUSTRALIA") from which one is allowed
+
+
+
+-------------------
+Introducing 	XSD	(Xml Schema Definition)			Microsoft
+
+	what are the advantages of XSD over DTD.		
+	DTD cannot specify the restrictions in a text/value of element / attribute.
+		for ex: EMPLOYEEID should follow a pattern		E001	
+	In XSD, we can specifiy regular expressions.
+
+	the order of elements can be restricted in XSD.	CONTENT TYPE can be (in XSD)
+		SEQUENCE	(elements must be in the specified order only (all elements))
+		CHOICE		(one from the list is allowed)
+		ALL		(all elements must be present in any order)
+
+	we can create user defined types in XSD 
+		complexType
+		simpleType
+
+	there are many pre defined data types in XSD	
+	
+
+<Students>
+   <Student sid='100'>
+       <Name> Harshita Khandelwal</Name>
+       <City> Gwalior </City>
+       <State> Madhya Pradesh </State>
+       <Country> India </Country>
+   </Student>
+   <Student sid='101'>
+       <Name> Jungkook Jeon</Name>
+       <City> Busan </City>
+       <State> South Korea </State>
+       <Country> Korea </Country>
+   </Student>
+</Students>
+
+	we can use XSD as external schema file
+	
+	validators, will accept 2 files to validate:
+		1) xml file	(student.xml)
+		2) xsd file	(student.xsd)
+
+
+
+xsd datatypes:
+	xsd:string
+	xsd:integer
+	xsd:positiveInteger
+	xsd:nonNegativeInteger
+
+Task:
+	for the XML file we created in previous task, create a XSD document and validate it
+	using https://www.liquid-technologies.com/online-xsd-validator
+
+
+task:
+<BOOKS>
+	<BOOK ISBN="ABC123">
+		<TITLE>You can win</TITLE>
+		<PRICE>110</PRICE>
+		<AUTHOR>
+			<FIRSTNAME>Shiv</FIRSTNAME>
+			<LASTNAME>Khera</LASTNAME>
+		</AUTHOR>
+	</BOOK>
+	<BOOK ISBN="ABC124">
+		<TITLE>Let us C</TITLE>
+		<PRICE>100</PRICE>
+		<AUTHOR>
+			<NAME>Balaguruswamy</NAME>
+		</AUTHOR>
+	</BOOK>
+</BOOKS>
+
+Note:
+	the <AUTHOR> element can contain either
+		i) <FIRSTNAME>, <LASTNAME>			(or)
+		ii) <NAME>
+hint:
+	for author, to allow either (firstname and lastname) or (name), 
+		use choice and complex type
+
+	for ISBN the format should be 
+		three upper case alphabets, followed by 3 digit number
+
+
+
+JQUERY:
+	What is jquery?
+		jquery is an application of java script.
+		we can download the jquery.js file (or) we can directly refer to CDN
+
+	format of jquery:
+		$(selector).event(event handler);
+				///event handler function name can be given. (or) define the function here itself
+				//as anonymous function
+		
+	how you were able to differentiate the buttons in css?	
+		ans: 	id/class	
+			for id, we used # symbol
+			for class, we used . symbol
+
+
+
+Task:
+	accept 2 numbers as input using 2 text boxes. and when the button is clicked, the jquery program should display the sum of those 2 numbers in alert.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            // alert('hi');
+            $("#btnAdd").click(function(){
+                var no1=parseInt($("#txtNo1").val());
+                var no2=parseInt($("#txtNo2").val());
+                var result=no1+no2;
+                $("#p1").html("The sum of "+no1+" and "+no2+" is "+result);
+            });
+        });
+    </script>
+</head>
+<body>
+    Number 1: <input type="text" name="" id="txtNo1"><br>
+    Number 2: <input type="text" name="" id="txtNo2"><br>
+    <input id="btnAdd" type="button" value="Add">
+    <p id="p1"></p>
+</body>
+</html>
+
+Assignment:
+	identify various selectors used in jquery. (https://www.w3schools.com/jquery/jquery_selectors.asp)
+
+Task:
+	create a html file with 10 text boxes. The text boxes do not have id or class.
+	write jquery program to do the following:
+	i) when textbox gets focus, the background color of current textbox should be highlighted in yellow.
+	ii) when textbox loses focus, the background color will become white.
+
+	use jquery events to do this.
+
+Task:
+	a html file with a textbox and a button
+	in textbox, the user can enter a color. On clicking the button, the background color of the page should be changed to the color specified in the text box.
+
+Activity:
+	identify the
+		effects
+		animations 
+	in jquery
+
+
+Local storage:			as a feature of HTML5
+	check boxes saying "Remember me"
+
+	localStorage		(is a object in javascript)
+		setItem
+		getItem
+
+Task:
+	Allow users to add multiple names to the localStorage (comma separated).
+	textbox, button, div.
+	on clicking the button, the textbox data should be appended to the localStorage (with a comma). And the content in the localStorage should be retrieved and split by comma and display as a list in the div (unordered list).

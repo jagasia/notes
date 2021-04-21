@@ -1,0 +1,257 @@
+1) Persistence context
+2) Entity manager
+
+DAO pattern (we already used)
+Service class should access the DAO class methods
+
+create a web application 
+	spring core, aop, dao (allowed)
+
+
+HTML, JSP as view
+
+Controller	(servlet)
+	instead of creating instance of DAO directly in the controller (servlet),
+	we should create an instance of Service class that will intern use the DAO
+
+AOP
+	in cross cutting
+		logging
+	***	transaction (means, in my DAO program, i do not handle transactions)
+			like Transaction annotation, we will configure in <aop:config>
+
+	if you will take care of Transaction, in DAO, what i have as a dependency?	
+			jt/ht (JdbcTemplate, HibernateTemplate), for cross cutting, we need to use Entity manager with persistence unit
+
+	AOP advisor (aspect is a class that contains advices)
+		we dont need to create an aspect class. because, it is already present in spring framework. Tx
+
+==========================================
+1) in pom.xml
+	add the dependencies
+	<properties>
+<spring.version>4.0.0.RELEASE</spring.version>
+		<hibernate.version>4.1.9.Final</hibernate.version>
+	</properties>
+
+	<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<!-- AspectJ (required spring-aop dependency) -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+
+		<!-- JPA Implementation (Hibernate)-->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		
+	<!-- OJDBC 8 here -->
+
+2) model class
+	model.Vehicle
+
+3) VehicleDao
+
+4) VehicleService
+	will call the dao methods
+		
+5) spring.xml
+	datasource
+	
+
+
+new tags can be introduced and placed inside namespaces
+	a namespace contains the schemas	(what is schema?)
+	a schema defines custom tags	
+
+<beans is a root element that can contain, <bean> etc etc
+this is what defined in schema. schema defines, what a tag is ? and what are the attributes, child elements, values, a tag can accept
+
+tags are defined by schema (ex for schema : a dtd file or xsd file)
+
+
+
+
+
+<beans xmlns="https://www.springframework.org/schema/beans" 
+	xmlns:p="https://www.springframework.org/schema/p"
+	xmlns:context="https://www.springframework.org/schema/context" 
+	xmlns:tx="https://www.springframework.org/schema/tx" 
+	xmlns:aop="https://www.springframework.org/schema/aop"
+	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		https://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		https://www.springframework.org/schema/context
+		https://www.springframework.org/schema/context/spring-context-3.0.xsd
+		https://www.springframework.org/schema/tx
+		https://www.springframework.org/schema/tx/spring-tx.xsd
+		https://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd
+
+	<bean>
+	</bean>
+
+
+in hibernate:
+	we do mapping in hbm file
+	or we map using annotations
+	
+	in hibernate.cfg.xml file
+		(for annotations)	<mapping class="" />	(instead of <mapping resource="" />)
+		if we do not define this mapping class in hibernate.cfg.xml file, (its ok. but we can do it in main class)
+		config.addAnnotatedClass("");		//config AnnotationConfiguration
+
+
+--------------
+
+in bean.xml
+	<bean id="" class="model.VehicleDao" >
+	</bean>
+
+	this is class path xml configuration
+
+in class itself
+	@Component
+	public class VehicleDao
+
+	<context:component-scan base-package="hu.daniel.hari.learn.spring" />
+	<!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+	<context:annotation-config />
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="https://www.springframework.org/schema/beans" 
+	xmlns:p="https://www.springframework.org/schema/p"
+	xmlns:context="https://www.springframework.org/schema/context" 
+	xmlns:tx="https://www.springframework.org/schema/tx" 
+	xmlns:aop="https://www.springframework.org/schema/aop"
+	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		https://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		https://www.springframework.org/schema/context
+		https://www.springframework.org/schema/context/spring-context-3.0.xsd
+		https://www.springframework.org/schema/tx
+		https://www.springframework.org/schema/tx/spring-tx.xsd
+		https://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd
+		">
+
+	<!-- Scans the classpath for annotated components that will be auto-registered as Spring beans -->
+	<context:component-scan base-package="hu.daniel.hari.learn.spring" />
+	<!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+	<context:annotation-config />
+
+	<!-- JPA -->
+	
+	<!-- Datasource, that is currently hsqldb (in-memory database). -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+		<property name="url" value="jdbc:hsqldb:mem://productDb" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+	</bean>
+
+	<!-- EntityManagerFactory -->
+	<bean id="entityManagerFactory" 
+			class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" 
+			p:packagesToScan="hu.daniel.hari.learn.spring.orm.model" 
+			p:dataSource-ref="dataSource"
+			>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="true" />
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- AOP Configuration for selecting transactional methods -->
+
+	<!-- the transactional advice (what 'happens'; see the <aop:advisor/> ) -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- all methods starting with 'list' or 'get' are read-only -->
+			<tx:method name="list*" read-only="true"/>
+			<tx:method name="get*" read-only="true"/>
+			 <!-- for other methods use the default transaction settings -->
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- ensure that the above transactional advice runs for any execution
+		of a method in the service package -->
+	<aop:config>
+		<aop:pointcut id="serviceMethods" 
+			expression="execution(* hu.daniel.hari.learn.spring.orm.service.*.*(..))" />
+		<aop:advisor pointcut-ref="serviceMethods" advice-ref="txAdvice" />
+	</aop:config>
+	
+	<!-- TransactionManager -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+</beans>
+
+
+JpaTransactionManager
+	depends on LocalContainerEntityManagerFactoryBean
+LocalContainerEntityManagerFactoryBean
+	depends on DriverManagerDataSource	and 	HibernateJpaVendorAdapter
+
+
+
+
+
+Task:
+	use EntityManager to persist the entities in the database
+
+
+1) create a dynamic web project in eclipse /sts
+2) convert it into a maven project
+	right click project -> configure -> mostly last option is to convert to maven project
+3) if error, right click and add the tomcat server in targeted runtime
+4) in pom.xml add these elements before <build>
+	<properties></properties>
+	<dependencies></dependencies>
+
+--------------------------
+whenever we want to show jsp file, a controller is used to show the jsp file. 
+	A controller, can set the initial model data available in the session before redirecting to a page
+
+
+TDD
+	reverse
+		test case
+		aim to fail
+		rectify the error
+		refactor

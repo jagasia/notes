@@ -1,0 +1,338 @@
+1) Java EE
+	servlets
+	JSP
+	EL
+	JSTL
+	
+	DAO	(Not related to Java EE)
+		is a core java program
+	The pain of working with JDBC with Servlets
+
+	when we upload our web application (that access database), what are the 
+		major issues we face
+
+	
+
+1) a trainer should be able to upload his details
+		first name
+		last name
+		phone
+		email
+		skill set		(csv)
+		experience	
+
+	CREATE TABLE TRAINER
+	(	
+		id int PRIMARY KEY AUTO_INCREMENT,
+		firstName varchar(50),
+		lastName varchar(50),
+		phone varchar(15),
+		email varchar(50),
+		skillSet varchar(500),
+		experience int
+	)
+
+	1) database
+	2) table
+	3) DTO		Data Transfer Object	(Trainer.java)		
+	4) DAO					(TrainerDAO.java)
+	5) servlet
+	6) JSP
+
+
+
+why we need DAO?
+	In my servlet, i could have coded, JDBC to access the database. WHy i need DAO pattern?
+		to perform CRUD operation
+		DAO pattern allows, db programmer to work independently of (UI differences like console app/ web app/ mobile app)
+		it may be a web application
+		it may be a mobile application
+		or a console application,
+	
+		the same DAO code can be re used
+
+		easy to do junit testing
+
+mundane activity	very boring, routine activity of writing SQL statements for common requirements
+		
+
+
+-----------------------------
+Introducing Hibernate
+-----------------------------
+	is an ORM framework	
+		Object in front end mapped to Relation in back end
+	java framework for DAO pattern
+	can be used by any java application
+		core java project/ web app/ mobile app/ web service
+
+components of hibernate
+	libraries	(jar)
+	configuration system
+		i) xml
+		ii) annotations
+
+	some times, table name and class name may be different		
+		Employee.java
+		EMP table
+
+	some times, column name in tabe may be different from the class property
+		firstName (in java)	FIRST_NAME in database table
+
+
+	Song
+		List<Artist> artistLIst;
+
+	but in db tables
+		Song table has a column "ARTIST_ID" as foreign key
+
+
+	we need CONFIGURATION SYSTEM to map the O and R
+
+	O-R mapping		can we call it as ORM
+
+	Object Relational Mapping
+	
+next 2 days, we learn pure hibernate (without spring)
+
+when we do hibernate programs,
+
+1) add jar files to build path( java project ) or to web-inf/lib (web app)
+		or pom.xml as dependencies (maven project)
+2) hibernate.cfg.xml		(xml file contains connection information)	driver, url, username, password
+3) Entity classes
+	define hibernate mapping 
+		xml/annotation
+	if xml, 
+		trainer.hbm.xml
+
+the file names are conventions (not rules)
+
+
+first hibernate project:
+	let's identify an entity
+	Vehicle
+		id
+		name
+		type
+		company
+		
+
+1) add jar files (hibernate)
+	put all the jar file in a folder and refer in the build path (java project)
+2) configure using xml
+	hibernate.cfg.xml		
+	vehicle.hbm.xml
+
+	the configuration files to be placed directly in src folder (so that the class names we mention will contain their package name like 		model.Vehicle)
+
+
+	right click src folder and add an xml file "hibernate.cfg.xml"
+
+	dialect:
+		you want hibernate to write SQL statements in response to your actions like CRUD
+		since there are different SQL varients, we need to mention the dialect
+		in english, dialect is a slang/ form of a particular language
+
+	hbm2ddl.auto:
+		create			hibernate will create the tables (use only first time)
+		drop and create
+		update			
+			will create if the tables are not present.	
+			if tables already exists and if any change (extra property in entity class) those changes are 			implemented in the tables
+		
+
+vehicle.hbm.xml
+	<id>		this element marks a property as identified. 
+			Hence the corresponding column will become primary key
+
+	for other columns, i am using <property> but for primary key column, i use <id> element
+	<generator>		class="IDENTITY | SEQUENCE | INCREMENT | AUTO"
+
+		for Oracle, choose SEQUENCE
+		for Mysql, choose INCREMENT
+
+instead of getConnection we can use getSession
+	we used persist() for create and also for update
+	how it knows that we need to add/update
+
+create:
+	whenever we do not supply the primary key value (0 is not found in the database)
+	when we do not supply a managed entity
+	when we supply detached entity
+
+	a detached entity is not synchronized with the db table record
+
+read:
+	session.get() works only when we find the entity using primary key
+
+
+to read existing entities from db, session offers:
+get			to retrieve based on primary key
+createCriteria		to retrieve based on any other criteria
+createQuery		to write query 
+
+
+
+-------------------------
+Passenger
+	pnr		int	auto
+	firstName	
+	lastName
+
+1) add jar files	(copy the jars from "jars" folder of first-hibernate project)
+2) config
+	hibernate.cfg.xml
+	passenger.hbm.xml		(take sample from first-hibernate)
+3) Entity class		Passenger.java
+4) DAO class		PassengerDAO.java
+5) Main to test 
+		CRUD 
+
+
+----------------------------
+session methods
+-----------------------------
+persist()			used to store a new entity or update a managed entity
+save()				used to store a new entity. returns serializable (primary key value generated)
+	after registration, you ask the user to NOTE DOWN THE NUMBER GENERATED
+update()			i do not need to get managed entity using session.get(id). i can just send the object (detached entity to update)
+				Session session = MyConnection.getConnection();
+		Transaction tran = session.beginTransaction();
+		session.update(trainer);
+		tran.commit();
+		session.close();
+
+saveOrUpdate()
+merge()
+delete()
+
+-----------------------------------------------------------
+persist		can be used for add/update	
+save		return serializable 	(ie., primary key value generated)
+update		void
+saveOrUpdate
+merge	
+delete
+
+
+Save(): Save() method generates the primary key and inserts the record in the database. It is similar to the persist() method in JPA but it behaves differently in a detached instance by creating the duplicate record upon database commit.
+Update():Update() is used to update the existing database record. It returns an exception if the record is not found or called in a transient instance.
+saveOrUpdate(): It saves or updates the database based on the entity passed. It does not return an exception in the transient state but it makes the state to persistent during a database operation.
+merge(): Values from a detached entity are updated to the database when the merge() is used by changing the detached entity to the persistent state.
+delete(): Delete method works in persistent mode to remove the entity from the database. An exception is returned if no record is found in the database.
+evict()
+To detach the object from session cache, hibernate provides evict() method. After detaching the object from the session, any change to object will not be persisted. The associated objects will also be detached if the association is mapped with cascade="evict".
+
+
+can we have auto generate column other than short, int or long?
+	NO
+
+
+save and persist	(similarity)	
+		they add detached entity	(new object)
+		they update managed entity	(obtained object)
+
+	(difference)
+	return type is 
+		persist - void
+		save	- serializable		(generated id)
+
+save vs update
+	return type is different		(update - void)	(save -serializable)
+
+	Update works on detached entity also		(WORKS on both detached and managed entity)
+
+
+
+
+
+increment the salary of all employees by 5%
+see the outcome.	If total sum of all employees' salary is above x, rollback, else commit
+
+
+
+
+
+merge()
+	can convert detached entity into a managed entity
+opposite to merge() is evit()
+evit()
+	can convert managed entity into a detached entity		
+
+
+
+
+
+after this activity:
+	we will move to maven
+	we will move to annotation	(remind uuid) for auto generate string
+
+
+
+generator classes:
+----------
+assigned
+increment
+sequence
+hilo
+identity
+native
+foreign
+uuid
+
+
+
+
+Task:
+	Create a maven project (quick start archetype) and test the dao we created earlier.
+
+------------------------------
+HQL	stands for Hibernate Query Language
+	why it is called as HQL? 
+		in HQL, we are not querying the tables.		(IMPORTANT)
+		WE ARE QUERYING THE OBJECTS
+		so, SELECT * FROM Vehicle				this is SQL query
+		in HQL:		Select v from Vehicle v			this is HQL query
+
+		sometimes, the entity Class name may be different from the TABLE NAME. 
+		in HQL, we never mention the table name or column name.
+
+		SELECT o FROM Vehicle o WHERE o.type='SUV'		(type is a private variable. if there is not getter method, we cannot use it like this here)
+
+		hibernate is going to convert that o.type into o.getType()
+
+		when we retrieve the entire object, 
+			we may do like:
+				from Vehicle o where o.type='SUV' (ALSO CORRECT)
+			THIS IS SIMILAR TO 
+				SELECT o FROM Vehicle o WHERE o.type='SUV'
+	
+	Lets see an example
+	
+		Session session = MyConnection.getConnection();
+		Query query = session.createQuery("select v from Vehicle v");
+		List<Vehicle> vehicles=query.list();
+		for(Vehicle v:vehicles)
+			System.out.println(v);
+
+
+	the above program retrieves 
+		all columns
+		all rows
+
+	this is simple
+		Now how would you read only id and name of all vehicles?
+
+		select o.id, o.name from Vehicle o
+
+
+
+Session session = MyConnection.getConnection();
+		Query query = session.createQuery("select o.id, o.name from Vehicle o");
+		List result=query.list();
+		for(Object v: result)
+		{
+			Object[] x=(Object[]) v;
+			System.out.println(x[0]+"\t"+x[1]);
+		}

@@ -1,0 +1,465 @@
+can we store password as encrypted text in the database
+	because, someone can write a sql query to see the password
+
+	what is encryption?
+		converting plain text into cyper text.
+
+management
+	is plain text
+
+nbobhfnfou
+	is cyper text
+
+in order to convert this, we used a key (ascii +1)
+
+	if the key is revealed, then decryption is possible
+
+nbobhfnfou
+management
+
+MD5		encryption	and decryption
+
+SHA1		Secure Hashing Algorithm
+		it is an one way algorithm. we can encrypt. but cannot decrypt
+
+		suitable for passwords.
+
+	while signing up, we give a password:
+			rama		after encryption it is translated into 
+			!@#$
+
+
+			!@#$	as password, it will again encrypt and then only compare with the database password
+
+	to check login success or not,
+		everytime, when user login,
+		he enters 
+			rama		encrypt, then compare with the data in the database.	 if they match, ok
+
+	thats why, in google, if we forget password, we can reset it only. we cannot recover and see old password at all.
+	sniffing	means taking data which is in transit
+
+
+------------	
+
+Age based on dob
+
+expiry date based on mfg date
+
+find no of days left for subscription. Reminder 
+
+weekly and monthly review calendar
+estimated delivery date
+
+finding next friday
+finding first saturday of the month
+
+finding second saturday of a month
+
+Task 6 / Java implementation in project / Java concepts or topics doubts or practice
+
+
+---------------------------------------------------
+Algorithms & Datastructures
+
+adding two numbers to rocket science.
+	i) algorithm
+	ii) data structures
+
+	sum(2,3)		here data are 2 and 3
+				adding is the algorithm
+	a+b	
+
+	if we take a class
+		properties	data 
+		methods		algorithm
+
+are based on 
+	time		as fast as possible / minimum time
+	space		less space as possible
+
+Algorthm:
+	dependant on the data structure.		right combination of these 2.
+
+	dictionary. how to search a specific word.	any strategy?
+	
+		find a word called "data"
+			we do not search from first page to last page. (LINEAR SEARCH)
+			we decide which half of the book, this is present			
+				1) data will be there in left half
+				2) find median and decide left or right (based on the value found in center)
+
+		this is called as BINARY SEARCH
+
+	2 popular algorthms are 
+		i) Searching
+			1) Linear	poor. but best for small list
+			2) Binary	is possible only if the list is sorted (faster)
+			3) Hashing	(more faster than binary search in some cases)
+		ii) Sorting
+
+	
+
+How do we define algorithms:
+	step by step
+	scientifc approach
+	for solving problems in finite/ definite number of steps
+
+	pseudo code/ english commonly used to write algorithms
+
+	flowchart is diagramatic representation of the algorithms
+
+what are the properties of algorithms:
+	finite		finite number  of steps
+	definite	loop exit condition
+	non ambigous	
+	Input			(decides the performance/ efficacy of the algorithm)
+	Output
+	Efficiency
+	Effectiveness		(efficacy)
+			modules// subroutines, sub programs, functions can be used to divide large problem into small
+	Termination
+
+Approaches:
+	Divide and Conquer approach
+		divide the problem into small units until the units become solvable
+	Greedy approach
+		best possible combination or solution
+
+
+
+
+
+
+
+
+
+
+
+.
+
+Palindrome
+Fibonacci
+Factorial
+
+
+
+
+
+
+
+
+Short algorithm
+
+write a java program that calls "display()" method 5 times.
+how will you do that?
+
+a)
+	display()
+	display()
+	display()
+	display()
+	display()
+
+b)
+	for(int i=0;i<5;i++)
+		display();
+
+
+
+
+a)	= 5 instructions	
+b)	int i;		1
+	i=0;		2
+	i<5;		6
+	i++;		5
+	display		5
+
+	totally 19 instructions
+
+	Short code may not be efficient code.	(may not be)
+
+	if you call this program, it will always produced factorial of 5. (WASTE)
+	for given input, it will produce factorial	(CORRECT)
+
+	if i ask what is the sum(2,3)		you will answer immediately 5
+	if i ask sum(12121, 43423525325)	you will answer after long time only
+	so based on input, our algorithm performance also vary
+
+	Effectiveness is like whether this works or not. impact or not. i apply some logic to improve the efficiency. but it may not alway have effect
+		degree to which something is successful in producing desired result
+
+	Efficieny can be calculated using a formula		ex:	50%
+
+
+The algorithms efficiency will change according to the input complexity.
+
+	MS Access	password protected. we forgot the pwd. so we wrote a java program to open the db. it gave error because, password is wrong. catch block will retry in a loop. with all possible 1 letter word. then 2 letter word. and so on.
+
+	if password is 1 letter word, we can find password in 1 second
+	2 letter		5 min
+	3 letter		1 hour
+	4 letter		20 hour
+	5 letter		1 week
+	6 letter		1 month
+	7 letter		1 year
+	8 letter		infinity 
+
+just assumption.
+	based on input complexity, the algorithm efficiency changes.
+	in above scenario, it is like 
+	Big O Notation
+
+	There are 2 asymptotic notations:
+		1) Theta notation	
+		2) Big O notation	(Upper Bound notation)
+		2) Omega notation	(Lower Bound notation)
+
+
+
+The algorithm complexity can be
+	i) Space complexity
+		keeps on creating objects/ variable. if this is done in a loop. 
+		if variables are declared in recursion, then until the pushed functions 
+		area popped up, they are present in the stack. space complexity must be considered
+		
+		we write bubble sort either using loop or recursive calling function
+
+		
+	ii) Time complexity
+		if statements are executed in loop. as many loop iterations, as much time taken
+
+
+
+sorting algorithms and Big O notations:
+	bubble sort.	This algorithm always do fixed number of comparisons.
+
+	1,8,2,7,3,6,4
+
+	to sort them using bubble sort,
+	we do compare adjacent elements
+
+	1 vs 8
+	8 vs 2
+	2 vs 7
+....
+...
+..
+.
+	for 1st round
+
+	after 1st round, the highest number is placed at end
+	
+	second round will be done n-2 times
+	
+	now, even if the list is already sorted, 
+		even if the list is entirely in descending (opp order)
+	the number of comparisons is not increased or decreased. always blindly it will compare.
+
+	n(n-1) comparisons
+	
+	if there are n elements
+		1st round, n-1 comparison		(ex: 3 elements means. 2 comparisons)
+		2nd round, n-2 comparisons
+		n-2th round, 2 comparison
+		n-1th round, 1 comparisons
+
+	n(n-1) comparisons		O(N^2)
+
+		O(N)		direct prportion	(performance will grow linearly to the size of the input)
+		O(1)		always same number of iterations to find result
+		O(N^2)
+		
+	identify the Big O notation mentioned above.
+
+		Big O notation O(N) represents the complexity of an algorithm, whose performance will grow linearly 		(in direct proportion) to the size of the input data.
+
+		O(1) means  no matter how much data, it will execute in constant time
+
+		O(n) means that your algorithm will take on the order of n operations
+
+		O(n^2) takes n*n operations
+		
+		O(n^2) algorithms become inefficient for handling large number of items.
+
+
+What is Recursion?
+	repeating itself
+	mostly it is about a function calling itself.
+		but imagine 
+			fn1 calls fn2
+			fn2 calls fn1
+
+		this is mutually executed recursion / indirect recursion
+
+example:
+	find the factorial of n is n* n-1!
+		n* factorial(n-1)
+		
+
+	
+for Factorial:
+	terminating condition
+		otherwise, stack overflow
+		every time the function called, is pushed to call stack
+		only after the terminating condition becoming true, the multiplication started.
+		until the terminating condition, the functions keep on pushing into the stack. this causes recursion as poor algorithm
+
+		entire function call all functions are pushed into stack.
+
+if factorial of 100 ????
+		all numbers between 1 and 100 cause a function push to the stack.
+
+	
+
+tasK
+	Write a recursive java program to display fibonacci series of n elements. 
+		input n.
+
+
+	0+1+1+2+3+5+8+13+21+34+55
+
+
+Task:
+	write a recursive java program to find if given number is a palindrome number or not.
+
+
+	123456 is a number
+	to get last digit
+		we modulo by 10
+	123456 % 10	=	6
+	then divide by 10 to remove last digit
+	123456 / 10	=	12345
+
+	repeat this until all digits are retrieved
+	
+	6	MULTIPLY BY 10 and add next number
+		60+5
+	5
+		65*10+4			654
+	4
+		654*10	4+3		6543
+
+1000
+	0*10	+0
+		0
+	not 00
+
+
+1000	as original
+	and 
+0	as reverse
+
+	1000	<>	0	hence not palindrome
+
+1001
+	1000		0001	it is only 1	so it is not palindrome
+
+
+
+Array is the first data structure we learnt
+	contigous memory
+	index to directly access an element in the array
+	index starts from 0
+	last element index is length-1
+
+	in java, arrays can be primitive or reference type.
+	
+	single dimension, multi dimension arrays
+
+	in java, multi dimension arrays are jagged. Means each row can have different length columns
+	
+	
+in general, datastructures,
+	Queue, Stack, Tree are datastructures, created using either Array (or) Linked List.	
+
+	if Stack is created using Array implementation. Then?
+		Top is an element which points to NULL in the beginning. every time, we push elements to the stack, the new element is pointed by Top. (before that, the New element will point the element pointed by Top earlier)
+
+	if Top is pointing to index -1, then stack has no elements. "Stack Underflow".
+	we always want the free space to be in the top portion of the stack.
+
+	when is Stack called as over flow?
+	if size of stack is equal to allocated space, then we cannot add any more element. If we add, new element, it should throw exception saying "Stack overflow".
+
+	
+in LinkedList implementation of Stack, there is no overflow or underflow. There is no need to shift elements to keep free space in top.
+
+	we are going to create our LinkedList program in java
+
+
+	Let us understand Linked List
+
+	each element in the linked list is called as "Node"
+		so we need to create a class "Node"
+
+	what is node made of?
+		Data		(in our example, what should be the data type?) decided to use:	String
+		Next	
+		Previous (if it is a doubly linked list)
+
+
+example:
+	Singly Linked List
+		a node contains
+			data 	(string)
+			next pointer
+
+	every data structure including arrays, is a technique of maintaining 1 pointer that represent entire list.
+
+	in array,	the array name is the pointer to first element. with the help of that 1st element all other elements can be found using index (formula)
+
+	similarly in linked list, we maintain "START" pointer?
+
+	linked list	-	start	(if start==null, then list is empty)
+	Stack		-	top
+	queue		-	front-rear
+	tree		-	root
+
+
+
+2 classes
+	1) Node
+	2) LinkedList		contains 		Node start;		
+
+
+Task:
+	Create a doubly linked list
+
+to remove an element from the linked list
+
+	1) if start==null	"nothing to remove"
+	2) prev=start
+	 temp=start
+		move temp to temp.next until temp becomes null (before that,
+			whenever temp moves next, before that, prev=temp
+		(or)
+		temp.data==data
+	3) after the loop
+		if temp is null	(ie., data is not found)
+	4)	to remove a node at temp
+		prev.next should point to temp.next
+
+		but if start==prev
+		start=temp.next		(removing first node, start should be updated)
+
+
+
+
+
+
+Stack:
+
+	Node
+		data
+		next
+
+
+Instead of Start, it is Top
+	In linkedlist, 	we add only at the end. Here, we add only at the top
+
+	name of methods
+		push
+		pop
+			pop removes and print the value
+

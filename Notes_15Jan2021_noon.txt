@@ -1,0 +1,112 @@
+<c:if
+<c:choose
+<c:forEach
+<c:set
+<c:out
+	out.print
+	<%= 			is also java code	
+
+
+
+signup form
+	radio buttons can use if
+	choose was used for alternate row formatting
+
+	
+
+select department:	
+	if others, type .............
+THE dropdownlist should display all departments from the departments table
+	if use choose others,
+		then he should type new department name. that should be added to the departments table
+
+
+jquery
+	ajax
+
+
+STUDENT	
+	id
+
+
+
+
+
+CREATE TABLE STUDENT
+(
+ID INT GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT BY 1),
+NAME VARCHAR2(50) NOT NULL,
+DOB DATE,
+GENDER VARCHAR2(15),
+DEPARTMENT_ID INT
+);
+
+CREATE TABLE DEPARTMENT
+(
+    ID INT PRIMARY KEY,
+    NAME VARCHAR2(50)
+);
+
+CREATE TABLE COURSE
+(
+    ID INT PRIMARY KEY,
+    NAME VARCHAR2(50) NOT NULL
+);
+
+CREATE TABLE STUDENTCOURSE
+(
+    STUDENT_ID INT,
+    COURSE_ID INT,
+    ENROLLMENT_DATE DATE,
+    ACTIVE varchar2(5)
+);
+
+ALTER TABLE STUDENT ADD CONSTRAINT fkDid120 FOREIGN KEY (DEPARTMENT_ID) REFERENCES DEPARTMENT(ID);
+
+
+
+
+if user do not want to disturb some fields, he will not change the values
+
+update page:
+display all values already present
+
+in console, whenever we want to update existing object, use read(int) first to get existing values in an object.
+then change whichever u want using SETTER methods
+
+AJAX
+	Asynchronous	Javascript	And	XML
+the page do not wait until the result comes from server
+js
+and xml
+
+
+
+
+JSTL 
+	core		
+	html
+	sql
+
+
+
+
+HTML			WE GET yyyy-MM-dd	as a string
+Servlet			creates Date object using sdf		yyyy-MM-dd	date obj
+DAO			according to database, we need to convert Date into string 
+db
+
+
+CGI		Common Gateway Interface
+and Servlets
+	multiple requests handled using multiple threads (servlet)
+
+	multiple requests handled using multiple process (CGI)
+
+in a CPU, there cannot be 100s of processes running
+
+
+
+understanding the JSTL 
+		core, sql, fmt
+
